@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MyShoppingCart.Application.Authentication;
+using MyShoppingCart.Application.Authentication.Queries;
 using MyShoppingCart.Application.Customers.Commands;
 using MyShoppingCart.Application.Customers.Queries;
 using MyShoppingCart.Application.Orders.Commands;
@@ -55,6 +57,9 @@ public static class SetupExtensions
                 typeof(IPipelineBehavior<GetProductsQuery, Response<IReadOnlyList<Product>>>),
                 typeof(ValidationPipelineBehavior<GetProductsQuery, IReadOnlyList<Product>>));
 
+            options.AddBehavior(
+                typeof(IPipelineBehavior<JwtTokenQuery, Response<string>>),
+                typeof(ValidationPipelineBehavior<JwtTokenQuery, string>));
 
 
 
@@ -96,7 +101,15 @@ public static class SetupExtensions
             options.AddBehavior(
                 typeof(IPipelineBehavior<GetProductsQuery, Response<IReadOnlyList<Product>>>),
                 typeof(ExceptionLoggingPipelineBehavior<GetProductsQuery, IReadOnlyList<Product>>));
+
+            options.AddBehavior(
+                typeof(IPipelineBehavior<JwtTokenQuery, Response<string>>),
+                typeof(ExceptionLoggingPipelineBehavior<JwtTokenQuery, string>));
         });
+
+
+
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         return services;
     }

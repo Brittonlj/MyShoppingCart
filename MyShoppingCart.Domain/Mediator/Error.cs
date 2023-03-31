@@ -15,7 +15,7 @@ public sealed record class Error(string Code, string Message)
     public readonly static Error InvalidOrderId = new Error("InvalidOrderId", "Invalid Order Id.");
 
     public readonly static Error Unauthorized = new Error(UNAUTHORIZED_CODE, "Unauthorized.");
-    public override string ToString()
+    public string ToJson()
     {
         return JsonSerializer.Serialize(this);
     }

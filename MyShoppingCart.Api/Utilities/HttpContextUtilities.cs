@@ -1,12 +1,13 @@
-﻿namespace MyShoppingCart.Api.Utilities;
+﻿using System.Security.Claims;
+
+namespace MyShoppingCart.Api.Utilities;
 
 public static class HttpContextUtilities
 {
     public static Guid? GetCustomerId(this HttpContext context)
     {
-        return null;
-
-        string? customerIdString = context.User?.Claims?.FirstOrDefault(x => x.Type == "CustomerId")?.Value;
+        string? customerIdString = context.User?.Claims?
+            .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrWhiteSpace(customerIdString))
         {

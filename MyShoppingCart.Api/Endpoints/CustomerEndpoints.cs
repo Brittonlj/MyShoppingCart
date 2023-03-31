@@ -1,14 +1,19 @@
-﻿namespace MyShoppingCart.Api.Endpoints;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Data;
+
+namespace MyShoppingCart.Api.Endpoints;
 
 public sealed class CustomerEndpoints
 {
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
-        var group = app.MapGroup("/customer");
+        var group = app.MapGroup("/customer")
+            .RequireAuthorization();
 
-        group.MapGet("/", GetAllCustomers);//.RequireAuthorization("admin"); // make admin
+        group.MapGet("/", GetAllCustomers);
         group.MapGet("/{customerId}", GetCustomerById);
         group.MapGet("/{customerId}/Orders", GetOrdersForCustomer);
+        group.MapDelete("/{customerId}/Orders/{orderId}", DeleteCustomerOrder);
         group.MapPost("/", CreateCustomer);
         group.MapPut("/", UpdateCustomer);
         group.MapDelete("/{customerId}", DeleteCustomer);
@@ -16,7 +21,7 @@ public sealed class CustomerEndpoints
         return app;
     }
 
-
+    [Authorize(Roles = "Admin")]
     public static async Task<IResult> GetAllCustomers(
         [FromServices] IMediator mediator,
         IOptionsSnapshot<MyShoppingCartSettings> settings,
@@ -54,7 +59,7 @@ public sealed class CustomerEndpoints
     {
         if (!Guid.TryParse(customerId, out var customerGuid))
         {
-            return Problem(Error.InvalidCustomerId.ToString());
+            return Problem(Error.InvalidCustomerId.ToJson());
         }
 
         var requestingCustomerId = context.GetCustomerId();
@@ -80,7 +85,7 @@ public sealed class CustomerEndpoints
     {
         if (!Guid.TryParse(customerId, out var customerGuid))
         {
-            return Problem(Error.InvalidCustomerId.ToString());
+            return Problem(Error.InvalidCustomerId.ToJson());
         }
 
         var requestingCustomerId = context.GetCustomerId();
@@ -131,19 +136,45 @@ public sealed class CustomerEndpoints
     }
     public static async Task<IResult> DeleteCustomer(
             [FromServices] IMediator mediator,
-            [FromBody] string customerId,
+            [FromRoute] string customerId,
             HttpContext context,
             CancellationToken cancellationToken
         )
     {
         if (!Guid.TryParse(customerId, out var customerGuid))
         {
-            return Problem(Error.InvalidCustomerId.ToString());
+            return Problem(Error.InvalidCustomerId.ToJson());
         }
 
         var requestingUserId = context.GetCustomerId();
 
         var request = new DeleteCustomerCommand(customerGuid, requestingUserId);
+
+        var response = await mediator.Send(request, cancellationToken);
+
+        return response.MatchResult();
+    }
+
+    public static async Task<IResult> DeleteCustomerOrder(
+            [FromServices] IMediator mediator,
+            [FromRoute] string customerId,
+            [FromRoute] string orderId,
+            HttpContext context,
+            CancellationToken cancellationToken
+        )
+    {
+        if (!Guid.TryParse(customerId, out var customerGuid))
+        {
+            return Problem(Error.InvalidCustomerId.ToJson());
+        }
+        if (!Guid.TryParse(orderId, out var orderGuid))
+        {
+            return Problem(Error.InvalidOrderId.ToJson());
+        }
+
+        var requestingUserId = context.GetCustomerId();
+
+        var request = new DeleteCustomerOrderCommand(customerGuid, orderGuid, requestingUserId);
 
         var response = await mediator.Send(request, cancellationToken);
 

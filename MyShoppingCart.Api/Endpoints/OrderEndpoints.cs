@@ -4,7 +4,9 @@ public sealed class OrderEndpoints
 {
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
-        var group = app.MapGroup("/order");
+        var group = app.MapGroup("/order")
+            .RequireAuthorization();
+
         // default getter is excluded on purpose
         group.MapGet("/{orderId}", GetOrderById);
         group.MapPost("/", CreateOrder);
@@ -24,7 +26,7 @@ public sealed class OrderEndpoints
     {
         if (!Guid.TryParse(orderId, out var orderGuid))
         {
-            return Problem(Error.InvalidOrderId.ToString());
+            return Problem(Error.InvalidOrderId.ToJson());
         }
 
         var customerId = context.GetCustomerId();
@@ -77,7 +79,7 @@ public sealed class OrderEndpoints
     {
         if (!Guid.TryParse(orderId, out var orderGuid))
         {
-            return Problem(Error.InvalidOrderId.ToString());
+            return Problem(Error.InvalidOrderId.ToJson());
         }
 
         var requestingCustomerId = context.GetCustomerId();

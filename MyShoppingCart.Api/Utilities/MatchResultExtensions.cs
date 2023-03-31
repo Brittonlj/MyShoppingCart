@@ -8,7 +8,7 @@ public static class MatchResultExtensions
             success => Ok(success),
             unauthorized => Unauthorized(),
             notFound => NotFound(),
-            error => Problem(error.ToString()),
+            error => Problem(error.ToJson()),
             validationFailed => ValidationProblem(validationFailed.Results));
     }
 }
