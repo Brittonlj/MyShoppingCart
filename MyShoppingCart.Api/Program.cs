@@ -1,4 +1,3 @@
-using Microsoft.OpenApi.Models;
 using MyShoppingCart.Api.Setup;
 using MyShoppingCart.Application.Setup;
 using MyShoppingCart.Infrastructure.Setup;

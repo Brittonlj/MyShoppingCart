@@ -27,12 +27,13 @@ public sealed class GetOrdersByCustomerIdQueryHandler :
             .Include(x => x.Products)
             .AsSplitQuery()
             .AsNoTracking()
-            .Paginate(request.PageNumber, request.PageSize)
             .Where(x => x.CustomerId == request.CustomerId);
 
         query = request.SortAscending ?
             query.OrderBy(x => x.OrderDateTimeUtc) :
             query.OrderByDescending(x => x.OrderDateTimeUtc);
+
+        query = query.Paginate(request.PageNumber, request.PageSize);
 
         var orders = await query.ToListAsync(cancellationToken);
 

@@ -1,4 +1,4 @@
-﻿using MyShoppingCart.Application.Authentication;
+﻿using MyShoppingCart.Application.Authentication.Queries;
 
 namespace MyShoppingCart.Api.Endpoints;
 

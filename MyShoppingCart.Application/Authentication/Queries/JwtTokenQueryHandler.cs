@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Entities;
-
-namespace MyShoppingCart.Application.Authentication.Queries;
+﻿namespace MyShoppingCart.Application.Authentication.Queries;
 
 public class JwtTokenQueryHandler : IRequestHandler<JwtTokenQuery, Response<string>>
 {

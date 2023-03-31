@@ -21,8 +21,7 @@ public sealed class GetCustomersQueryHandler :
             .Include(x => x.BillingAddress)
             .Include(x => x.ShippingAddress)
             .AsSplitQuery()
-            .AsNoTracking()
-            .Paginate(request.PageNumber, request.PageSize);
+            .AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(request.NamesLike))
         {
@@ -41,6 +40,8 @@ public sealed class GetCustomersQueryHandler :
         query = request.SortAscending ?
             query.OrderBy(orderByClause) :
             query.OrderByDescending(orderByClause);
+
+        query = query.Paginate(request.PageNumber, request.PageSize);
 
         var customers = await query.ToListAsync(cancellationToken);
 
