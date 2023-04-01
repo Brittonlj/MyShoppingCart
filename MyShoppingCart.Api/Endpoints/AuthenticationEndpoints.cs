@@ -23,7 +23,7 @@ public class AuthenticationEndpoints
     {
         if (!Guid.TryParse(customerId, out var customerGuid)) 
         {
-            return Unauthorized();
+            return BadRequest("Invalid customerId");
         }
 
         var request = new JwtTokenQuery(customerGuid, role);
