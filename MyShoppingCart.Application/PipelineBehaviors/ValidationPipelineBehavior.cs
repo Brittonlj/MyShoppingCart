@@ -2,7 +2,7 @@
 
 public sealed class ValidationPipelineBehavior<TRequest, TEntity> :
     IPipelineBehavior<TRequest, Response<TEntity>>
-    where TRequest : IRequest<Response<TEntity>>
+    where TRequest : IQuery<TEntity>
     where TEntity : class
 
 {

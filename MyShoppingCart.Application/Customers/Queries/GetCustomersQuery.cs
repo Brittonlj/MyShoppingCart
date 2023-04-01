@@ -7,6 +7,6 @@ public sealed record GetCustomersQuery(
     int PageSize,
     string SortColumn = "LastName",
     bool SortAscending = true
-    ) : IRequest<Response<IReadOnlyList<Customer>>>
+    ) : IQueryMany<Customer>
 {
 }

@@ -4,7 +4,7 @@ namespace MyShoppingCart.Application.PipelineBehaviors;
 
 public sealed class ExceptionLoggingPipelineBehavior<TRequest, TEntity> :
     IPipelineBehavior<TRequest, Response<TEntity>>
-    where TRequest : IRequest<Response<TEntity>>
+    where TRequest : IQuery<TEntity>
     where TEntity : class
 {
     private readonly ILogger<TRequest> _logger;

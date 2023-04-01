@@ -6,6 +6,6 @@ public sealed record GetProductsQuery(
     int PageSize,
     string SortColumn,
     bool SortAscending = true
-    ) : IRequest<Response<IReadOnlyList<Product>>>
+    ) : IQueryMany<Product>
 {
 }

@@ -6,6 +6,6 @@ public sealed record GetOrdersByCustomerIdQuery(
     int PageSize,
     bool SortAscending = true,
     Guid? RequestingCustomerId = null
-    ) : IRequest<Response<IReadOnlyList<Order>>>
+    ) : IQueryMany<Order>
 {
 }
