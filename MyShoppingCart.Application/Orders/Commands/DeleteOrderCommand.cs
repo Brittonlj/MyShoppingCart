@@ -1,5 +1,7 @@
 ﻿namespace MyShoppingCart.Application.Orders.Commands;
 
-public sealed record DeleteOrderCommand(Guid OrderId, Guid? RequestingCustomerId = null) : IQuery<Success>
+public sealed record DeleteOrderCommand(Guid CustomerId, Guid OrderId) : 
+    IRequest<Response<Success>>,
+    IAuthorizedCustomerRequest
 {
 }

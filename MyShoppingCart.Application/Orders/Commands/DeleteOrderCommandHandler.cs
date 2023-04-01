@@ -23,12 +23,6 @@ public sealed class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderComma
             return NotFound.Instance;
         }
 
-        if (request.RequestingCustomerId.HasValue &&
-            order.CustomerId != request.RequestingCustomerId.Value)
-        {
-            return Unauthorized.Instance;
-        }
-
         await _context.OrderProducts
             .Where(o => o.OrderId == request.OrderId)
             .ExecuteDeleteAsync();

@@ -1,8 +1,8 @@
 ﻿namespace MyShoppingCart.Application.Orders.Queries;
 
-public sealed class GetOrdersByCustomerIdQueryValidator : AbstractValidator<GetOrdersByCustomerIdQuery>
+public sealed class GetOrdersQueryValidator : AbstractValidator<GetOrdersQuery>
 {
-    public GetOrdersByCustomerIdQueryValidator()
+    public GetOrdersQueryValidator()
     {
         RuleFor(x => x.CustomerId).NotEmpty();
         RuleFor(x => x.PageNumber).NotEmpty();

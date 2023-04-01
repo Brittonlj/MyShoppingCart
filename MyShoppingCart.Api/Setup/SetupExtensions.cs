@@ -12,7 +12,7 @@ public static class SetupExtensions
     public static WebApplication RegisterMyShoppingCartEndpoints(this WebApplication app)
     {
         CustomerEndpoints.RegisterEndpoints(app);
-        OrderEndpoints.RegisterEndpoints(app);
+        CustomerOrderEndpoints.RegisterEndpoints(app);
         ProductsEndpoints.RegisterEndpoints(app);
         AuthenticationEndpoints.RegisterEndpoints(app);
         return app;
@@ -65,6 +65,8 @@ public static class SetupExtensions
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!))
             };
         });
+
+        services.AddHttpContextAccessor();
 
         services.AddAuthorization();
 

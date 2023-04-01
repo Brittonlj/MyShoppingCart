@@ -1,4 +1,5 @@
-﻿public sealed record CreateOrderCommand(Order Order, Guid? RequestingCustomerId = null) : 
-    IQuery<Success>
+﻿public sealed record CreateOrderCommand(Guid CustomerId, Order Order) :
+    IQuery<Success>,
+    IAuthorizedCustomerRequest
 {
 }

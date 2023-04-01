@@ -1,8 +1,6 @@
-﻿using MediatR;
+﻿namespace MyShoppingCart.Domain.Mediator;
 
-namespace MyShoppingCart.Domain.Mediator;
-
-public interface IQueryMany<TEntity> : IQuery<IReadOnlyList<TEntity>>
+public interface IQueryMany<TEntity> : IRequest<Response<IReadOnlyList<TEntity>>>
     where TEntity : class
 {
 }

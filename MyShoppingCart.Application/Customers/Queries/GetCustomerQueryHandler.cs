@@ -15,11 +15,6 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
         GetCustomerQuery query,
         CancellationToken cancellationToken = default)
     {
-        if (query.RequestingUser.HasValue && query.CustomerId != query.RequestingUser.Value)
-        {
-            return Unauthorized.Instance;
-        }
-
         var customer = await _context
             .Customers
             .Include(x => x.ShippingAddress)

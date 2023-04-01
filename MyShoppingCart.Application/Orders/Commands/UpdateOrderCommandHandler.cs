@@ -24,11 +24,6 @@ public sealed class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderComma
             return NotFound.Instance;
         }
 
-        if (request.RequestingCustomerId.HasValue && order.CustomerId != request.RequestingCustomerId.Value)
-        {
-            return Unauthorized.Instance;
-        }
-
         if (order != request.Order)
         {
             _context.Entry(order).CurrentValues.SetValues(request.Order);

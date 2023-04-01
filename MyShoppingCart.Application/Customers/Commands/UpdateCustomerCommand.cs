@@ -1,6 +1,7 @@
 ﻿namespace MyShoppingCart.Application.Customers.Commands;
 
-public sealed record UpdateCustomerCommand(Customer Customer, Guid? RequestingCustomerId = null) : 
-    IQuery<Success>
+public sealed record UpdateCustomerCommand(Customer Customer, Guid CustomerId) : 
+    IQuery<Success>,
+    IAuthorizedCustomerRequest
 {
 }

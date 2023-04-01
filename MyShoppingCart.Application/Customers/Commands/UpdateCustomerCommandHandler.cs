@@ -13,12 +13,6 @@ public sealed class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustome
 
     public async Task<Response<Success>> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
     {
-        if (request.RequestingCustomerId.HasValue &&
-            request.RequestingCustomerId.Value != request.Customer.Id)
-        {
-            return Unauthorized.Instance;
-        }
-
         var customer = await _context
             .Customers
             .Include(x => x.BillingAddress)

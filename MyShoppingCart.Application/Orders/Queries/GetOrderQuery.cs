@@ -1,6 +1,7 @@
 ﻿namespace MyShoppingCart.Application.Orders.Queries;
 
-public sealed record GetOrderQuery(Guid OrderId, Guid? CustomerId = null, Guid? RequestingUserId = null) : 
-    IQuery<Order>
+public sealed record GetOrderQuery(Guid CustomerId, Guid OrderId) : 
+    IQuery<Order>,
+    IAuthorizedCustomerRequest
 {
 }

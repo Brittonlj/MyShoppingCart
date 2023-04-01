@@ -22,12 +22,6 @@ public sealed class CreateOrderCommandHandler : IRequestHandler<CreateOrderComma
             return new NotFound(Error.CustomerNotFound.Message);
         }
 
-        if (request.RequestingCustomerId.HasValue &&
-            request.Order.CustomerId != request.RequestingCustomerId.Value)
-        {
-            return Unauthorized.Instance;
-        }
-
         var order = request.Order;
 
         _context.Orders.Add(order);

@@ -2,26 +2,20 @@
 
 namespace MyShoppingCart.Application.Orders.Queries;
 
-public sealed class GetOrdersByCustomerIdQueryHandler : 
-    IRequestHandler<GetOrdersByCustomerIdQuery, Response<IReadOnlyList<Order>>>
+public sealed class GetOrdersQueryHandler : 
+    IRequestHandler<GetOrdersQuery, Response<IReadOnlyList<Order>>>
 {
     private readonly IUnitOfWork _context;
 
-    public GetOrdersByCustomerIdQueryHandler(IUnitOfWork context)
+    public GetOrdersQueryHandler(IUnitOfWork context)
     {
         _context = context;
     }
 
     public async Task<Response<IReadOnlyList<Order>>> Handle(
-        GetOrdersByCustomerIdQuery request,
+        GetOrdersQuery request,
         CancellationToken cancellationToken)
     {
-        if (request.RequestingCustomerId.HasValue &&
-            request.CustomerId != request.RequestingCustomerId)
-        {
-            return Unauthorized.Instance;
-        }
-
         var query = _context
             .Orders
             .Include(x => x.Products)
