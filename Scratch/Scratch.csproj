@@ -7,4 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyShoppingCart.Application\MyShoppingCart.Application.csproj" />
+    <ProjectReference Include="..\MyShoppingCart.Domain\MyShoppingCart.Domain.csproj" />
+    <ProjectReference Include="..\MyShoppingCart.Infrastructure\MyShoppingCart.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
