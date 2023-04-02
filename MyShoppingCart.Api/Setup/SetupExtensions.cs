@@ -12,8 +12,8 @@ public static class SetupExtensions
     public static WebApplication RegisterMyShoppingCartEndpoints(this WebApplication app)
     {
         CustomerEndpoints.RegisterEndpoints(app);
-        CustomerOrderEndpoints.RegisterEndpoints(app);
-        ProductsEndpoints.RegisterEndpoints(app);
+        OrderEndpoints.RegisterEndpoints(app);
+        ProductEndpoints.RegisterEndpoints(app);
         AuthenticationEndpoints.RegisterEndpoints(app);
         return app;
     }

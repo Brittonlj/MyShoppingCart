@@ -1,18 +1,15 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace MyShoppingCart.Domain.Entities;
 
-namespace MyShoppingCart.Domain.Entities;
-
-public sealed class Customer : EntityBase, IEquatable<Customer>
+public sealed class Customer : IEquatable<Customer>
 {
+    public Guid Id { get; init; } = Guid.NewGuid();
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string Email { get; set; }
-    public Guid? ShippingAddressId { get; set; }
-    public Guid? BillingAddressId { get; set; }
-    public Address? ShippingAddress { get; set; }
-    public Address? BillingAddress { get; set; }
-    [JsonIgnore]
-    public List<Order> Orders { get; } = new();
+    public required Guid ShippingAddressId { get; set; }
+    public required Guid BillingAddressId { get; set; }
+    public required Address ShippingAddress { get; set; }
+    public required Address BillingAddress { get; set; }
 
 
     #region Equatable
@@ -35,8 +32,7 @@ public sealed class Customer : EntityBase, IEquatable<Customer>
             ShippingAddressId == other.ShippingAddressId &&
             BillingAddressId == other.BillingAddressId &&
             ShippingAddress == other.ShippingAddress &&
-            BillingAddress == other.BillingAddress &&
-            Orders.SequenceEqual(other.Orders);
+            BillingAddress == other.BillingAddress;
     }
 
     public override bool Equals(object? obj)
@@ -48,5 +44,19 @@ public sealed class Customer : EntityBase, IEquatable<Customer>
     {
         return HashCode.Combine(Id, FirstName, LastName, Email, ShippingAddressId, BillingAddressId);
     }
+
+    public static bool operator ==(Customer obj1, Customer obj2)
+    {
+        if (ReferenceEquals(obj1, obj2))
+            return true;
+        if (ReferenceEquals(obj1, null))
+            return false;
+        if (ReferenceEquals(obj2, null))
+            return false;
+        return obj1.Equals(obj2);
+    }
+
+    public static bool operator !=(Customer obj1, Customer obj2) => !(obj1 == obj2);
+
     #endregion
 }

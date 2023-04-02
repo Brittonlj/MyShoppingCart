@@ -32,8 +32,7 @@ public static class SetupExtensions
 
         var requests = assemblies
             .SelectMany(x => x.GetTypes())
-            .Where(t => t.IsClass && t.GetInterfaces()
-            .Any(isIRequest))
+            .Where(t => t.IsClass && t.GetInterfaces().Any(isIRequest))
             .ToList();
 
         var pipelineInterfaceType = typeof(IPipelineBehavior<,>);

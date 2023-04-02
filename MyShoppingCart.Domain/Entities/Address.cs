@@ -1,7 +1,8 @@
 ﻿namespace MyShoppingCart.Domain.Entities;
 
-public sealed class Address : EntityBase, IEquatable<Address>
+public sealed class Address : IEquatable<Address>
 {
+    public Guid Id { get; init; } = Guid.NewGuid();
     public required string Street { get; set; }
     public required string City { get; set; }
     public required string State { get; set; }
@@ -35,5 +36,18 @@ public sealed class Address : EntityBase, IEquatable<Address>
     {
         return HashCode.Combine(Id, Street, City, State, PostalCode);
     }
+
+    public static bool operator ==(Address obj1, Address obj2)
+    {
+        if (ReferenceEquals(obj1, obj2))
+            return true;
+        if (ReferenceEquals(obj1, null))
+            return false;
+        if (ReferenceEquals(obj2, null))
+            return false;
+        return obj1.Equals(obj2);
+    }
+
+    public static bool operator !=(Address obj1, Address obj2) => !(obj1 == obj2);
     #endregion
 }

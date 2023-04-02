@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using MyShoppingCart.Application.Data;
 using MyShoppingCart.Domain.Entities;
 
@@ -27,5 +28,10 @@ public sealed class MyShoppingCartContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(IMyShoppingCartInfrastructureMarker).Assembly);
 
         base.OnModelCreating(modelBuilder);
+    }
+
+    public IDbContextTransaction BeginTransaction()
+    {
+        return Database.BeginTransaction();
     }
 }

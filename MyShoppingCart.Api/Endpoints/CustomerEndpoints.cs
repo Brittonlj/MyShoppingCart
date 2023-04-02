@@ -48,15 +48,10 @@ public sealed class CustomerEndpoints
 
     public static async Task<IResult> GetCustomerById(
         [FromServices] IMediator mediator,
-        [FromRoute] string customerId,
+        [FromRoute] Guid customerId,
         CancellationToken cancellationToken)
     {
-        if (!Guid.TryParse(customerId, out var customerGuid))
-        {
-            return Problem(Error.InvalidCustomerId.ToJson());
-        }
-
-        var request = new GetCustomerQuery(customerGuid);
+        var request = new GetCustomerQuery(customerId);
 
         var response = await mediator.Send(request, cancellationToken);
 
@@ -65,11 +60,9 @@ public sealed class CustomerEndpoints
 
     public static async Task<IResult> CreateCustomer(
         [FromServices] IMediator mediator,
-        [FromBody] Customer customer,
+        [FromBody] CreateCustomerQuery request,
         CancellationToken cancellationToken)
     {
-        var request = new CreateCustomerCommand(customer);
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();
@@ -78,11 +71,9 @@ public sealed class CustomerEndpoints
  
     public static async Task<IResult> UpdateCustomer(
         [FromServices] IMediator mediator,
-        [FromBody] Customer customer,
+        [FromBody] UpdateCustomerQuery request,
         CancellationToken cancellationToken)
     {
-        var request = new UpdateCustomerCommand(customer, customer.Id);
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();
@@ -90,15 +81,10 @@ public sealed class CustomerEndpoints
 
     public static async Task<IResult> DeleteCustomer(
         [FromServices] IMediator mediator,
-        [FromRoute] string customerId,
+        [FromRoute] Guid customerId,
         CancellationToken cancellationToken)
     {
-        if (!Guid.TryParse(customerId, out var customerGuid))
-        {
-            return Problem(Error.InvalidCustomerId.ToJson());
-        }
-
-        var request = new DeleteCustomerCommand(customerGuid);
+        var request = new DeleteCustomerCommand(customerId);
 
         var response = await mediator.Send(request, cancellationToken);
 

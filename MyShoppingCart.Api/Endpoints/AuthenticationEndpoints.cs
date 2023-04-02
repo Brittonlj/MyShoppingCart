@@ -8,7 +8,7 @@ public class AuthenticationEndpoints
     {
         var group = app.MapGroup("/authentication").AllowAnonymous();
 
-        group.MapPost("/token/{customerId}", GetToken); //This is just a dummy authentication method to test with
+        group.MapGet("/token/{customerId}", GetToken); //This is just a dummy authentication method to test with
 
         return app;
     }
@@ -16,17 +16,12 @@ public class AuthenticationEndpoints
     public static async Task<IResult> GetToken(
     [FromServices] IMediator mediator,
     IOptionsSnapshot<MyShoppingCartSettings> settings,
-    [FromRoute] string customerId,
+    [FromRoute] Guid customerId,
     [FromQuery] string? role,
     CancellationToken cancellationToken
 )
     {
-        if (!Guid.TryParse(customerId, out var customerGuid)) 
-        {
-            return BadRequest("Invalid customerId");
-        }
-
-        var request = new JwtTokenQuery(customerGuid, role);
+        var request = new JwtTokenQuery(customerId, role);
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();

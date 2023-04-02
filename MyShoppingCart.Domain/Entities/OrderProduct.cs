@@ -2,8 +2,8 @@
 
 public sealed class OrderProduct : IEquatable<OrderProduct>
 {
-    public required Guid OrderId { get; init; }
-    public required Guid ProductId { get; init; }
+    public Guid OrderId { get; init; } = Guid.NewGuid();
+    public Guid ProductId { get; init; } = Guid.NewGuid();
 
     #region Equatable
     public bool Equals(OrderProduct? other)
@@ -31,5 +31,19 @@ public sealed class OrderProduct : IEquatable<OrderProduct>
     {
         return HashCode.Combine(OrderId, ProductId);
     }
+
+    public static bool operator ==(OrderProduct obj1, OrderProduct obj2)
+    {
+        if (ReferenceEquals(obj1, obj2))
+            return true;
+        if (ReferenceEquals(obj1, null))
+            return false;
+        if (ReferenceEquals(obj2, null))
+            return false;
+        return obj1.Equals(obj2);
+    }
+
+    public static bool operator !=(OrderProduct obj1, OrderProduct obj2) => !(obj1 == obj2);
+
     #endregion
 }

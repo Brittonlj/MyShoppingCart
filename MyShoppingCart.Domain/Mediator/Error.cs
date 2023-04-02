@@ -10,6 +10,7 @@ public sealed record class Error(string Code, string Message)
 
     public readonly static Error CustomerNotFound = new Error(NOT_FOUND_CODE, "Customer Not Found.");
     public readonly static Error InvalidCustomerId = new Error("InvalidCustomerId", "Invalid Customer Id.");
+    public readonly static Error InvalidProductId = new Error("InvalidProductId", "Invalid Product Id.");
 
     public readonly static Error OrderNotFound = new Error(NOT_FOUND_CODE, "Order Not Found.");
     public readonly static Error InvalidOrderId = new Error("InvalidOrderId", "Invalid Order Id.");

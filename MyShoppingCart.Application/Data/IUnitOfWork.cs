@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MyShoppingCart.Application.Data;
 
@@ -13,4 +14,6 @@ public interface IUnitOfWork
 
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    IDbContextTransaction BeginTransaction();
 }
