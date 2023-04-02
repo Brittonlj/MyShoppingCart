@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Domain.Entities;
 
-public sealed class Address : IEquatable<Address>
+public sealed class Address : IEntity<Address>
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public required string Street { get; set; }

@@ -2,8 +2,8 @@
 
 public sealed class OrderProduct : IEquatable<OrderProduct>
 {
-    public Guid OrderId { get; init; } = Guid.NewGuid();
-    public Guid ProductId { get; init; } = Guid.NewGuid();
+    public Guid OrderId { get; init; }
+    public Guid ProductId { get; init; }
 
     #region Equatable
     public bool Equals(OrderProduct? other)

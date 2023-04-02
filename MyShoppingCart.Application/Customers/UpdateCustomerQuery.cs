@@ -1,16 +1,14 @@
-﻿using MyShoppingCart.Application.Addresses;
-
-namespace MyShoppingCart.Application.Customers;
+﻿namespace MyShoppingCart.Application.Customers;
 
 public sealed record UpdateCustomerQuery(
     Guid CustomerId,
     string FirstName,
     string LastName,
     string Email,
-    AddressModel BillingAddress,
-    AddressModel ShippingAddress
-    ) :
-    IQuery<CustomerModel>,
+    Address BillingAddress,
+    Address ShippingAddress,
+    IReadOnlyList<SecurityClaim> Claims) :
+    IQuery<Customer>,
     IAuthorizedCustomerRequest
 {
 }

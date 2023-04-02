@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace MyShoppingCart.Application.Products;
+﻿namespace MyShoppingCart.Application.Products;
 
 public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Response<Success>>
 {

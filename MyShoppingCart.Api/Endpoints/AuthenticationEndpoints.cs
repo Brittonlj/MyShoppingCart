@@ -1,4 +1,4 @@
-﻿using MyShoppingCart.Application.Authentication.Queries;
+﻿using MyShoppingCart.Application.Authentication;
 
 namespace MyShoppingCart.Api.Endpoints;
 
@@ -17,14 +17,18 @@ public class AuthenticationEndpoints
     [FromServices] IMediator mediator,
     IOptionsSnapshot<MyShoppingCartSettings> settings,
     [FromRoute] Guid customerId,
-    [FromQuery] string? role,
     CancellationToken cancellationToken
 )
     {
-        var request = new JwtTokenQuery(customerId, role);
+        var request = new JwtTokenQuery(customerId);
         var response = await mediator.Send(request, cancellationToken);
 
-        return response.MatchResult();
+        return response.Match(
+            success => Content(success),
+            unauthorized => Unauthorized(),
+            notFound => NotFound(),
+            error => Problem(error.ToJson()),
+            validationFailed => ValidationProblem(validationFailed.Results));
     }
 
 }

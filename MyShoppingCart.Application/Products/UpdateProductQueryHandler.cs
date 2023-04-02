@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Application.Products;
 
-public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQuery, Response<ProductModel>>
+public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQuery, Response<Product>>
 {
     private readonly IUnitOfWork _context;
 
@@ -9,7 +9,7 @@ public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQue
         _context = context;
     }
 
-    public async Task<Response<ProductModel>> Handle(UpdateProductQuery request, CancellationToken cancellationToken)
+    public async Task<Response<Product>> Handle(UpdateProductQuery request, CancellationToken cancellationToken)
     {
         var product = await _context.Products.FindAsync(request.Id, cancellationToken);
 
@@ -22,7 +22,7 @@ public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQue
 
         await _context.SaveChangesAsync();
 
-        return product.ToModel();
+        return product;
 
     }
 }

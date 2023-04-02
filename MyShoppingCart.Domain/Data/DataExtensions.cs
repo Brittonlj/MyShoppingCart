@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace MyShoppingCart.Application.Data;
+﻿namespace MyShoppingCart.Domain.Data;
 
 public static class DataExtensions
 {

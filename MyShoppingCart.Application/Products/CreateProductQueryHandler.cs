@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Application.Products;
 
-public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQuery, Response<ProductModel>>
+public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQuery, Response<Product>>
 {
     private readonly IUnitOfWork _context;
 
@@ -9,14 +9,20 @@ public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQue
         _context = context;
     }
 
-    public async Task<Response<ProductModel>> Handle(CreateProductQuery request, CancellationToken cancellationToken)
+    public async Task<Response<Product>> Handle(CreateProductQuery request, CancellationToken cancellationToken)
     {
-        var product = request.ToEntity();
+        var product = new Product
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Price = request.Price,
+            ImageUrl = request.ImageUrl,
+        };
 
         _context.Products.Add(product);
 
         await _context.SaveChangesAsync();
 
-        return product.ToModel();
+        return product;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyShoppingCart.Application.Authentication;
-using MyShoppingCart.Application.PipelineBehaviors;
 
 namespace MyShoppingCart.Application.Setup;
 

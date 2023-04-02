@@ -6,6 +6,6 @@ public sealed record GetProductsQuery(
     int PageSize,
     string SortColumn,
     bool SortAscending = true
-    ) : IQueryMany<ProductModel>
+    ) : IQueryMany<Product>
 {
 }

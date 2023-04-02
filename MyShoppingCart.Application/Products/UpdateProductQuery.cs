@@ -6,6 +6,6 @@ public sealed record UpdateProductQuery(
     string Description,
     decimal Price,
     string? ImageUrl) :
-    IQuery<ProductModel>
+    IQuery<Product>
 {
 }

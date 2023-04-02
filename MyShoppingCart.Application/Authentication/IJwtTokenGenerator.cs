@@ -2,6 +2,6 @@
 {
     public interface IJwtTokenGenerator
     {
-        string GenerateToken(Guid customerId, string? role);
+        string GenerateToken(Customer customer);
     }
 }

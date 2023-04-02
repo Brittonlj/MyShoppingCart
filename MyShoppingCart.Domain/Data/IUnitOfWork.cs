@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
+using MyShoppingCart.Domain.Entities;
 
-namespace MyShoppingCart.Application.Data;
+namespace MyShoppingCart.Domain.Data;
 
 public interface IUnitOfWork
 {
@@ -11,6 +11,8 @@ public interface IUnitOfWork
     DbSet<Product> Products { get; set; }
     DbSet<Address> Addresses { get; set; }
     DbSet<OrderProduct> OrderProducts { get; set; }
+    DbSet<SecurityClaim> Claims { get; set; }
+
 
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

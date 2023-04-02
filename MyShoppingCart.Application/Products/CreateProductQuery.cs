@@ -5,6 +5,6 @@ public sealed record CreateProductQuery(
     string Description,
     decimal Price,
     string? ImageUrl) :
-    IQuery<ProductModel>
+    IQuery<Product>
 {
 }

@@ -15,15 +15,23 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
         _jwtConfig = config.Value;
     }
 
-    public string GenerateToken(Guid customerId, string? role)
+    public string GenerateToken(Customer customer)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        var claims = new[]
+
+        var claims = customer.Claims.Select(x => new Claim(x.Type, x.Value)).ToList();
+        
+        if (!claims.Any(x => x.Type == ClaimTypes.NameIdentifier))
         {
-            new Claim(ClaimTypes.NameIdentifier, customerId.ToString()),
-            new Claim(ClaimTypes.Role, role ?? "Customer")
-        };
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, customer.Id.ToString()));
+        }
+        
+        if (!claims.Any(x => x.Type == ClaimTypes.Role))
+        {
+            claims.Add(new Claim(ClaimTypes.Role, "Customer"));
+        }
+        
         var token = new JwtSecurityToken(
             _jwtConfig.Issuer,
             _jwtConfig.Audience,

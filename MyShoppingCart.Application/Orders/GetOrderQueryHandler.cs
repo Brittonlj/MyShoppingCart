@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace MyShoppingCart.Application.Orders
+﻿namespace MyShoppingCart.Application.Orders
 {
-    public sealed class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, Response<OrderModel>>
+    public sealed class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, Response<Order>>
     {
         private readonly IUnitOfWork _context;
 
@@ -11,7 +9,7 @@ namespace MyShoppingCart.Application.Orders
             _context = context;
         }
 
-        public async Task<Response<OrderModel>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
+        public async Task<Response<Order>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
             var order = await _context
                 .Orders
@@ -26,7 +24,7 @@ namespace MyShoppingCart.Application.Orders
                 return NotFound.Instance;
             }
 
-            return order.ToModel();
+            return order;
         }
     }
 }

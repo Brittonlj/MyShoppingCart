@@ -7,7 +7,7 @@ public sealed record GetOrdersQuery(
     string SortColumn,
     bool SortAscending = true
     ) :
-    IQueryMany<OrderModel>,
+    IQueryMany<Order>,
     IAuthorizedCustomerRequest
 {
 }

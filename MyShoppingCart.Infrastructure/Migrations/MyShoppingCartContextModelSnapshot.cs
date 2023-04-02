@@ -86,9 +86,13 @@ namespace MyShoppingCart.Infrastructure.Migrations
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
 
-                    b.HasIndex("BillingAddressId");
+                    b.HasIndex("BillingAddressId")
+                        .IsUnique()
+                        .HasFilter("[BillingAddressId] IS NOT NULL");
 
-                    b.HasIndex("ShippingAddressId");
+                    b.HasIndex("ShippingAddressId")
+                        .IsUnique()
+                        .HasFilter("[ShippingAddressId] IS NOT NULL");
 
                     b.ToTable("Customer", (string)null);
                 });
@@ -162,15 +166,43 @@ namespace MyShoppingCart.Infrastructure.Migrations
                     b.ToTable("Product", (string)null);
                 });
 
+            modelBuilder.Entity("MyShoppingCart.Domain.Entities.SecurityClaim", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Claim", (string)null);
+                });
+
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("MyShoppingCart.Domain.Entities.Address", "BillingAddress")
-                        .WithMany()
-                        .HasForeignKey("BillingAddressId");
+                        .WithOne()
+                        .HasForeignKey("MyShoppingCart.Domain.Entities.Customer", "BillingAddressId");
 
                     b.HasOne("MyShoppingCart.Domain.Entities.Address", "ShippingAddress")
-                        .WithMany()
-                        .HasForeignKey("ShippingAddressId");
+                        .WithOne()
+                        .HasForeignKey("MyShoppingCart.Domain.Entities.Customer", "ShippingAddressId");
 
                     b.Navigation("BillingAddress");
 
@@ -179,17 +211,19 @@ namespace MyShoppingCart.Infrastructure.Migrations
 
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", null)
-                        .WithMany("Orders")
+                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", "Customer")
+                        .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.OrderProduct", b =>
                 {
                     b.HasOne("MyShoppingCart.Domain.Entities.Order", null)
-                        .WithMany("OrderProducts")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -201,14 +235,18 @@ namespace MyShoppingCart.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyShoppingCart.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("MyShoppingCart.Domain.Entities.SecurityClaim", b =>
                 {
-                    b.Navigation("Orders");
+                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", null)
+                        .WithMany("Claims")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("MyShoppingCart.Domain.Entities.Order", b =>
+            modelBuilder.Entity("MyShoppingCart.Domain.Entities.Customer", b =>
                 {
-                    b.Navigation("OrderProducts");
+                    b.Navigation("Claims");
                 });
 #pragma warning restore 612, 618
         }

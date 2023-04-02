@@ -30,17 +30,13 @@ public sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .IsRequired()
             .HasMaxLength(50);
 
-        //builder
-        //    .HasOne(x => x.BillingAddress)
-        //    .WithOne()
-        //    .HasForeignKey<Customer>("BillingAddressId")
-        //    .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(x => x.ShippingAddress)
+            .WithOne();
 
-        //builder
-        //    .HasOne(x => x.ShippingAddress)
-        //    .WithOne()
-        //    .HasForeignKey<Customer>("ShippingAddressId")
-        //    .OnDelete(DeleteBehavior.Cascade);
+        builder
+            .HasOne(x => x.BillingAddress)
+            .WithOne();
 
     }
 }

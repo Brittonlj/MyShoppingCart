@@ -13,17 +13,18 @@ public class JwtTokenQueryHandler : IRequestHandler<JwtTokenQuery, Response<stri
 
     public async Task<Response<string>> Handle(JwtTokenQuery request, CancellationToken cancellationToken)
     {
-        var customer = await _context.Customers.FindAsync(request.CustomerId);
-
-        // add authentication here
+        var customer = await _context
+            .Customers
+            .Include(x => x.Claims)
+            .FirstOrDefaultAsync(x => x.Id == request.CustomerId);
 
         if (customer is null)
         {
             return Unauthorized.Instance;
         }
 
-        var token = _tokenGenerator.GenerateToken(request.CustomerId, request.Role);
-
-        return token;
+        var token = _tokenGenerator.GenerateToken(customer);
+        var bearer = $"Bearer {token}";
+        return bearer;
     }
 }

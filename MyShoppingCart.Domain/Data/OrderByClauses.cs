@@ -1,4 +1,6 @@
-﻿namespace MyShoppingCart.Application.Data;
+﻿using MyShoppingCart.Domain.Entities;
+
+namespace MyShoppingCart.Domain.Data;
 
 public static class OrderByClauses
 {
@@ -16,5 +18,5 @@ public static class OrderByClauses
         { nameof(Order.OrderDateTimeUtc), new OrderBy<Order, DateTime>(x => x.OrderDateTimeUtc) }
 };
 
-    
+
 }

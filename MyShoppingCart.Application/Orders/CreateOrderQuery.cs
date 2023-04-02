@@ -3,7 +3,7 @@
 public sealed record CreateOrderQuery(
     Guid CustomerId,
     IReadOnlyList<Guid> ProductIds) :
-    IQuery<OrderModel>,
+    IQuery<Order>,
     IAuthorizedCustomerRequest
 {
 }

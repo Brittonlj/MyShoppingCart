@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Data;
+﻿namespace MyShoppingCart.Domain.Data;
 
 public interface IOrderBy
 {

@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace MyShoppingCart.Application.Products;
+﻿namespace MyShoppingCart.Application.Products;
 
 public sealed class GetProductsQueryHandler :
-    IRequestHandler<GetProductsQuery, Response<IReadOnlyList<ProductModel>>>
+    IRequestHandler<GetProductsQuery, Response<IReadOnlyList<Product>>>
 {
     private readonly IUnitOfWork _context;
     public GetProductsQueryHandler(IUnitOfWork context)
@@ -11,7 +9,7 @@ public sealed class GetProductsQueryHandler :
         _context = context;
     }
 
-    public async Task<Response<IReadOnlyList<ProductModel>>> Handle(
+    public async Task<Response<IReadOnlyList<Product>>> Handle(
         GetProductsQuery request,
         CancellationToken cancellationToken)
     {
@@ -36,6 +34,6 @@ public sealed class GetProductsQueryHandler :
 
         var products = await query.ToListAsync(cancellationToken);
 
-        return products.ToModels();
+        return products;
     }
 }

@@ -1,4 +1,4 @@
-﻿using MyShoppingCart.Application.Addresses;
+﻿using MyShoppingCart.Domain.Models;
 
 namespace MyShoppingCart.Application.Customers;
 
@@ -6,9 +6,9 @@ public sealed record CreateCustomerQuery(
     string FirstName,
     string LastName,
     string Email,
-    AddressModel BillingAddress,
-    AddressModel ShippingAddress
-    ) :
-    IQuery<CustomerModel>
+    NewAddressModel? BillingAddress,
+    NewAddressModel? ShippingAddress,
+    List<NewSecurityClaimModel> Claims) :
+    IQuery<Customer>
 {
 }

@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
 
 namespace MyShoppingCart.Application.Orders;
 
-public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, Response<OrderModel>>
+public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, Response<Order>>
 {
     private readonly IUnitOfWork _context;
 
@@ -11,25 +11,44 @@ public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, 
         _context = context;
     }
 
-    public async Task<Response<OrderModel>> Handle(CreateOrderQuery request, CancellationToken cancellationToken)
+    public async Task<Response<Order>> Handle(CreateOrderQuery request, CancellationToken cancellationToken)
     {
         var customer = await _context
             .Customers
-            .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
+            .FindAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)
         {
             return new NotFound(Error.CustomerNotFound.Message);
         }
 
-        var order = request.ToShallowEntity(customer);
-        var products = _context.Products.Where(x => request.ProductIds.Contains(x.Id)).ToList();
-        order.Products.AddRange(products);
+        var order = new Order
+        {
+            Customer = customer,
+            CustomerId = customer.Id,
+            OrderDateTimeUtc = DateTime.UtcNow,
+        };
 
+        var productsList = await _context.Products.Where(x => request.ProductIds.Contains(x.Id)).ToListAsync(cancellationToken);
+
+        var missingProducts = request.ProductIds.Where(x => !productsList.Select(x => x.Id).Contains(x));
+
+        if (missingProducts.Any())
+        {
+            var json = JsonSerializer.Serialize(missingProducts);
+
+            return new NotFound(json);
+        }
+
+        foreach (var productId in request.ProductIds)
+        {
+            order.Products.Add(productsList.First(x => x.Id == productId));
+        }
+        
         _context.Orders.Add(order);
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return order.ToModel();
+        return order;
     }
 }

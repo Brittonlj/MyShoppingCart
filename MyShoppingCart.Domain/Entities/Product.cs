@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Domain.Entities;
 
-public sealed class Product : IEquatable<Product>
+public sealed class Product : IEntity<Product>
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public required string Name { get; set; }

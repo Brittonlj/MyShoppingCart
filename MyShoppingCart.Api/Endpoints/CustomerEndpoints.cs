@@ -39,8 +39,8 @@ public sealed class CustomerEndpoints
             pageNumber ?? 1,
             pageSize ?? defaultPageSize,
             sortColumn ?? defaultSortColumn,
-            sortAscending ?? true
-            );
+            sortAscending ?? true);
+
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();

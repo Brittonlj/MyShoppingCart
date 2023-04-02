@@ -1,4 +1,6 @@
 ﻿
+using MyShoppingCart.Domain.Validators;
+
 namespace MyShoppingCart.Application.Customers;
 
 public sealed class UpdateCustomerQueryValidator : AbstractValidator<UpdateCustomerQuery>
@@ -9,7 +11,7 @@ public sealed class UpdateCustomerQueryValidator : AbstractValidator<UpdateCusto
         RuleFor(x => x.FirstName).NotEmpty().MaximumLength(50);
         RuleFor(x => x.LastName).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Email).NotEmpty().MaximumLength(50).EmailAddress();
-        RuleFor(x => x.ShippingAddress).NotNull().SetValidator(new AddressModelValidator());
-        RuleFor(x => x.BillingAddress).NotNull().SetValidator(new AddressModelValidator());
+        RuleFor(x => x.ShippingAddress).NotNull().SetValidator(new AddressValidator());
+        RuleFor(x => x.BillingAddress).NotNull().SetValidator(new AddressValidator());
     }
 }

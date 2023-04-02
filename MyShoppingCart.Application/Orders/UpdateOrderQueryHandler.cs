@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace MyShoppingCart.Application.Orders;
 
-namespace MyShoppingCart.Application.Orders;
-
-public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, Response<OrderModel>>
+public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, Response<Order>>
 {
     private readonly IUnitOfWork _context;
 
@@ -11,7 +9,7 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
         _context = context;
     }
 
-    public async Task<Response<OrderModel>> Handle(UpdateOrderQuery request, CancellationToken cancellationToken)
+    public async Task<Response<Order>> Handle(UpdateOrderQuery request, CancellationToken cancellationToken)
     {
         var order = await _context
             .Orders
@@ -29,19 +27,11 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
         var productGuids = request.ProductIds.Select(x => x).ToList();
         var requestProducts = await _context.Products.Where(x => productGuids.Contains(x.Id)).ToListAsync();
 
-        foreach (var product in order.Products.Where(x => !productGuids.Contains(x.Id)))
-        {
-            order.Products.Remove(product);
-        }
-        foreach (var product in requestProducts.Where(x => !order.Products.Contains(x)))
-        {
-            order.Products.Add(product);
-        }
-
-        _context.Orders.Update(order);
+        // Only update the product lists
+        EntityUtility.MergeEntityLists(_context.Products, order.Products, requestProducts);
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return order.ToModel();
+        return order;
     }
 }

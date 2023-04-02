@@ -27,6 +27,7 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder
             .HasOne(x => x.Customer)
             .WithMany()
-            .HasForeignKey(x => x.CustomerId);
+            .HasForeignKey(x => x.CustomerId)
+            .HasPrincipalKey(x => x.Id);
     }
 }

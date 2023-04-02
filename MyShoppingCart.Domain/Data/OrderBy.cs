@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace MyShoppingCart.Application.Data;
+namespace MyShoppingCart.Domain.Data;
 
 public sealed class OrderBy<TEntity, T> : IOrderBy
 {
@@ -11,6 +11,6 @@ public sealed class OrderBy<TEntity, T> : IOrderBy
         this.expression = expression;
     }
 
-    public dynamic Expression => this.expression;
+    public dynamic Expression => expression;
 }
 

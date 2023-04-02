@@ -1,10 +1,10 @@
 ﻿namespace MyShoppingCart.Domain.Entities;
 
-public sealed class Order : IEquatable<Order>
+public sealed class Order : IEntity<Order>
 {
     public Guid Id { get; init; } = Guid.NewGuid();
-    public Guid CustomerId { get; init; }
-    public required Customer Customer { get; init; }
+    public required Guid CustomerId { get; set; }
+    public required Customer Customer { get; set; }
     public DateTime OrderDateTimeUtc { get; set; } = DateTime.UtcNow;
     public List<Product> Products { get; } = new();
 
@@ -22,7 +22,7 @@ public sealed class Order : IEquatable<Order>
 
         return
             Id == other.Id &&
-            CustomerId == other.CustomerId &&
+            Customer == other.Customer &&
             OrderDateTimeUtc == other.OrderDateTimeUtc &&
             Products.SequenceEqual(other.Products);
     }
@@ -34,7 +34,7 @@ public sealed class Order : IEquatable<Order>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, CustomerId, OrderDateTimeUtc, Products);
+        return HashCode.Combine(Id, Customer, OrderDateTimeUtc, Products);
     }
 
     public static bool operator ==(Order obj1, Order obj2)

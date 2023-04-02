@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using MyShoppingCart.Application.Data;
+using MyShoppingCart.Domain.Data;
 using MyShoppingCart.Domain.Entities;
 
 namespace MyShoppingCart.Infrastructure;
@@ -12,7 +12,8 @@ public sealed class MyShoppingCartContext : DbContext, IUnitOfWork
     public DbSet<Product> Products { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<OrderProduct> OrderProducts { get; set; }
-
+    public DbSet<SecurityClaim> Claims { get; set; }
+  
 
     public MyShoppingCartContext(){ }
     public MyShoppingCartContext(DbContextOptions<MyShoppingCartContext> context) : base(context) { }

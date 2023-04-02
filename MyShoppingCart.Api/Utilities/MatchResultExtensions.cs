@@ -7,7 +7,7 @@ public static class MatchResultExtensions
         return response.Match(
             success => (success is Success) ? Ok() : Ok(success),
             unauthorized => Unauthorized(),
-            notFound => NotFound(),
+            notFound => (string.IsNullOrWhiteSpace(notFound.Message)) ? NotFound() : NotFound(notFound.Message),
             error => Problem(error.ToJson()),
             validationFailed => ValidationProblem(validationFailed.Results));
     }

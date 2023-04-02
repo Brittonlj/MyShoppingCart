@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace MyShoppingCart.Application.Customers;
 
-namespace MyShoppingCart.Application.Customers;
-
-public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Response<CustomerModel>>
+public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Response<Customer>>
 {
     private readonly IUnitOfWork _context;
 
@@ -11,7 +9,7 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
         _context = context;
     }
 
-    public async Task<Response<CustomerModel>> Handle(
+    public async Task<Response<Customer>> Handle(
         GetCustomerQuery query,
         CancellationToken cancellationToken = default)
     {
@@ -28,6 +26,6 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
             return NotFound.Instance;
         }
 
-        return customer.ToModel();
+        return customer;
     }
 }

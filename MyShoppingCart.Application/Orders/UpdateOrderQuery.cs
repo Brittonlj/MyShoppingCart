@@ -4,7 +4,7 @@ public sealed record UpdateOrderQuery(
     Guid CustomerId,
     Guid OrderId,
     IReadOnlyList<Guid> ProductIds) :
-    IQuery<OrderModel>,
+    IQuery<Order>,
     IAuthorizedCustomerRequest
 {
 }
