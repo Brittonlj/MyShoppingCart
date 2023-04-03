@@ -1,7 +1,7 @@
 ﻿namespace MyShoppingCart.Application.Customers;
 
 public sealed class GetCustomerSecurityQueryHandler : 
-    IRequestHandler<GetCustomerSecurityQuery, Response<Customer>>
+    IRequestHandler<GetCustomerSecurityQuery, Response<IReadOnlyList<SecurityClaim>>>
 {
     private readonly IUnitOfWork _context;
 
@@ -10,14 +10,12 @@ public sealed class GetCustomerSecurityQueryHandler :
         _context = context;
     }
 
-    public async Task<Response<Customer>> Handle(
+    public async Task<Response<IReadOnlyList<SecurityClaim>>> Handle(
         GetCustomerSecurityQuery request, 
         CancellationToken cancellationToken)
     {
         var customer = await _context
             .Customers
-            .Include(x => x.Claims)
-            .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
 
         if (customer is null)
@@ -25,6 +23,11 @@ public sealed class GetCustomerSecurityQueryHandler :
             return NotFound.Instance;
         }
 
-        return customer;
+        var claims = await _context
+            .Claims
+            .Where(x => x.CustomerId == request.CustomerId)
+            .ToListAsync(cancellationToken);
+
+        return claims;
     }
 }

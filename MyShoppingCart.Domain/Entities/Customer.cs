@@ -8,14 +8,12 @@ public sealed class Customer : IEntity<Customer>
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string Email { get; set; }
+    [JsonIgnore]
     public Guid? ShippingAddressId { get; set; }
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Address? ShippingAddress { get; set; }
+    [JsonIgnore]
     public Guid? BillingAddressId { get; set; }
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Address? BillingAddress { get; set; }
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public List<SecurityClaim> Claims { get; } = new();
 
     #region Equatable
     public bool Equals(Customer? other)
@@ -32,8 +30,7 @@ public sealed class Customer : IEntity<Customer>
             LastName == other.LastName &&
             Email == other.Email &&
             EqualityComparer<Address>.Default.Equals(ShippingAddress, other.ShippingAddress) &&
-            EqualityComparer<Address>.Default.Equals(BillingAddress, other.BillingAddress) &&
-            Claims.SequenceEqual(other.Claims);
+            EqualityComparer<Address>.Default.Equals(BillingAddress, other.BillingAddress);
     }
 
     public override bool Equals(object? obj)
@@ -43,7 +40,7 @@ public sealed class Customer : IEntity<Customer>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, FirstName, LastName, Email, ShippingAddress, BillingAddress, Claims);
+        return HashCode.Combine(Id, FirstName, LastName, Email, ShippingAddress, BillingAddress);
     }
 
     public static bool operator ==(Customer obj1, Customer obj2)

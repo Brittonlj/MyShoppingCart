@@ -1,8 +1,10 @@
-﻿namespace MyShoppingCart.Application.Orders;
+﻿using MyShoppingCart.Domain.Models;
+
+namespace MyShoppingCart.Application.Orders;
 
 public sealed record CreateOrderQuery(
     Guid CustomerId,
-    IReadOnlyList<Guid> ProductIds) :
+    IReadOnlyList<NewLineItemModel> LineItems) :
     IQuery<Order>,
     IAuthorizedCustomerRequest
 {

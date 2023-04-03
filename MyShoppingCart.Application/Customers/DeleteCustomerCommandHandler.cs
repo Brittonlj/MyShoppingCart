@@ -20,9 +20,7 @@ public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustome
             return NotFound.Instance;
         }
 
-        _context
-            .Customers
-            .Remove(customer);
+        _context.Customers.Remove(customer);
 
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -24,7 +24,7 @@ public sealed class GetProductsQueryHandler :
                 x.Description.Contains(request.SearchString));
         }
 
-        var orderByClause = OrderByClauses.Products[request.SortColumn];
+        var orderByClause = GetProductsQuery.OrderByClauses[request.SortColumn];
 
         query = request.SortAscending ?
             query.OrderBy(orderByClause) :

@@ -13,12 +13,29 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
 
     public async Task<Response<Customer>> Handle(CreateCustomerQuery request, CancellationToken cancellationToken)
     {
+        var customer = MapToCustomer(request);
+
+        var claims = request.Claims.Select(x => new SecurityClaim{ Type = x.Type, Value = x.Value }).ToList();
+
+        ValidateClaims(claims, customer.Id);
+        
+        await _context.Customers.AddAsync(customer, cancellationToken);
+        await _context.Claims.AddRangeAsync(claims, cancellationToken);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return customer;
+    }
+
+    private Customer MapToCustomer(CreateCustomerQuery request)
+    {
         var customer = new Customer
         {
             FirstName = request.FirstName,
             LastName = request.LastName,
             Email = request.Email
         };
+
         if (request.BillingAddress is not null)
         {
             customer.BillingAddress = new Address
@@ -29,7 +46,8 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
                 PostalCode = request.BillingAddress.PostalCode
             };
         }
-        if(request.ShippingAddress is not null)
+
+        if (request.ShippingAddress is not null)
         {
             customer.ShippingAddress = new Address
             {
@@ -39,30 +57,22 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
                 PostalCode = request.ShippingAddress.PostalCode
             };
         }
-        foreach(var claim in request.Claims)
-        {
-            customer.Claims.Add(new SecurityClaim
-            {
-                Type = claim.Type,
-                Value = claim.Value
-            });
-        }
-
-        AddMinimumClaims(customer.Claims, customer.Id);
-        
-        await _context.Customers.AddAsync(customer, cancellationToken);
-
-        await _context.SaveChangesAsync(cancellationToken);
 
         return customer;
     }
 
-    private void AddMinimumClaims(List<SecurityClaim> claims, Guid customerId)
+    private void ValidateClaims(List<SecurityClaim> claims, Guid customerId)
     {
+        var invalidUserClaims = claims.Where(x => x.Type == ClaimTypes.NameIdentifier && x.Value != customerId.ToString());
+
+        foreach(var invalidClaim in invalidUserClaims)
+        {
+            claims.Remove(invalidClaim);
+        }
+
         if (!claims.Any(x => x.Type == ClaimTypes.NameIdentifier))
         {
-            claims.Add(
-            new SecurityClaim
+            claims.Add(new SecurityClaim
             {
                 CustomerId = customerId,
                 Type = ClaimTypes.NameIdentifier,
@@ -72,8 +82,7 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
 
         if (!claims.Any(x => x.Type == ClaimTypes.Role))
         {
-            claims.Add(
-            new SecurityClaim
+            claims.Add(new SecurityClaim
             {
                 CustomerId = customerId,
                 Type = ClaimTypes.Role,

@@ -1,4 +1,6 @@
-﻿namespace MyShoppingCart.Application.Authentication;
+﻿using MyShoppingCart.Application.Services;
+
+namespace MyShoppingCart.Application.Authentication;
 
 public class JwtTokenQueryHandler : IRequestHandler<JwtTokenQuery, Response<string>>
 {
@@ -15,15 +17,19 @@ public class JwtTokenQueryHandler : IRequestHandler<JwtTokenQuery, Response<stri
     {
         var customer = await _context
             .Customers
-            .Include(x => x.Claims)
-            .FirstOrDefaultAsync(x => x.Id == request.CustomerId);
+            .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
 
         if (customer is null)
         {
             return Unauthorized.Instance;
         }
 
-        var token = _tokenGenerator.GenerateToken(customer);
+        var claims = await _context
+            .Claims
+            .Where(x => x.CustomerId  == request.CustomerId)
+            .ToListAsync(cancellationToken);
+
+        var token = _tokenGenerator.GenerateToken(claims);
         var bearer = $"Bearer {token}";
         return bearer;
     }

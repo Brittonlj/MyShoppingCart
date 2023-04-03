@@ -22,8 +22,4 @@
     <PackageReference Include="OneOf.SourceGenerator" Version="3.0.243" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Addresses\" />
-  </ItemGroup>
-
 </Project>

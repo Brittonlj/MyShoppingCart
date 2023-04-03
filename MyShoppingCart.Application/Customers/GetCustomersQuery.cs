@@ -7,7 +7,7 @@ public sealed record GetCustomersQuery(
     int PageSize,
     string SortColumn = "LastName",
     bool SortAscending = true
-    ) : IQueryMany<Customer>
+    ) : IQueryManyPaged<Customer>
 {
     
     public static readonly IReadOnlyDictionary<string, IOrderBy> OrderByClauses = new Dictionary<string, IOrderBy>

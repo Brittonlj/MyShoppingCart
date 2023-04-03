@@ -1,4 +1,6 @@
-﻿namespace MyShoppingCart.Application.Customers;
+﻿using Azure.Core;
+
+namespace MyShoppingCart.Application.Customers;
 
 public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQuery, Response<Customer>>
 {
@@ -17,7 +19,6 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
             .Customers
             .Include(x => x.BillingAddress)
             .Include(x => x.ShippingAddress)
-            .Include(x => x.Claims)
             .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
 
         if (customer is null)
@@ -26,6 +27,16 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
         }
 
         _context.Entry(customer).CurrentValues.SetValues(request);
+
+        UpdateAddresses(customer, request);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return customer;
+    }
+
+    private void UpdateAddresses(Customer customer, UpdateCustomerQuery request)
+    {
         if (customer.BillingAddress is not null)
         {
             if (request.BillingAddress is not null)
@@ -49,12 +60,5 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
                 customer.ShippingAddress = null;
             }
         }
-
-        EntityUtility.MergeEntityLists(_context.Claims, customer.Claims, request.Claims.ToList());
-
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return customer;
     }
-
 }

@@ -1,4 +1,10 @@
-﻿namespace MyShoppingCart.Domain.Data;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using MyShoppingCart.Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+
+namespace MyShoppingCart.Domain.Data;
 
 public static class DataExtensions
 {

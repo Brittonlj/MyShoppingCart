@@ -4,6 +4,7 @@ public sealed class OrderProduct : IEquatable<OrderProduct>
 {
     public Guid OrderId { get; init; }
     public Guid ProductId { get; init; }
+    public int Quantity { get; init; }
 
     #region Equatable
     public bool Equals(OrderProduct? other)
@@ -19,7 +20,8 @@ public sealed class OrderProduct : IEquatable<OrderProduct>
 
         return
             OrderId == other.OrderId &&
-            ProductId == other.ProductId;
+            ProductId == other.ProductId &&
+            Quantity == other.Quantity;
     }
 
     public override bool Equals(object? obj)
@@ -29,7 +31,7 @@ public sealed class OrderProduct : IEquatable<OrderProduct>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(OrderId, ProductId);
+        return HashCode.Combine(OrderId, ProductId, Quantity);
     }
 
     public static bool operator ==(OrderProduct obj1, OrderProduct obj2)

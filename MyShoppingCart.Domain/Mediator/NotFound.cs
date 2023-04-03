@@ -4,11 +4,11 @@ public sealed class NotFound
 {
     public static readonly NotFound Instance = new NotFound();
 
-    public string Message { get; } = "Not Found";
+    public object? Message { get; }
 
 	private NotFound() { }
 
-    public NotFound(string message)
+    public NotFound(object? message = null)
     {
         Message = message;
     }

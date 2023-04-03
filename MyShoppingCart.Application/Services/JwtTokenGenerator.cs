@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MyShoppingCart.Application.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace MyShoppingCart.Application.Authentication;
+namespace MyShoppingCart.Application.Services;
 
 public sealed class JwtTokenGenerator : IJwtTokenGenerator
 {
@@ -15,32 +16,20 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
         _jwtConfig = config.Value;
     }
 
-    public string GenerateToken(Customer customer)
+    public string GenerateToken(List<SecurityClaim> securityClaims)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = customer.Claims.Select(x => new Claim(x.Type, x.Value)).ToList();
-        
-        if (!claims.Any(x => x.Type == ClaimTypes.NameIdentifier))
-        {
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, customer.Id.ToString()));
-        }
-        
-        if (!claims.Any(x => x.Type == ClaimTypes.Role))
-        {
-            claims.Add(new Claim(ClaimTypes.Role, "Customer"));
-        }
-        
+        var claims = securityClaims.Select(x => new Claim(x.Type, x.Value)).ToList();
+
         var token = new JwtSecurityToken(
             _jwtConfig.Issuer,
             _jwtConfig.Audience,
             claims,
-            expires: DateTime.Now.AddMinutes(15),
+            expires: DateTime.Now.AddMinutes(_jwtConfig.TimeoutInMinutes),
             signingCredentials: credentials);
 
-
         return new JwtSecurityTokenHandler().WriteToken(token);
-
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace MyShoppingCart.Application.Customers;
 
-public sealed record GetCustomerSecurityQuery(Guid CustomerId) : IQuery<Customer>
+public sealed record GetCustomerSecurityQuery(Guid CustomerId) : IQueryMany<SecurityClaim>
 {
 }

@@ -6,6 +6,13 @@ public sealed record GetProductsQuery(
     int PageSize,
     string SortColumn,
     bool SortAscending = true
-    ) : IQueryMany<Product>
+    ) : IQueryManyPaged<Product>
 {
+    public static readonly IReadOnlyDictionary<string, IOrderBy> OrderByClauses =
+        new Dictionary<string, IOrderBy>
+        {
+            { nameof(Product.Name), new OrderBy<Product, string>(x => x.Name) },
+            { nameof(Product.Price), new OrderBy<Product, decimal>(x => x.Price) },
+        };
+
 }

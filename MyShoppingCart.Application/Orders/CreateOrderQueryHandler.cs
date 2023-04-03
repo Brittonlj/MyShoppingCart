@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace MyShoppingCart.Application.Orders;
+﻿namespace MyShoppingCart.Application.Orders;
 
 public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, Response<Order>>
 {
@@ -13,38 +11,21 @@ public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, 
 
     public async Task<Response<Order>> Handle(CreateOrderQuery request, CancellationToken cancellationToken)
     {
-        var customer = await _context
-            .Customers
-            .FindAsync(request.CustomerId, cancellationToken);
+        var customer = await _context.Customers.FindAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)
         {
             return new NotFound(Error.CustomerNotFound.Message);
         }
 
-        var order = new Order
+        var order = new Order { Customer = customer, CustomerId = customer.Id };
+
+        foreach (var lineItem in request.LineItems)
         {
-            Customer = customer,
-            CustomerId = customer.Id,
-            OrderDateTimeUtc = DateTime.UtcNow,
-        };
-
-        var productsList = await _context.Products.Where(x => request.ProductIds.Contains(x.Id)).ToListAsync(cancellationToken);
-
-        var missingProducts = request.ProductIds.Where(x => !productsList.Select(x => x.Id).Contains(x));
-
-        if (missingProducts.Any())
-        {
-            var json = JsonSerializer.Serialize(missingProducts);
-
-            return new NotFound(json);
+            _context.OrderProducts.Add(
+                new OrderProduct { OrderId = order.Id, ProductId = lineItem.ProductId, Quantity = lineItem.Quantity });
         }
 
-        foreach (var productId in request.ProductIds)
-        {
-            order.Products.Add(productsList.First(x => x.Id == productId));
-        }
-        
         _context.Orders.Add(order);
 
         await _context.SaveChangesAsync(cancellationToken);

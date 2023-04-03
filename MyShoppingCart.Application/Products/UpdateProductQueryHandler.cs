@@ -11,6 +11,7 @@ public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQue
 
     public async Task<Response<Product>> Handle(UpdateProductQuery request, CancellationToken cancellationToken)
     {
+
         var product = await _context.Products.FindAsync(request.Id, cancellationToken);
 
         if (product is null)
