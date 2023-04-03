@@ -16,8 +16,6 @@ public sealed class GetCustomersQueryHandler :
     {
         var query = _context
             .Customers
-            .Include(x => x.BillingAddress)
-            .Include(x => x.ShippingAddress)
             .AsSplitQuery()
             .AsNoTracking();
 
@@ -39,7 +37,10 @@ public sealed class GetCustomersQueryHandler :
             query.OrderBy(orderByClause) :
             query.OrderByDescending(orderByClause);
 
-        query = query.Paginate(request.PageNumber, request.PageSize);
+        query = query.Paginate(request.PageNumber, request.PageSize)
+            .Include(x => x.BillingAddress)
+            .Include(x => x.ShippingAddress)
+;
 
         var customers = await query.ToListAsync(cancellationToken);
 

@@ -13,7 +13,6 @@ public sealed class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderComma
     {
         var order = await _context
             .Orders
-            .Include(x => x.Products)
             .Where(x => x.Id == request.OrderId && x.CustomerId == request.CustomerId)
             .FirstOrDefaultAsync(cancellationToken);
 

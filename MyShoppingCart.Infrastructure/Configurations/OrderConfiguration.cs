@@ -20,9 +20,10 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
             .IsRequired();
 
         builder
-            .HasMany(x => x.Products)
-            .WithMany()
-            .UsingEntity<OrderProduct>();
+            .HasMany(x => x.LineItems)
+            .WithOne()
+            .HasForeignKey(x => x.OrderId)
+            .HasPrincipalKey(x => x.Id);
 
         builder
             .HasOne(x => x.Customer)

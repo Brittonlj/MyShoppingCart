@@ -6,9 +6,9 @@ public sealed record CreateCustomerQuery(
     string FirstName,
     string LastName,
     string Email,
-    NewAddressModel? BillingAddress,
-    NewAddressModel? ShippingAddress,
-    List<NewSecurityClaimModel> Claims) :
+    AddressModel? BillingAddress,
+    AddressModel? ShippingAddress,
+    List<SecurityClaimModel> Claims) :
     IQuery<Customer>
 {
 }

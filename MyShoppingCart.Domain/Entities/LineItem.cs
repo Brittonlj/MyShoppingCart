@@ -1,13 +1,28 @@
-﻿namespace MyShoppingCart.Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
 
-public sealed class OrderProduct : IEquatable<OrderProduct>
+namespace MyShoppingCart.Domain.Entities;
+
+public sealed class LineItem : IEquatable<LineItem>
 {
-    public Guid OrderId { get; init; }
-    public Guid ProductId { get; init; }
-    public int Quantity { get; init; }
+    public required Guid OrderId { get; init; }
+    public required Guid ProductId { get; init; }
+    public Product? Product { get; init; }
+    public required int Quantity { get; set; }
+
+    public LineItem()
+    {
+    }
+
+    [SetsRequiredMembers]
+    public LineItem(Guid orderId, Guid productId, int quantity)
+    {
+        OrderId = orderId;
+        ProductId = productId;
+        Quantity = quantity;
+    }
 
     #region Equatable
-    public bool Equals(OrderProduct? other)
+    public bool Equals(LineItem? other)
     {
         if (other is null)
             return false;
@@ -26,7 +41,7 @@ public sealed class OrderProduct : IEquatable<OrderProduct>
 
     public override bool Equals(object? obj)
     {
-        return Equals(obj as OrderProduct);
+        return Equals(obj as LineItem);
     }
 
     public override int GetHashCode()
@@ -34,7 +49,7 @@ public sealed class OrderProduct : IEquatable<OrderProduct>
         return HashCode.Combine(OrderId, ProductId, Quantity);
     }
 
-    public static bool operator ==(OrderProduct obj1, OrderProduct obj2)
+    public static bool operator ==(LineItem obj1, LineItem obj2)
     {
         if (ReferenceEquals(obj1, obj2))
             return true;
@@ -45,7 +60,7 @@ public sealed class OrderProduct : IEquatable<OrderProduct>
         return obj1.Equals(obj2);
     }
 
-    public static bool operator !=(OrderProduct obj1, OrderProduct obj2) => !(obj1 == obj2);
+    public static bool operator !=(LineItem obj1, LineItem obj2) => !(obj1 == obj2);
 
     #endregion
 }

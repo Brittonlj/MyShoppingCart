@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Domain.Models;
 
-public sealed record NewSecurityClaimModel(
+public sealed record SecurityClaimModel(
     string Type,
     string Value)
 {

@@ -71,7 +71,7 @@ public static class SetupExtensions
         {
             var validIssuer = config["Jwt:Issuer"];
             var validAudience = config["Jwt:Audience"];
-            var key = config["key"];
+            var key = config["Jwt:key"];
 
             options.TokenValidationParameters = new TokenValidationParameters
             {

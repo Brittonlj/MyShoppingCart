@@ -1,12 +1,15 @@
-﻿namespace MyShoppingCart.Domain.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace MyShoppingCart.Domain.Entities;
 
 public sealed class Order : IEntity<Order>
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public required Guid CustomerId { get; set; }
-    public required Customer Customer { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]  
+    public Customer? Customer { get; set; }
     public DateTime OrderDateTimeUtc { get; set; } = DateTime.UtcNow;
-    public List<Product> Products { get; } = new();
+    public List<LineItem> LineItems { get; } = new();
 
     #region Equatable
     public bool Equals(Order? other)
@@ -22,9 +25,9 @@ public sealed class Order : IEntity<Order>
 
         return
             Id == other.Id &&
-            Customer == other.Customer &&
+            CustomerId == other.CustomerId &&
             OrderDateTimeUtc == other.OrderDateTimeUtc &&
-            Products.SequenceEqual(other.Products);
+            LineItems.SequenceEqual(other.LineItems);
     }
 
     public override bool Equals(object? obj)
@@ -34,7 +37,7 @@ public sealed class Order : IEntity<Order>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, Customer, OrderDateTimeUtc, Products);
+        return HashCode.Combine(Id, CustomerId, OrderDateTimeUtc, LineItems);
     }
 
     public static bool operator ==(Order obj1, Order obj2)

@@ -4,14 +4,18 @@ public class OrderEndpoints
 {
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
-        var group = app.MapGroup("/order")
+        var customer = app.MapGroup("/customer")
             .RequireAuthorization();
 
-        group.MapGet("/{customerId}", GetOrders);
-        group.MapGet("/{orderId}/{customerId}", GetOrder);
-        group.MapPost("/", CreateOrder);
-        group.MapPut("/", UpdateOrder);
-        group.MapDelete("/{orderId}/{customerId}", DeleteOrder);
+        customer.MapGet("/{customerId}/order", GetOrders);
+        customer.MapGet("/{customerId}/order/{orderId}", GetOrder);
+        customer.MapDelete("{customerId}/order/{orderId}", DeleteOrder);
+
+        var order = app.MapGroup("/order")
+            .RequireAuthorization();
+
+        order.MapPost("/", CreateOrder);
+        order.MapPut("/", UpdateOrder);
 
         return app;
     }

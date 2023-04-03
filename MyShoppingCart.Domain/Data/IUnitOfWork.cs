@@ -10,7 +10,7 @@ public interface IUnitOfWork
     DbSet<Order> Orders { get; set; }
     DbSet<Product> Products { get; set; }
     DbSet<Address> Addresses { get; set; }
-    DbSet<OrderProduct> OrderProducts { get; set; }
+    DbSet<LineItem> LineItems { get; set; }
     DbSet<SecurityClaim> Claims { get; set; }
 
 

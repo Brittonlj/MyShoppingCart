@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-
-namespace MyShoppingCart.Application.Customers;
+﻿namespace MyShoppingCart.Application.Customers;
 
 public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQuery, Response<Customer>>
 {
@@ -11,9 +9,7 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
         _context = context;
     }
 
-    public async Task<Response<Customer>> Handle(
-        UpdateCustomerQuery request,
-        CancellationToken cancellationToken)
+    public async Task<Response<Customer>> Handle(UpdateCustomerQuery request, CancellationToken cancellationToken)
     {
         var customer = await _context
             .Customers
@@ -34,6 +30,43 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
 
         return customer;
     }
+
+    //private async void UpdateClaims(UpdateCustomerQuery request)
+    //{
+    //    var originals = await _context
+    //        .Claims
+    //        .Where(x => x.CustomerId == request.CustomerId)
+    //        .ToListAsync();
+
+    //    var requests = request.Claims;
+
+    //    var claimsToAdd = requests.Where(x => !originals.Any(y => x.Id == y.Id)).ToList();
+
+    //    var claimsToDelete = originals.Where(x => !requests.Any(y => x.Id == y.Id))
+    //        .ToList();
+
+    //    var matches = originals.Join(requests,
+    //        originalId => originalId.Id,
+    //        requestId => requestId.Id,
+    //        (original, request) => new
+    //        {
+    //            Original = original,
+    //            Request = request
+    //        });
+
+    //    //Update
+    //    matches
+    //        .Where(x => x.Original.Id == x.Request.Id && x.Original != x.Request)
+    //        .ToList()
+    //        .ForEach(x => _context.Entry(x.Original).CurrentValues.SetValues(x.Request));
+
+    //    //Add
+    //    originals.AddRange(claimsToAdd);
+
+    //    //Delete
+    //    claimsToDelete.ForEach(x => originals.Remove(x));
+
+    //}
 
     private void UpdateAddresses(Customer customer, UpdateCustomerQuery request)
     {

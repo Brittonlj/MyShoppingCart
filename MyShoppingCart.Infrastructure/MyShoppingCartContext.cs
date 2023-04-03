@@ -11,7 +11,7 @@ public sealed class MyShoppingCartContext : DbContext, IUnitOfWork
     public DbSet<Order> Orders { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Address> Addresses { get; set; }
-    public DbSet<OrderProduct> OrderProducts { get; set; }
+    public DbSet<LineItem> LineItems { get; set; }
     public DbSet<SecurityClaim> Claims { get; set; }
   
 

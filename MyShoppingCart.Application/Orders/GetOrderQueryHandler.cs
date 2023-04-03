@@ -13,7 +13,8 @@
         {
             var order = await _context
                 .Orders
-                .Include(x => x.Products)
+                .Include(x => x.LineItems)
+                .ThenInclude(x => x.Product)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .Where(x => x.Id == request.OrderId && x.CustomerId == request.CustomerId)

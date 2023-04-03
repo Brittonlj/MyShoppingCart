@@ -18,12 +18,11 @@ public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, 
             return new NotFound(Error.CustomerNotFound.Message);
         }
 
-        var order = new Order { Customer = customer, CustomerId = customer.Id };
+        var order = new Order { CustomerId = customer.Id };
 
         foreach (var lineItem in request.LineItems)
         {
-            _context.OrderProducts.Add(
-                new OrderProduct { OrderId = order.Id, ProductId = lineItem.ProductId, Quantity = lineItem.Quantity });
+            order.LineItems.Add(new LineItem(order.Id, lineItem.ProductId, lineItem.Quantity));
         }
 
         _context.Orders.Add(order);

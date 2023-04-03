@@ -4,7 +4,7 @@ namespace MyShoppingCart.Application.Orders;
 
 public sealed record CreateOrderQuery(
     Guid CustomerId,
-    IReadOnlyList<NewLineItemModel> LineItems) :
+    IReadOnlyList<LineItemModel> LineItems) :
     IQuery<Order>,
     IAuthorizedCustomerRequest
 {

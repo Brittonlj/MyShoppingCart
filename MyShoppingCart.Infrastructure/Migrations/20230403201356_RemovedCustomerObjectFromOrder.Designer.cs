@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyShoppingCart.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyShoppingCart.Infrastructure;
 namespace MyShoppingCart.Infrastructure.Migrations
 {
     [DbContext(typeof(MyShoppingCartContext))]
-    partial class MyShoppingCartContextModelSnapshot : ModelSnapshot
+    [Migration("20230403201356_RemovedCustomerObjectFromOrder")]
+    partial class RemovedCustomerObjectFromOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,8 +138,6 @@ namespace MyShoppingCart.Infrastructure.Migrations
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
 
-                    b.HasIndex("CustomerId");
-
                     b.ToTable("Order", (string)null);
                 });
 
@@ -227,17 +228,6 @@ namespace MyShoppingCart.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("MyShoppingCart.Domain.Entities.Order", b =>
-                {
-                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Order", b =>

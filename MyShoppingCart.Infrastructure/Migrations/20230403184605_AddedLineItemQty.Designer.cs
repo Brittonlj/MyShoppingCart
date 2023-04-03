@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyShoppingCart.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyShoppingCart.Infrastructure;
 namespace MyShoppingCart.Infrastructure.Migrations
 {
     [DbContext(typeof(MyShoppingCartContext))]
-    partial class MyShoppingCartContextModelSnapshot : ModelSnapshot
+    [Migration("20230403184605_AddedLineItemQty")]
+    partial class AddedLineItemQty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,28 +100,6 @@ namespace MyShoppingCart.Infrastructure.Migrations
                     b.ToTable("Customer", (string)null);
                 });
 
-            modelBuilder.Entity("MyShoppingCart.Domain.Entities.LineItem", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("OrderId", "ProductId"));
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("LineItem", (string)null);
-                });
-
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -138,6 +119,26 @@ namespace MyShoppingCart.Infrastructure.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Order", (string)null);
+                });
+
+            modelBuilder.Entity("MyShoppingCart.Domain.Entities.OrderProduct", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("OrderId", "ProductId"));
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProduct", (string)null);
                 });
 
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Product", b =>
@@ -212,23 +213,6 @@ namespace MyShoppingCart.Infrastructure.Migrations
                     b.Navigation("ShippingAddress");
                 });
 
-            modelBuilder.Entity("MyShoppingCart.Domain.Entities.LineItem", b =>
-                {
-                    b.HasOne("MyShoppingCart.Domain.Entities.Order", null)
-                        .WithMany("LineItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyShoppingCart.Domain.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Order", b =>
                 {
                     b.HasOne("MyShoppingCart.Domain.Entities.Customer", "Customer")
@@ -240,9 +224,19 @@ namespace MyShoppingCart.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("MyShoppingCart.Domain.Entities.Order", b =>
+            modelBuilder.Entity("MyShoppingCart.Domain.Entities.OrderProduct", b =>
                 {
-                    b.Navigation("LineItems");
+                    b.HasOne("MyShoppingCart.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyShoppingCart.Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

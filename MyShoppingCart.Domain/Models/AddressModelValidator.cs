@@ -1,8 +1,8 @@
 ﻿namespace MyShoppingCart.Domain.Models;
 
-public sealed class NewAddressModelValidator : AbstractValidator<NewAddressModel>
+public sealed class AddressModelValidator : AbstractValidator<AddressModel>
 {
-	public NewAddressModelValidator()
+	public AddressModelValidator()
 	{
         RuleFor(x => x.Street).NotEmpty().MaximumLength(50);
         RuleFor(x => x.City).NotEmpty().MaximumLength(50);

@@ -16,7 +16,6 @@ public sealed class GetOrdersQueryHandler :
     {
         var query = _context
             .Orders
-            .Include(x => x.Products)
             .AsSplitQuery()
             .AsNoTracking()
             .Where(x => x.CustomerId == request.CustomerId);
@@ -25,8 +24,11 @@ public sealed class GetOrdersQueryHandler :
             query.OrderBy(x => x.OrderDateTimeUtc) :
             query.OrderByDescending(x => x.OrderDateTimeUtc);
 
-        query = query.Paginate(request.PageNumber, request.PageSize);
-
+        query = query
+            .Paginate(request.PageNumber, request.PageSize)
+            .Include(x => x.LineItems)
+            .ThenInclude(x => x.Product)
+;
         var orders = await query.ToListAsync(cancellationToken);
 
         return orders;

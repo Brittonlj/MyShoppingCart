@@ -6,8 +6,7 @@ public sealed record UpdateCustomerQuery(
     string LastName,
     string Email,
     Address BillingAddress,
-    Address ShippingAddress,
-    IReadOnlyList<SecurityClaim> Claims) :
+    Address ShippingAddress) :
     IQuery<Customer>,
     IAuthorizedCustomerRequest
 {

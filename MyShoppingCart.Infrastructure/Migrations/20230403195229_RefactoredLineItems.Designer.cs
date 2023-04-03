@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyShoppingCart.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyShoppingCart.Infrastructure;
 namespace MyShoppingCart.Infrastructure.Migrations
 {
     [DbContext(typeof(MyShoppingCartContext))]
-    partial class MyShoppingCartContextModelSnapshot : ModelSnapshot
+    [Migration("20230403195229_RefactoredLineItems")]
+    partial class RefactoredLineItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +114,6 @@ namespace MyShoppingCart.Infrastructure.Migrations
                     b.HasKey("OrderId", "ProductId");
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("OrderId", "ProductId"));
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
