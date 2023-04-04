@@ -5,9 +5,9 @@ namespace MyShoppingCart.Domain.Configuration;
 public sealed class DefaultPageSorting
 {
     [Required]
-    public string Customer { get; init; } = string.Empty;
+    public required string Customer { get; init; }
     [Required]
-    public string Product { get; init; } = string.Empty;
+    public required string Product { get; init; }
     [Required]
-    public string Order { get; init; } = string.Empty;
+    public required string Order { get; init; }
 }

@@ -6,7 +6,7 @@ public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQue
 
     public CreateProductQueryHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<Product>> Handle(CreateProductQuery request, CancellationToken cancellationToken)

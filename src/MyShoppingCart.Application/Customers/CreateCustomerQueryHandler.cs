@@ -8,7 +8,7 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
 
     public CreateCustomerQueryHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<Customer>> Handle(CreateCustomerQuery request, CancellationToken cancellationToken)

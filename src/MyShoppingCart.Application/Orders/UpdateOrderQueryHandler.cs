@@ -6,7 +6,7 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
 
     public UpdateOrderQueryHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<Order>> Handle(UpdateOrderQuery request, CancellationToken cancellationToken)

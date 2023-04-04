@@ -6,7 +6,7 @@ public sealed class GetProductsQueryHandler :
     private readonly IUnitOfWork _context;
     public GetProductsQueryHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<IReadOnlyList<Product>>> Handle(

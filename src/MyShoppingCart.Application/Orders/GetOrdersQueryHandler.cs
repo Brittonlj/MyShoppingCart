@@ -7,7 +7,7 @@ public sealed class GetOrdersQueryHandler :
 
     public GetOrdersQueryHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<IReadOnlyList<Order>>> Handle(

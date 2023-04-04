@@ -6,7 +6,7 @@ public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustome
 
     public DeleteCustomerCommandHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<Success>> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)

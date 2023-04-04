@@ -8,7 +8,7 @@ public sealed class CreateOrderQueryValidator : AbstractValidator<CreateOrderQue
 
     public CreateOrderQueryValidator(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
 
         RuleFor(x => x.CustomerId).NotEmpty();
         RuleFor(x => x.LineItems).NotEmpty();

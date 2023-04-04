@@ -7,7 +7,7 @@ public sealed class GetCustomersQueryHandler :
 
     public GetCustomersQueryHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<IReadOnlyList<Customer>>> Handle(

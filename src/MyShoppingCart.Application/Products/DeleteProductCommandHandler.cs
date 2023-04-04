@@ -5,7 +5,7 @@ public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductC
     private readonly IUnitOfWork _context;
     public DeleteProductCommandHandler(IUnitOfWork context)
     {
-        _context = context;
+        _context = Guard.Against.Null(context, nameof(context)); ;
     }
 
     public async Task<Response<Success>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
