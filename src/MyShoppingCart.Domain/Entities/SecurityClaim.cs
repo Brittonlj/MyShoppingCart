@@ -4,7 +4,6 @@ namespace MyShoppingCart.Domain.Entities;
 
 public sealed class SecurityClaim : IEntity<SecurityClaim>
 {
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public Guid Id { get; init; } = Guid.NewGuid();
     public Guid CustomerId { get; set; } = Guid.Empty;
     public required string Type { get; set; }

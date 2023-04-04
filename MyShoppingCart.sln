@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Api", "MyShoppingCart.Api\MyShoppingCart.Api.csproj", "{7C5BBE6E-EE6A-43CD-9912-53A452F4B7F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Api", "src\MyShoppingCart.Api\MyShoppingCart.Api.csproj", "{7C5BBE6E-EE6A-43CD-9912-53A452F4B7F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Application", "MyShoppingCart.Application\MyShoppingCart.Application.csproj", "{485D8709-386D-4578-817E-D5F533A177EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Application", "src\MyShoppingCart.Application\MyShoppingCart.Application.csproj", "{485D8709-386D-4578-817E-D5F533A177EF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Domain", "MyShoppingCart.Domain\MyShoppingCart.Domain.csproj", "{72CA6177-1096-436B-AB96-40A3BDC33DD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Domain", "src\MyShoppingCart.Domain\MyShoppingCart.Domain.csproj", "{72CA6177-1096-436B-AB96-40A3BDC33DD8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Infrastructure", "MyShoppingCart.Infrastructure\MyShoppingCart.Infrastructure.csproj", "{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Infrastructure", "src\MyShoppingCart.Infrastructure\MyShoppingCart.Infrastructure.csproj", "{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24F65965-72FF-4ACA-B942-0E71080F7410}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{70EA7699-BFE3-48E0-8871-451342588D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +43,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C5BBE6E-EE6A-43CD-9912-53A452F4B7F9} = {70EA7699-BFE3-48E0-8871-451342588D34}
+		{485D8709-386D-4578-817E-D5F533A177EF} = {70EA7699-BFE3-48E0-8871-451342588D34}
+		{72CA6177-1096-436B-AB96-40A3BDC33DD8} = {70EA7699-BFE3-48E0-8871-451342588D34}
+		{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F} = {70EA7699-BFE3-48E0-8871-451342588D34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BAF06671-2003-4046-9833-71ABD57CCD05}
