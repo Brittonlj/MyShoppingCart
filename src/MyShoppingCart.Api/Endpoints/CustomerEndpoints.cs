@@ -19,7 +19,7 @@ public sealed class CustomerEndpoints
         return app;
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> GetAllCustomers(
         [FromServices] IMediator mediator,
         IOptionsSnapshot<MyShoppingCartSettings> settings,
@@ -59,7 +59,7 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> CreateCustomer(
         [FromServices] IMediator mediator,
         [FromBody] CreateCustomerQuery request,
@@ -70,7 +70,7 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> UpdateCustomer(
         [FromServices] IMediator mediator,
         [FromBody] UpdateCustomerQuery request,
@@ -81,7 +81,7 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> DeleteCustomer(
         [FromServices] IMediator mediator,
         [FromRoute] Guid customerId,

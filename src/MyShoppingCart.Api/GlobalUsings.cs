@@ -8,3 +8,4 @@ global using MyShoppingCart.Domain.Mediator;
 global using MyShoppingCart.Application.Customers;
 global using MyShoppingCart.Application.Orders;
 global using MyShoppingCart.Application.Products;
+global using MyShoppingCart.Application.Configuration;

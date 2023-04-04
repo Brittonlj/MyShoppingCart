@@ -45,7 +45,7 @@ public static class ProductEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> CreateProduct(
         [FromServices] IMediator mediator,
         [FromBody] CreateProductQuery request,
@@ -56,7 +56,7 @@ public static class ProductEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> UpdateProduct(
     [FromServices] IMediator mediator,
     [FromBody] UpdateProductQuery request,
@@ -67,7 +67,7 @@ public static class ProductEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> DeleteProduct(
         [FromServices] IMediator mediator,
         [FromRoute] Guid productId,

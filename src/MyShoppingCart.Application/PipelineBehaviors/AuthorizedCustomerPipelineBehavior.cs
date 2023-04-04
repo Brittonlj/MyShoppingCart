@@ -27,7 +27,7 @@ public sealed class AuthorizedCustomerPipelineBehavior<TRequest, TEntity> :
 
         var user = _httpContextAccessor.HttpContext.User;
 
-        var isAdmin = user.IsInRole("Admin");
+        var isAdmin = user.IsInRole(Roles.Admin);
 
         if (isAdmin)
         {
