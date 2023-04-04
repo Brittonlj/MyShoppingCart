@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Application.Services
 {
-    public interface IJwtTokenGenerator
+    public interface IJwtTokenService
     {
         string GenerateToken(List<SecurityClaim> securityClaims);
     }

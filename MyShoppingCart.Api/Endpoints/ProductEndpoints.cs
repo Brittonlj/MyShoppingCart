@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using MyShoppingCart.Domain.Configuration;
 
 namespace MyShoppingCart.Api.Endpoints;
 

@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Domain.Setup;
+﻿namespace MyShoppingCart.Domain.Configuration;
 
 public sealed class DefaultPageSorting
 {

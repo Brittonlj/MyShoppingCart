@@ -7,11 +7,11 @@ using System.Text;
 
 namespace MyShoppingCart.Application.Services;
 
-public sealed class JwtTokenGenerator : IJwtTokenGenerator
+public sealed class JwtTokenService : IJwtTokenService
 {
     private readonly JwtConfig _jwtConfig;
 
-    public JwtTokenGenerator(IOptionsSnapshot<JwtConfig> config)
+    public JwtTokenService(IOptionsSnapshot<JwtConfig> config)
     {
         _jwtConfig = config.Value;
     }

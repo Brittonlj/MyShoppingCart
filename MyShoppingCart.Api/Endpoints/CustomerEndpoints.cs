@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using MyShoppingCart.Domain.Configuration;
 
 namespace MyShoppingCart.Api.Endpoints;
 
@@ -58,6 +59,7 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
+    [Authorize(Roles = "Admin")]
     public static async Task<IResult> CreateCustomer(
         [FromServices] IMediator mediator,
         [FromBody] CreateCustomerQuery request,
@@ -68,7 +70,7 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
- 
+    [Authorize(Roles = "Admin")]
     public static async Task<IResult> UpdateCustomer(
         [FromServices] IMediator mediator,
         [FromBody] UpdateCustomerQuery request,
@@ -79,6 +81,7 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
+    [Authorize(Roles = "Admin")]
     public static async Task<IResult> DeleteCustomer(
         [FromServices] IMediator mediator,
         [FromRoute] Guid customerId,

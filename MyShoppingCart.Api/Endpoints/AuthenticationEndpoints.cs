@@ -1,4 +1,5 @@
 ﻿using MyShoppingCart.Application.Authentication;
+using MyShoppingCart.Domain.Configuration;
 
 namespace MyShoppingCart.Api.Endpoints;
 

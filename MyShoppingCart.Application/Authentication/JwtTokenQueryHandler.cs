@@ -5,9 +5,9 @@ namespace MyShoppingCart.Application.Authentication;
 public class JwtTokenQueryHandler : IRequestHandler<JwtTokenQuery, Response<string>>
 {
     private readonly IUnitOfWork _context;
-    private readonly IJwtTokenGenerator _tokenGenerator;
+    private readonly IJwtTokenService _tokenGenerator;
 
-    public JwtTokenQueryHandler(IUnitOfWork context, IJwtTokenGenerator tokenGenerator)
+    public JwtTokenQueryHandler(IUnitOfWork context, IJwtTokenService tokenGenerator)
     {
         _context = context;
         _tokenGenerator = tokenGenerator;

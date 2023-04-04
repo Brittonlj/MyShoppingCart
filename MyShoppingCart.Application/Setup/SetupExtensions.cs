@@ -15,7 +15,7 @@ public static class SetupExtensions
             options.RegisterPipelines();
         });
 
-        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
 
         return services;
     }

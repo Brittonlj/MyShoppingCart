@@ -1,7 +1,4 @@
-﻿
-using MyShoppingCart.Domain.Validators;
-
-namespace MyShoppingCart.Application.Customers;
+﻿namespace MyShoppingCart.Application.Customers;
 
 public sealed class UpdateCustomerQueryValidator : AbstractValidator<UpdateCustomerQuery>
 {

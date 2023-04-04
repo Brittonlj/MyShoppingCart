@@ -1,4 +1,6 @@
-﻿namespace MyShoppingCart.Api.Endpoints;
+﻿using MyShoppingCart.Domain.Configuration;
+
+namespace MyShoppingCart.Api.Endpoints;
 
 public class OrderEndpoints
 {

@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyShoppingCart.Api.Endpoints;
 using MyShoppingCart.Application.Configuration;
+using MyShoppingCart.Domain.Configuration;
 using System.Text;
 
 namespace MyShoppingCart.Api.Setup;
@@ -69,9 +70,8 @@ public static class SetupExtensions
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
-            var validIssuer = config["Jwt:Issuer"];
-            var validAudience = config["Jwt:Audience"];
-            var key = config["Jwt:key"];
+            JwtConfig jwtConfig = new JwtConfig();
+            config.GetSection(JwtConfig.SECTION_NAME).Bind(jwtConfig);
 
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -79,9 +79,9 @@ public static class SetupExtensions
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = validIssuer,
-                ValidAudience = validAudience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                ValidIssuer = jwtConfig.Issuer,
+                ValidAudience = jwtConfig.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key))
             };
         });
     }

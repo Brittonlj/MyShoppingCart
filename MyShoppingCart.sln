@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Domain", "My
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Infrastructure", "MyShoppingCart.Infrastructure\MyShoppingCart.Infrastructure.csproj", "{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scratch", "Scratch\Scratch.csproj", "{830AB500-43F4-415C-BB2F-C2267240367B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24F65965-72FF-4ACA-B942-0E71080F7410}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
@@ -40,10 +38,6 @@ Global
 		{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{830AB500-43F4-415C-BB2F-C2267240367B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{830AB500-43F4-415C-BB2F-C2267240367B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{830AB500-43F4-415C-BB2F-C2267240367B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{830AB500-43F4-415C-BB2F-C2267240367B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
