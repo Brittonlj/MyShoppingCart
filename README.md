@@ -5,7 +5,7 @@ Welcome to my portfolio project for a simple shopping cart. I wasn't setting out
 Some things you will find examples of in this code base:
 
 - [Design Patterns](https://refactoring.guru/design-patterns/behavioral-patterns) not limited to:
-  - The [CQRS Pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) and the [Mediator Pattern](https://refactoring.guru/design-patterns/mediator) using the popular open source [MediatR](https://github.com/jbogard/MediatR) project. I used MediatR Pipeline Behaviors to handle cross-cutting concerns like error logging as well as request and security validation.
+  - The [Mediator Pattern](https://refactoring.guru/design-patterns/mediator) using the popular open source [MediatR](https://github.com/jbogard/MediatR) project. I used MediatR Pipeline Behaviors to handle cross-cutting concerns like error logging as well as request and security validation.
   - The [Options Pattern](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-7.0)
   - Not to mention some old favorites like the [Factory Pattern](https://refactoring.guru/design-patterns/factory-method), the [Builder Pattern](https://refactoring.guru/design-patterns/builder) and many more.
 - I used a version of [Domain Driven Design](https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/february/best-practice-an-introduction-to-domain-driven-design) to lay out this project, but I didn't go full-on aggregate objects etc.
