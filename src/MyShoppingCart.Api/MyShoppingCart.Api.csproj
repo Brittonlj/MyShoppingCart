@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -21,10 +21,6 @@
     <ProjectReference Include="..\MyShoppingCart.Application\MyShoppingCart.Application.csproj" />
     <ProjectReference Include="..\MyShoppingCart.Domain\MyShoppingCart.Domain.csproj" />
     <ProjectReference Include="..\MyShoppingCart.Infrastructure\MyShoppingCart.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Filters\" />
   </ItemGroup>
 
 </Project>
