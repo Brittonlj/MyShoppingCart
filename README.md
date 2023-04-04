@@ -13,7 +13,7 @@ Some things you will find examples of in this code base:
 - I used Microsoft's [Minimal API Framework](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0). I find it easier to work with than the controller based method.
 - I used JWT token authorization with roles and claims.
 - I used the [Fluent Validation](https://docs.fluentvalidation.net/en/latest/) project for all of the validation needs.
-- I used the [OneOf](https://github.com/mcintyre321/OneOf) package to implement Value Objects as Discriminated Unions. This cuts down on using null values and exception throwing as flow control.
+- I used the [OneOf](https://github.com/mcintyre321/OneOf) package to implement Value Objects as F#-like [Discriminated Unions](https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/discriminated-unions). This cuts down on using null values and exception throwing as flow control.
 
 My next steps are to add unit tests and a simple front-end.
 
