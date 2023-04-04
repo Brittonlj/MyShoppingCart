@@ -12,9 +12,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyShoppingCart.Infrastructure", "MyShoppingCart.Infrastructure\MyShoppingCart.Infrastructure.csproj", "{89CD13D0-C35B-4C27-8AD4-2C409AF51A5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{24F65965-72FF-4ACA-B942-0E71080F7410}"
-	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

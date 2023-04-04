@@ -9,9 +9,9 @@ namespace MyShoppingCart.Application.Services;
 
 public sealed class JwtTokenService : IJwtTokenService
 {
-    private readonly JwtConfig _jwtConfig;
+    private readonly JwtSettings _jwtConfig;
 
-    public JwtTokenService(IOptionsSnapshot<JwtConfig> config)
+    public JwtTokenService(IOptionsSnapshot<JwtSettings> config)
     {
         _jwtConfig = config.Value;
     }

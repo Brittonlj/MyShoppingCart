@@ -1,8 +1,13 @@
-﻿namespace MyShoppingCart.Domain.Configuration;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MyShoppingCart.Domain.Configuration;
 
 public sealed class DefaultPageSorting
 {
-    public string Customer { get; init; } = "LastName";
-    public string Product { get; init; } = "Name";
-    public string Order { get; init; } = "OrderDateTimeUtc";
+    [Required]
+    public string Customer { get; init; } = string.Empty;
+    [Required]
+    public string Product { get; init; } = string.Empty;
+    [Required]
+    public string Order { get; init; } = string.Empty;
 }

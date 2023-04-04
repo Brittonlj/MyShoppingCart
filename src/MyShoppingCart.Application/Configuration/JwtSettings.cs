@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Application.Configuration;
 
-public sealed class JwtConfig
+public sealed class JwtSettings
 {
     public const string SECTION_NAME = "Jwt";
 

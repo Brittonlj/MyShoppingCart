@@ -25,8 +25,17 @@ public static class SetupExtensions
     {
         AddSwaggerGen(services);
 
-        services.Configure<MyShoppingCartSettings>(config.GetSection(MyShoppingCartSettings.SECTION_NAME));
-        services.Configure<JwtConfig>(config.GetSection(JwtConfig.SECTION_NAME));
+        services
+            .AddOptions<MyShoppingCartSettings>()
+            .BindConfiguration(MyShoppingCartSettings.SECTION_NAME)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services
+            .AddOptions<JwtSettings>()
+            .BindConfiguration(JwtSettings.SECTION_NAME)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         AddAuthentication(services, config);
 
@@ -70,8 +79,8 @@ public static class SetupExtensions
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
-            JwtConfig jwtConfig = new JwtConfig();
-            config.GetSection(JwtConfig.SECTION_NAME).Bind(jwtConfig);
+            JwtSettings jwtConfig = new JwtSettings();
+            config.GetSection(JwtSettings.SECTION_NAME).Bind(jwtConfig);
 
             options.TokenValidationParameters = new TokenValidationParameters
             {
