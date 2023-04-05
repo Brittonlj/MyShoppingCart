@@ -9,8 +9,8 @@ public class OrderEndpoints
         var customer = app.MapGroup("/customer")
             .RequireAuthorization();
 
-        customer.MapGet("/{customerId}/order", GetOrders);
-        customer.MapGet("/{customerId}/order/{orderId}", GetOrder);
+        customer.MapGet("/{customerId}/order", GetAllOrders);
+        customer.MapGet("/{customerId}/order/{orderId}", GetOrderById);
         customer.MapDelete("{customerId}/order/{orderId}", DeleteOrder);
 
         var order = app.MapGroup("/order")
@@ -22,9 +22,8 @@ public class OrderEndpoints
         return app;
     }
 
-    public static async Task<IResult> GetOrder(
+    public static async Task<IResult> GetOrderById(
          [FromServices] IMediator mediator,
-         IOptionsSnapshot<MyShoppingCartSettings> settings,
          [FromRoute] Guid customerId,
          [FromRoute] Guid orderId,
          CancellationToken cancellationToken)
@@ -36,7 +35,7 @@ public class OrderEndpoints
         return response.MatchResult();
     }
 
-    public static async Task<IResult> GetOrders(
+    public static async Task<IResult> GetAllOrders(
         [FromServices] IMediator mediator,
         IOptionsSnapshot<MyShoppingCartSettings> settings,
         [FromRoute] Guid customerId,
