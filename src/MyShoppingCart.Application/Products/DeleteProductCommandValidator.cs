@@ -4,6 +4,6 @@ public sealed class DeleteProductCommandValidator : AbstractValidator<DeleteProd
 {
 	public DeleteProductCommandValidator()
 	{
-		RuleFor(x => x.Id).NotEmpty();
+		RuleFor(x => x.ProductId).NotEmpty();
 	}
 }

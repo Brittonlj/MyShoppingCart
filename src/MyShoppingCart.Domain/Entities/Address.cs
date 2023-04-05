@@ -1,4 +1,6 @@
-﻿namespace MyShoppingCart.Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace MyShoppingCart.Domain.Entities;
 
 public sealed class Address : IEntity<Address>
 {
@@ -7,7 +9,30 @@ public sealed class Address : IEntity<Address>
     public required string City { get; set; }
     public required string State { get; set; }
     public required string PostalCode { get; set; }
- 
+
+    public Address()
+    {
+    }
+
+    [SetsRequiredMembers]
+    public Address(string street, string city, string state, string postalCode)
+    {
+        Street = street;
+        City = city;
+        State = state;
+        PostalCode = postalCode;
+    }
+
+    [SetsRequiredMembers]
+    public Address(Guid id, string street, string city, string state, string postalCode)
+    {
+        Id = id;
+        Street = street;
+        City = city;
+        State = state;
+        PostalCode = postalCode;
+    }
+
     #region Equatable
     public bool Equals(Address? other)
     {

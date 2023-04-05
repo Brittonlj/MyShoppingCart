@@ -1,5 +1,5 @@
 ﻿namespace MyShoppingCart.Application.Products;
 
-public sealed record DeleteProductCommand(Guid Id) : ICommand
+public sealed record DeleteProductCommand(Guid ProductId) : ICommand
 {
 }

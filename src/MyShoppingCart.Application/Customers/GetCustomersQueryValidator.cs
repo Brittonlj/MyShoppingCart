@@ -8,7 +8,7 @@ public sealed class GetCustomersQueryValidator : AbstractValidator<GetCustomersQ
             .NotEmpty()
             .Must(x => GetCustomersQuery.OrderByClauses.Keys.Contains(x))
             .WithErrorCode("InvalidSortColumn")
-            .WithMessage("{PropertyValue} is an invalid value for {PropertyName}");
+            .WithMessage("'{PropertyValue}' is an invalid value for '{PropertyName}'");
         RuleFor(x => x.PageNumber).NotEmpty();
         RuleFor(x => x.PageSize).NotEmpty().LessThanOrEqualTo(50);
         RuleFor(x => x.NamesLike).MaximumLength(50);

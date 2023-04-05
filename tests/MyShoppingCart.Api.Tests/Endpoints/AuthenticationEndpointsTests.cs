@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
-namespace MyShoppingCart.Api.Tests.Endpoints;
+﻿namespace MyShoppingCart.Api.Tests.Endpoints;
 
 public class AuthenticationEndpointsTests
 {

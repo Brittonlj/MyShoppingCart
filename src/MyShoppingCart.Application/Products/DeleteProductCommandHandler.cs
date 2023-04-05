@@ -10,7 +10,7 @@ public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductC
 
     public async Task<Response<Success>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _context.Products.FindAsync(request.Id,  cancellationToken);
+        var product = await _context.Products.FindAsync(request.ProductId,  cancellationToken);
 
         if (product is null)
         {

@@ -9,7 +9,7 @@ public sealed class GetProductsQueryValidator : AbstractValidator<GetProductsQue
             .NotEmpty()
             .Must(x => GetProductsQuery.OrderByClauses.Keys.Contains(x))
             .WithErrorCode("InvalidSortColumn")
-            .WithMessage("{PropertyValue} is an invalid value for {PropertyName}");
+            .WithMessage("'{PropertyValue}' is an invalid value for '{PropertyName}'");
         RuleFor(x => x.PageNumber).NotEmpty();
         RuleFor(x => x.PageSize).NotEmpty().LessThanOrEqualTo(50);
 
