@@ -1,7 +1,7 @@
 ﻿namespace MyShoppingCart.Application.Products;
 
 public sealed record UpdateProductQuery(
-    Guid Id,
+    Guid ProductId,
     string Name,
     string Description,
     decimal Price,
