@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace MyShoppingCart.Domain.Entities;
 
@@ -8,6 +8,28 @@ public sealed class SecurityClaim : IEntity<SecurityClaim>
     public Guid CustomerId { get; set; } = Guid.Empty;
     public required string Type { get; set; }
     public required string Value { get; set; }
+
+    public SecurityClaim()
+    {
+    }
+
+    [SetsRequiredMembers]
+    public SecurityClaim(Guid customerId, string type, string value)
+    {
+        CustomerId = customerId;
+        Type = type;
+        Value = value;
+    }
+    
+    [SetsRequiredMembers]
+    public SecurityClaim(Guid id, Guid customerId, string type, string value)
+    {
+        Id = id;
+        CustomerId = customerId;
+        Type = type;
+        Value = value;
+    }
+
 
     #region Equatable
     public bool Equals(SecurityClaim? other)

@@ -1,5 +1,4 @@
 ﻿using MyShoppingCart.Application.Authentication;
-using MyShoppingCart.Domain.Configuration;
 
 namespace MyShoppingCart.Api.Endpoints;
 
@@ -16,7 +15,6 @@ public class AuthenticationEndpoints
 
     public static async Task<IResult> GetToken(
     [FromServices] IMediator mediator,
-    IOptionsSnapshot<MyShoppingCartSettings> settings,
     [FromRoute] Guid customerId,
     CancellationToken cancellationToken
 )

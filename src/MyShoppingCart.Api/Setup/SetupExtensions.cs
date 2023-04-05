@@ -2,7 +2,6 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyShoppingCart.Api.Endpoints;
-using MyShoppingCart.Application.Configuration;
 using MyShoppingCart.Domain.Configuration;
 using System.Text;
 
