@@ -15,10 +15,8 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
     {
         var customer = MapToCustomer(request);
 
-        var claims = request.Claims.Select(x => new SecurityClaim{ Type = x.Type, Value = x.Value }).ToList();
+        var claims = GetDefaultClaims(customer.Id);
 
-        ValidateClaims(claims, customer.Id);
-        
         await _context.Customers.AddAsync(customer, cancellationToken);
         await _context.Claims.AddRangeAsync(claims, cancellationToken);
 
@@ -61,33 +59,24 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
         return customer;
     }
 
-    private void ValidateClaims(List<SecurityClaim> claims, Guid customerId)
+    private List<SecurityClaim> GetDefaultClaims(Guid customerId)
     {
-        var invalidUserClaims = claims.Where(x => x.Type == ClaimTypes.NameIdentifier && x.Value != customerId.ToString());
+        var claims = new List<SecurityClaim>();
 
-        foreach(var invalidClaim in invalidUserClaims)
+        claims.Add(new SecurityClaim
         {
-            claims.Remove(invalidClaim);
-        }
+            CustomerId = customerId,
+            Type = ClaimTypes.NameIdentifier,
+            Value = customerId.ToString()
+        });
 
-        if (!claims.Any(x => x.Type == ClaimTypes.NameIdentifier))
+        claims.Add(new SecurityClaim
         {
-            claims.Add(new SecurityClaim
-            {
-                CustomerId = customerId,
-                Type = ClaimTypes.NameIdentifier,
-                Value = customerId.ToString()
-            });
-        }
+            CustomerId = customerId,
+            Type = ClaimTypes.Role,
+            Value = "Customer"
+        });
 
-        if (!claims.Any(x => x.Type == ClaimTypes.Role))
-        {
-            claims.Add(new SecurityClaim
-            {
-                CustomerId = customerId,
-                Type = ClaimTypes.Role,
-                Value = "Customer"
-            });
-        }
+        return claims;
     }
 }

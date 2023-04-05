@@ -11,6 +11,5 @@ public sealed class CreateCustomerQueryValidator : AbstractValidator<CreateCusto
         RuleFor(x => x.Email).NotEmpty().MaximumLength(50).EmailAddress();
         RuleFor(x => x.BillingAddress).NotNull().SetValidator(new AddressModelValidator());
         RuleFor(x => x.ShippingAddress).NotNull().SetValidator(new AddressModelValidator());
-        RuleForEach(x => x.Claims).SetValidator(new SecurityClaimModelValidator());
     }
 }
