@@ -4,44 +4,32 @@ namespace MyShoppingCart.Application.Orders;
 
 public sealed class CreateOrderQueryValidator : AbstractValidator<CreateOrderQuery>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Product> _productRepository;
 
-    public CreateOrderQueryValidator(IUnitOfWork context)
+    public CreateOrderQueryValidator(IRepository<Product> productRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
 
         RuleFor(x => x.CustomerId).NotEmpty();
         RuleFor(x => x.LineItems).NotEmpty();
     }
 
-
-    protected override bool PreValidate(ValidationContext<CreateOrderQuery> context, ValidationResult result)
+    public override async Task<ValidationResult> ValidateAsync(ValidationContext<CreateOrderQuery> context, CancellationToken cancellation = default)
     {
-        CheckForDuplicateProductIds(context);
-        CheckForInvalidProductIds(context);
+        await CheckForInvalidProductIds(context, cancellation);
 
-        return base.PreValidate(context, result);
+        return await base.ValidateAsync(context, cancellation);
     }
 
-    private void CheckForDuplicateProductIds(ValidationContext<CreateOrderQuery> context)
+    private async Task CheckForInvalidProductIds(ValidationContext<CreateOrderQuery> context, CancellationToken cancellation = default)
     {
-        var dupes = context.InstanceToValidate.LineItems.GroupBy(x => x.ProductId).Where(x => x.Count() > 1);
+        var request = context.InstanceToValidate;
+        var productIds = request.LineItems.Select(x => x.ProductId).ToList();
+        var query = new QueryAllProductsByProductIds(productIds).WithNoTracking();
 
-        foreach (var dupe in dupes)
-        {
-            context.AddFailure(new FluentValidation.Results.ValidationFailure("LineItems", $"The ProductId ('{dupe.Key}') is contained in more than one line item."));
-        }
-    }
+        var products = await _productRepository.ListAsync(query, cancellation);
 
-    private void CheckForInvalidProductIds(ValidationContext<CreateOrderQuery> context)
-    {
-        var query = context.InstanceToValidate;
-        var products = _context.Products
-            .Where(x => query.LineItems.Select(y => y.ProductId).Contains(x.Id))
-            .AsNoTracking()
-            .ToList();
-
-        var missingProductIds = query.LineItems.Where(x => !products.Any(p => p.Id == x.ProductId)).ToList();
+        var missingProductIds = request.LineItems.Where(x => !products.Any(p => p.Id == x.ProductId)).ToList();
 
         foreach (var missing in missingProductIds)
         {

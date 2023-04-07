@@ -2,11 +2,11 @@
 
 public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQuery, Response<Product>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Product> _productRepository;
 
-    public CreateProductQueryHandler(IUnitOfWork context)
+    public CreateProductQueryHandler(IRepository<Product> productRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
     }
 
     public async Task<Response<Product>> Handle(CreateProductQuery request, CancellationToken cancellationToken)
@@ -19,9 +19,7 @@ public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQue
             ImageUrl = request.ImageUrl,
         };
 
-        _context.Products.Add(product);
-
-        await _context.SaveChangesAsync();
+        await _productRepository.AddAsync(product);
 
         return product;
     }

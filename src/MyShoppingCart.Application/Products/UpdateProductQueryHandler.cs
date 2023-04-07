@@ -2,26 +2,26 @@
 
 public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQuery, Response<Product>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Product> _productRepository;
 
-    public UpdateProductQueryHandler(IUnitOfWork context)
+    public UpdateProductQueryHandler(IRepository<Product> productRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
     }
 
     public async Task<Response<Product>> Handle(UpdateProductQuery request, CancellationToken cancellationToken)
     {
-
-        var product = await _context.Products.FindAsync(request.ProductId, cancellationToken);
+        var query = new QueryProductById(request.ProductId);
+        var product = await _productRepository.FirstOrDefaultAsync(query, cancellationToken);
 
         if (product is null)
         {
             return NotFound.Instance;
         }
 
-        _context.Entry(product).CurrentValues.SetValues(request);
+        _productRepository.UpdateEntityProperties(product, request);
 
-        await _context.SaveChangesAsync();
+        await _productRepository.UpdateAsync(product, cancellationToken);
 
         return product;
 

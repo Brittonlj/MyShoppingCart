@@ -2,13 +2,13 @@
 
 namespace MyShoppingCart.Domain.Entities;
 
-public sealed class Order : IEntity<Order>
+public sealed class Order : IEntity<Guid>
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
-    public required Guid CustomerId { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid CustomerId { get; set; }
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]  
     public Customer? Customer { get; set; }
-    public DateTime OrderDateTimeUtc { get; set; } = DateTime.UtcNow;
+    public DateTime OrderDateTimeUtc { get; set; }
     public List<LineItem> LineItems { get; } = new();
 
     #region Equatable

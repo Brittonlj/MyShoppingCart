@@ -1,14 +1,19 @@
 ﻿using System.Security.Claims;
+using System.Transactions;
 
 namespace MyShoppingCart.Application.Customers;
 
 public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQuery, Response<Customer>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Customer> _customerRepository;
+    private readonly IRepository<SecurityClaim> _securityClaimRepository;
 
-    public CreateCustomerQueryHandler(IUnitOfWork context)
+    public CreateCustomerQueryHandler(
+        IRepository<Customer> customerRepository, 
+        IRepository<SecurityClaim> securityClaimRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _securityClaimRepository = Guard.Against.Null(securityClaimRepository, nameof(securityClaimRepository));
     }
 
     public async Task<Response<Customer>> Handle(CreateCustomerQuery request, CancellationToken cancellationToken)
@@ -17,10 +22,13 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
 
         var claims = GetDefaultClaims(customer.Id);
 
-        await _context.Customers.AddAsync(customer, cancellationToken);
-        await _context.Claims.AddRangeAsync(claims, cancellationToken);
+        using var transaction = new TransactionScope();
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _customerRepository.AddAsync(customer, cancellationToken);
+
+        await _securityClaimRepository.AddRangeAsync(claims, cancellationToken);
+
+        transaction.Complete();
 
         return customer;
     }

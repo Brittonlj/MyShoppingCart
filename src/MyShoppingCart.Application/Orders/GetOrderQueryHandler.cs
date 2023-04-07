@@ -2,23 +2,20 @@
 {
     public sealed class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, Response<Order>>
     {
-        private readonly IUnitOfWork _context;
+        private readonly IRepository<Order> _orderRepository;
 
-        public GetOrderQueryHandler(IUnitOfWork context)
+        public GetOrderQueryHandler(IRepository<Order> orderRepository)
         {
-            _context = Guard.Against.Null(context, nameof(context)); ;
+            _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
         }
 
         public async Task<Response<Order>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
-            var order = await _context
-                .Orders
-                .Include(x => x.LineItems)
-                .ThenInclude(x => x.Product)
-                .AsSplitQuery()
-                .AsNoTracking()
-                .Where(x => x.Id == request.OrderId && x.CustomerId == request.CustomerId)
-                .FirstOrDefaultAsync(cancellationToken);
+            var query = new QueryOrderById(request.OrderId, request.CustomerId)
+                .WithProducts()
+                .WithNoTracking();
+
+            var order = await _orderRepository.FirstOrDefaultAsync(query);
 
             if (order is null)
             {

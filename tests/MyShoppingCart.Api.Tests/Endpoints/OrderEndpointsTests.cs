@@ -458,12 +458,14 @@ public class OrderEndpointsTests
 
     private static UpdateOrderQuery GetUpdateOrderQuery()
     {
+        var orderId = Guid.NewGuid();
         return new UpdateOrderQuery(
             Guid.NewGuid(),
-            Guid.NewGuid(),
-            new List<LineItemModel>
+            orderId,
+            DateTime.UtcNow,
+            new List<LineItem>
             {
-                new LineItemModel(Guid.NewGuid(), 10)
+                new LineItem(orderId, Guid.NewGuid(), 10)
             }
 );
     }

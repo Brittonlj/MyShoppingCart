@@ -2,28 +2,24 @@
 
 public sealed class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand, Response<Success>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Order> _orderRepository;
 
-    public DeleteOrderCommandHandler(IUnitOfWork context)
+    public DeleteOrderCommandHandler(IRepository<Order> orderRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository)); ;
     }
 
     public async Task<Response<Success>> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
     {
-        var order = await _context
-            .Orders
-            .Where(x => x.Id == request.OrderId && x.CustomerId == request.CustomerId)
-            .FirstOrDefaultAsync(cancellationToken);
+        var query = new QueryOrderById(request.OrderId, request.CustomerId);
+        var order = await _orderRepository.FirstOrDefaultAsync(query, cancellationToken);
 
         if (order is null)
         {
             return NotFound.Instance;
         }
 
-        _context.Orders.Remove(order);
-
-        await _context.SaveChangesAsync(cancellationToken);
+        await _orderRepository.DeleteAsync(order);
 
         return Success.Instance;
     }

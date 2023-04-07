@@ -10,9 +10,4 @@ public sealed record GetOrdersQuery(
     IQueryManyPaged<Order>,
     IAuthorizedCustomerRequest
 {
-    public static readonly IReadOnlyDictionary<string, IOrderBy> OrderByClauses =
-        new Dictionary<string, IOrderBy>
-        {
-            { nameof(Order.OrderDateTimeUtc), new OrderBy<Order, DateTime>(x => x.OrderDateTimeUtc) }
-        };
 }

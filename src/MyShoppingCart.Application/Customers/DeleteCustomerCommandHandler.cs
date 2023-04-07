@@ -2,27 +2,24 @@
 
 public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustomerCommand, Response<Success>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Customer> _customerRepository;
 
-    public DeleteCustomerCommandHandler(IUnitOfWork context)
+    public DeleteCustomerCommandHandler(IRepository<Customer> customerRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
     }
 
     public async Task<Response<Success>> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
-        var customer = await _context
-            .Customers
-            .FindAsync(request.CustomerId, cancellationToken);
+        var spec = new QueryCustomerById(request.CustomerId);
+        var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (customer is null)
         {
             return NotFound.Instance;
         }
 
-        _context.Customers.Remove(customer);
-
-        await _context.SaveChangesAsync(cancellationToken);
+        await _customerRepository.DeleteAsync(customer, cancellationToken);
 
         return Success.Instance;
     }

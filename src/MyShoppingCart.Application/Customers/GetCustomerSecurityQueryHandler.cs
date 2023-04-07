@@ -3,30 +3,31 @@
 public sealed class GetCustomerSecurityQueryHandler : 
     IRequestHandler<GetCustomerSecurityQuery, Response<IReadOnlyList<SecurityClaim>>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Customer> _customerRepository;
+    private readonly IRepository<SecurityClaim> _securityClaimRepository;
 
-    public GetCustomerSecurityQueryHandler(IUnitOfWork context)
+    public GetCustomerSecurityQueryHandler(
+        IRepository<Customer> customerRepository, 
+        IRepository<SecurityClaim> securityClaimRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _securityClaimRepository = Guard.Against.Null(securityClaimRepository, nameof(securityClaimRepository));
     }
 
     public async Task<Response<IReadOnlyList<SecurityClaim>>> Handle(
         GetCustomerSecurityQuery request, 
         CancellationToken cancellationToken)
     {
-        var customer = await _context
-            .Customers
-            .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
+        var customerQuery = new QueryCustomerById(request.CustomerId);
+        var customer = await _customerRepository.FirstOrDefaultAsync(customerQuery, cancellationToken);
 
         if (customer is null)
         {
             return NotFound.Instance;
         }
 
-        var claims = await _context
-            .Claims
-            .Where(x => x.CustomerId == request.CustomerId)
-            .ToListAsync(cancellationToken);
+        var claimsQuery = new QuerySecurityClaims(request.CustomerId);
+        var claims = await _securityClaimRepository.ListAsync(claimsQuery, cancellationToken);
 
         return claims;
     }

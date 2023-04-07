@@ -22,7 +22,25 @@ public static class DataExtensions
         return Queryable.ThenByDescending(source, orderBy.Expression);
     }
 
+
+    public static IOrderedQueryable<T> OrderBy<T>(this ISpecificationBuilder<T> source, IOrderBy orderBy)
+    {
+        return Queryable.OrderBy(source, orderBy.Expression);
+    }
+
+    public static IOrderedQueryable<T> OrderByDescending<T>(this ISpecificationBuilder<T> source, IOrderBy orderBy)
+    {
+        return Queryable.OrderByDescending(source, orderBy.Expression);
+    }
+
     public static IQueryable<T> Paginate<T>(this IQueryable<T> query, int pageNumber, int pageSize)
+    {
+        return query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize);
+    }
+
+    public static ISpecificationBuilder<T> Paginate<T>(this ISpecificationBuilder<T> query, int pageNumber, int pageSize)
     {
         return query
             .Skip((pageNumber - 1) * pageSize)

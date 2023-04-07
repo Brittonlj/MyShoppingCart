@@ -3,35 +3,25 @@
 public sealed class GetOrdersQueryHandler :
     IRequestHandler<GetOrdersQuery, Response<IReadOnlyList<Order>>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Order> _orderRepository;
 
-    public GetOrdersQueryHandler(IUnitOfWork context)
+    public GetOrdersQueryHandler(IRepository<Order> orderRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
     }
 
     public async Task<Response<IReadOnlyList<Order>>> Handle(
         GetOrdersQuery request,
         CancellationToken cancellationToken)
     {
-        var query = _context
-            .Orders
-            .AsSplitQuery()
-            .AsNoTracking()
-            .Where(x => x.CustomerId == request.CustomerId);
-
-        query = request.SortAscending ?
-            query.OrderBy(x => x.OrderDateTimeUtc) :
-            query.OrderByDescending(x => x.OrderDateTimeUtc);
-
-        query = query
-            .Paginate(request.PageNumber, request.PageSize)
-            .Include(x => x.LineItems)
-            .ThenInclude(x => x.Product)
+        var query = new QueryAllOrders(
+            request.CustomerId,
+            request.PageNumber,
+            request.PageSize,
+            request.SortAscending);
 ;
-        var orders = await query.ToListAsync(cancellationToken);
+        var orders = await _orderRepository.ListAsync(query, cancellationToken);
 
         return orders;
-
     }
 }

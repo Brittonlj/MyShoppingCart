@@ -3,7 +3,7 @@
 public static class EntityUtility
 {
     public static void MergeEntityLists<T>(DbSet<T> dbSet, List<T> original, List<T> requests) 
-        where T : class, IEntity<T>
+        where T : class, IEntity<Guid>
     {
         // Update
         var join = original.Join(requests,

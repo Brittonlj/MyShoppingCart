@@ -3,36 +3,26 @@
 public sealed class GetProductsQueryHandler :
     IRequestHandler<GetProductsQuery, Response<IReadOnlyList<Product>>>
 {
-    private readonly IUnitOfWork _context;
-    public GetProductsQueryHandler(IUnitOfWork context)
+    private readonly IRepository<Product> _productRepository;
+
+    public GetProductsQueryHandler(IRepository<Product> productRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
     }
 
     public async Task<Response<IReadOnlyList<Product>>> Handle(
         GetProductsQuery request,
         CancellationToken cancellationToken)
     {
-        var query = _context
-            .Products
-            .AsNoTracking();
+        var query = new QueryAllProducts(
+            request.SearchString,
+            request.PageNumber,
+            request.PageSize,
+            request.SortColumn,
+            request.SortAscending)
+            .WithNoTracking();
 
-        if (!string.IsNullOrWhiteSpace(request.SearchString))
-        {
-            query = query.Where(x =>
-                x.Name.Contains(request.SearchString) ||
-                x.Description.Contains(request.SearchString));
-        }
-
-        var orderByClause = GetProductsQuery.OrderByClauses[request.SortColumn];
-
-        query = request.SortAscending ?
-            query.OrderBy(orderByClause) :
-            query.OrderByDescending(orderByClause);
-
-        query = query.Paginate(request.PageNumber, request.PageSize);
-
-        var products = await query.ToListAsync(cancellationToken);
+        var products = await _productRepository.ListAsync(query, cancellationToken);
 
         return products;
     }

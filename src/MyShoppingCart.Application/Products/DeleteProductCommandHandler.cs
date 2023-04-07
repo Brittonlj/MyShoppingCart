@@ -2,24 +2,24 @@
 
 public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Response<Success>>
 {
-    private readonly IUnitOfWork _context;
-    public DeleteProductCommandHandler(IUnitOfWork context)
+    private readonly IRepository<Product> _productRepository;
+
+    public DeleteProductCommandHandler(IRepository<Product> productRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
     }
 
     public async Task<Response<Success>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _context.Products.FindAsync(request.ProductId,  cancellationToken);
+        var query = new QueryProductById(request.ProductId);
+        var product = await _productRepository.FirstOrDefaultAsync(query, cancellationToken);
 
         if (product is null)
         {
             return NotFound.Instance;
         }
 
-        _context.Products.Remove(product);
-
-        await _context.SaveChangesAsync();
+        await _productRepository.DeleteAsync(product);
 
         return Success.Instance;
     }

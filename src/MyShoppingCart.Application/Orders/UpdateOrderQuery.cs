@@ -1,11 +1,10 @@
-﻿using MyShoppingCart.Domain.Models;
-
-namespace MyShoppingCart.Application.Orders;
+﻿namespace MyShoppingCart.Application.Orders;
 
 public sealed record UpdateOrderQuery(
     Guid CustomerId,
     Guid OrderId,
-    IReadOnlyList<LineItemModel> LineItems) :
+    DateTime OrderDateTimeUtc,
+    IReadOnlyList<LineItem> LineItems) :
     IQuery<Order>,
     IAuthorizedCustomerRequest
 {

@@ -12,7 +12,7 @@ public sealed class LineItemConfiguration : IEntityTypeConfiguration<LineItem>
             .ToTable("LineItem");
 
         builder
-            .HasKey(x => new { x.OrderId, x.ProductId })
+            .HasKey(x => x.Id)
             .IsClustered();
 
         builder

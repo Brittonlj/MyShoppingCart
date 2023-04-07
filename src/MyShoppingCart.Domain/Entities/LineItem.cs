@@ -2,12 +2,13 @@
 
 namespace MyShoppingCart.Domain.Entities;
 
-public sealed class LineItem : IEquatable<LineItem>
+public sealed class LineItem : IEntity<Guid>, IEquatable<LineItem>
 {
-    public required Guid OrderId { get; init; }
-    public required Guid ProductId { get; init; }
-    public Product? Product { get; init; }
-    public required int Quantity { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid OrderId { get; set; }
+    public Guid ProductId { get; set; }
+    public Product? Product { get; set; }
+    public int Quantity { get; set; }
 
     public LineItem()
     {

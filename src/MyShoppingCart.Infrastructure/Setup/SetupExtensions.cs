@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MyShoppingCart.Domain.Data;
+using MyShoppingCart.Domain.Repositories;
+using MyShoppingCart.Infrastructure.Repositories;
 
 namespace MyShoppingCart.Infrastructure.Setup;
 
@@ -19,8 +20,7 @@ public static class SetupExtensions
             options.UseSqlServer(connectionString);
         });
 
-        services.AddScoped<IUnitOfWork, MyShoppingCartContext>();
-
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         return services;
     }

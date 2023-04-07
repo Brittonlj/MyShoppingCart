@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using MyShoppingCart.Domain.Data;
 using MyShoppingCart.Domain.Entities;
 
 namespace MyShoppingCart.Infrastructure;
 
-public sealed class MyShoppingCartContext : DbContext, IUnitOfWork
+public sealed class MyShoppingCartContext : DbContext
 {
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Order> Orders { get; set; }

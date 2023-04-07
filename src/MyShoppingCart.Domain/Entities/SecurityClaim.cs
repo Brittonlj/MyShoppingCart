@@ -2,10 +2,10 @@
 
 namespace MyShoppingCart.Domain.Entities;
 
-public sealed class SecurityClaim : IEntity<SecurityClaim>
+public sealed class SecurityClaim : IEntity<Guid>
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
-    public Guid CustomerId { get; set; } = Guid.Empty;
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid CustomerId { get; set; }
     public required string Type { get; set; }
     public required string Value { get; set; }
 

@@ -2,24 +2,20 @@
 
 public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Response<Customer>>
 {
-    private readonly IUnitOfWork _context;
+    private readonly IRepository<Customer> _customerRepository;
 
-    public GetCustomerQueryHandler(IUnitOfWork context)
+    public GetCustomerQueryHandler(IRepository<Customer> customerRepository)
     {
-        _context = Guard.Against.Null(context, nameof(context)); ;
+        _customerRepository = customerRepository;
     }
 
     public async Task<Response<Customer>> Handle(
-        GetCustomerQuery query,
+        GetCustomerQuery request,
         CancellationToken cancellationToken = default)
     {
-        var customer = await _context
-            .Customers
-            .Include(x => x.ShippingAddress)
-            .Include(x => x.BillingAddress)
-            .AsSplitQuery()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == query.CustomerId, cancellationToken);
+        var query = new QueryCustomerById(request.CustomerId).WithNoTracking();
+
+        var customer = await _customerRepository.FirstOrDefaultAsync(query, cancellationToken);
 
         if (customer is null)
         {

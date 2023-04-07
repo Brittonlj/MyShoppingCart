@@ -1,8 +1,8 @@
 ﻿namespace MyShoppingCart.Domain.Entities;
 
-public sealed class Product : IEntity<Product>
+public sealed class Product : IEntity<Guid>
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
     public required string Name { get; set; }
     public required string Description { get; set; }
     public required decimal Price { get; set; }
