@@ -1,4 +1,6 @@
 ﻿global using MediatR;
+global using Mapster;
+global using MapsterMapper;
 global using MyShoppingCart.Domain.Mediator;
 global using MyShoppingCart.Domain.Entities;
 global using FluentValidation;

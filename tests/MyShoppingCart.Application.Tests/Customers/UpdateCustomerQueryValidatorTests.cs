@@ -1,8 +1,8 @@
-﻿namespace MyShoppingCart.Application.Tests.Validators.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Customers;
 
-public class CreateCustomerQueryValidatorTests
+public class UpdateCustomerQueryValidatorTests
 {
-    private readonly IValidator<CreateCustomerQuery> _validator = new CreateCustomerQueryValidator();
+    private readonly IValidator<UpdateCustomerQuery> _validator = new UpdateCustomerQueryValidator();
 
     #region Happy Path
 
@@ -10,7 +10,7 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenStateIsValid()
     {
         //Arrange
-        var query = GetCreateCustomerQuery();
+        var query = GetUpdateCustomerQuery();
 
         //Act
         var results = await _validator.ValidateAsync(query);
@@ -22,19 +22,37 @@ public class CreateCustomerQueryValidatorTests
 
     #endregion
 
-    #region First Name
+    #region CustomerId
+
     [Fact]
-    public async Task Validate_ShouldReturnResults_WhenFirstNameIsEmpty()
+    public async Task Validate_ShouldReturnResults_WhenCustomerIdIsEmpty()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { FirstName = string.Empty };
+        var query = GetUpdateCustomerQuery() with { CustomerId = Guid.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.FirstName),
+            nameof(UpdateCustomerQuery.CustomerId),
+            "'Customer Id' must not be empty.");
+    }
+    #endregion
+
+    #region First Name
+    [Fact]
+    public async Task Validate_ShouldReturnResults_WhenFirstNameIsEmpty()
+    {
+        //Arrange
+        var query = GetUpdateCustomerQuery() with { FirstName = string.Empty };
+
+        //Act
+        var results = await _validator.ValidateAsync(query);
+
+        //Assert
+        results.AssertValidationErrors(
+            nameof(UpdateCustomerQuery.FirstName),
             "'First Name' must not be empty.");
     }
 
@@ -42,14 +60,14 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenFirstNameIsTooLong()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { FirstName = LongStrings.LONG_STRING_51 };
+        var query = GetUpdateCustomerQuery() with { FirstName = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.FirstName),
+            nameof(UpdateCustomerQuery.FirstName),
             "The length of 'First Name' must be 50 characters or fewer. You entered 51 characters.");
     }
     #endregion
@@ -59,14 +77,14 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenLastNameIsEmpty()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { LastName = string.Empty };
+        var query = GetUpdateCustomerQuery() with { LastName = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.LastName),
+            nameof(UpdateCustomerQuery.LastName),
             "'Last Name' must not be empty.");
     }
 
@@ -74,14 +92,14 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenLastNameTooLong()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { LastName = LongStrings.LONG_STRING_51 };
+        var query = GetUpdateCustomerQuery() with { LastName = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.LastName),
+            nameof(UpdateCustomerQuery.LastName),
             "The length of 'Last Name' must be 50 characters or fewer. You entered 51 characters.");
     }
 
@@ -93,14 +111,14 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenEmailIsEmpty()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { Email = string.Empty };
+        var query = GetUpdateCustomerQuery() with { Email = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.Email),
+            nameof(UpdateCustomerQuery.Email),
             "'Email' must not be empty.");
     }
 
@@ -109,17 +127,17 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenEmailTooLong()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { Email = LongStrings.LONG_STRING_51 };
+        var query = GetUpdateCustomerQuery() with { Email = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.Email),
+            nameof(UpdateCustomerQuery.Email),
             "The length of 'Email' must be 50 characters or fewer. You entered 51 characters.");
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.Email),
+            nameof(UpdateCustomerQuery.Email),
             "'Email' is not a valid email address.", 1);
     }
 
@@ -127,14 +145,14 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenEmailIsInvalid()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { Email = "test" };
+        var query = GetUpdateCustomerQuery() with { Email = "test" };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.Email),
+            nameof(UpdateCustomerQuery.Email),
             "'Email' is not a valid email address.");
     }
     #endregion
@@ -145,14 +163,14 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenBillingAddressIsNull()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { BillingAddress = null };
+        var query = GetUpdateCustomerQuery() with { BillingAddress = null };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.BillingAddress),
+            nameof(UpdateCustomerQuery.BillingAddress),
             "'Billing Address' must not be empty.");
     }
 
@@ -160,9 +178,9 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenBillingAddressIsInvalid()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with
+        var query = GetUpdateCustomerQuery() with
         {
-            BillingAddress = new AddressModel(string.Empty, string.Empty, string.Empty, string.Empty)
+            BillingAddress = new Address(string.Empty, string.Empty, string.Empty, string.Empty)
         };
 
         //Act
@@ -187,9 +205,9 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenBillingAddressIsTooLong()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with
+        var query = GetUpdateCustomerQuery() with
         {
-            BillingAddress = new AddressModel(LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51)
+            BillingAddress = new Address(LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51)
         };
 
         //Act
@@ -218,14 +236,14 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenShippingAddressIsNull()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with { ShippingAddress = null };
+        var query = GetUpdateCustomerQuery() with { ShippingAddress = null };
 
         //Act
         var results = await _validator.ValidateAsync(query);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(CreateCustomerQuery.ShippingAddress),
+            nameof(UpdateCustomerQuery.ShippingAddress),
             "'Shipping Address' must not be empty.");
     }
 
@@ -233,9 +251,9 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenShippingAddressIsInvalid()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with
+        var query = GetUpdateCustomerQuery() with
         {
-            ShippingAddress = new AddressModel(string.Empty, string.Empty, string.Empty, string.Empty)
+            ShippingAddress = new Address(string.Empty, string.Empty, string.Empty, string.Empty)
         };
 
         //Act
@@ -260,9 +278,9 @@ public class CreateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenShippingAddressIsTooLong()
     {
         //Arrange
-        var query = GetCreateCustomerQuery() with
+        var query = GetUpdateCustomerQuery() with
         {
-            ShippingAddress = new AddressModel(LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51)
+            ShippingAddress = new Address(LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51)
         };
 
         //Act
@@ -287,14 +305,15 @@ public class CreateCustomerQueryValidatorTests
 
     #region Private Helpers
 
-    private static CreateCustomerQuery GetCreateCustomerQuery()
+    private static UpdateCustomerQuery GetUpdateCustomerQuery()
     {
-        var address = new AddressModel(
+        var address = new Address(
             "123 Test Street",
             "Test Town",
             "MO",
             "12345");
-        return new CreateCustomerQuery(
+        return new UpdateCustomerQuery(
+            Guid.NewGuid(),
             "Fred",
             "Flintstone",
             "fred.flintstone@test.com",

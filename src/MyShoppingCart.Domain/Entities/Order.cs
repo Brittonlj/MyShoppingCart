@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using MyShoppingCart.Domain.Models;
+using System.Text.Json.Serialization;
 
 namespace MyShoppingCart.Domain.Entities;
 
@@ -9,7 +10,69 @@ public sealed class Order : IEntity<Guid>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]  
     public Customer? Customer { get; set; }
     public DateTime OrderDateTimeUtc { get; set; }
-    public List<LineItem> LineItems { get; } = new();
+    public IReadOnlyList<LineItem> LineItems => _lineItems;
+    private List<LineItem> _lineItems = new();
+
+    public void AddUpdateLineItem(LineItem lineItem)
+    {
+        lineItem.OrderId = Id;
+
+        var foundLineItem = _lineItems.FirstOrDefault(x => x.Id == lineItem.Id);
+        if (foundLineItem is not null)
+        {
+            if (foundLineItem != lineItem)
+            {
+                lineItem.Adapt(foundLineItem);
+            }
+            return;
+        }
+
+        _lineItems.Add(lineItem);
+    }
+
+    public void AddUpdateLineItem(LineItemModel lineItemModel)
+    {
+        var lineItem = new LineItem(Id, lineItemModel.ProductId, lineItemModel.Quantity);
+        _lineItems.Add(lineItem);
+    }
+
+    public void AddUpdateLineItemRange(IEnumerable<LineItem> lineItems)
+    {
+        foreach (var lineItem in lineItems)
+        {
+            AddUpdateLineItem(lineItem);
+        }
+    }
+
+    public void AddUpdateLineItemRange(IEnumerable<LineItemModel> lineItemModels)
+    {
+        foreach (var lineItemModel in lineItemModels)
+        {
+            AddUpdateLineItem(lineItemModel);
+        }
+    }
+
+    public void RemoveLineItem(LineItem lineItem)
+    {
+        RemoveLineItem(lineItem.Id);
+    }
+
+    public void RemoveLineItem(Guid lineItemId)
+    {
+        var foundLineItem = _lineItems.FirstOrDefault(x => x.Id == lineItemId);
+        if (foundLineItem is not null)
+        {
+            _lineItems.Remove(foundLineItem);
+        }
+    }
+
+    public void RemoveLineItemRange(IEnumerable<LineItem> lineItems)
+    {
+        foreach (var lineItem in lineItems)
+        {
+            RemoveLineItem(lineItem.Id);
+        }
+    }
 
     #region Equatable
     public bool Equals(Order? other)

@@ -1,8 +1,8 @@
-﻿namespace MyShoppingCart.Application.Tests.Validators.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Products;
 
-public class GetCustomerQueryValidatorTests
+public class DeleteProductCommandValidatorTests
 {
-    private readonly IValidator<GetCustomerQuery> _validator = new GetCustomerQueryValidator();
+    private readonly IValidator<DeleteProductCommand> _validator = new DeleteProductCommandValidator();
 
     #region Happy Path
 
@@ -10,7 +10,7 @@ public class GetCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenRequestIsValid()
     {
         //Arrange
-        var request = new GetCustomerQuery(Guid.NewGuid());
+        var request = new DeleteProductCommand(Guid.NewGuid());
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -22,21 +22,21 @@ public class GetCustomerQueryValidatorTests
 
     #endregion
 
-    #region CustomerId
+    #region ProductId
 
     [Fact]
-    public async Task Validate_ShouldReturnResults_WhenCustomerIdIsEmpty()
+    public async Task Validate_ShouldReturnResults_WhenProductIdIsEmpty()
     {
         //Arrange
-        var request = new GetCustomerQuery(Guid.Empty);
+        var request = new DeleteProductCommand(Guid.Empty);
 
         //Act
         var results = await _validator.ValidateAsync(request);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetCustomerQuery.CustomerId),
-            "'Customer Id' must not be empty.");
+            nameof(DeleteProductCommand.ProductId),
+            "'Product Id' must not be empty.");
     }
 
     #endregion

@@ -22,6 +22,15 @@ public sealed class LineItem : IEntity<Guid>, IEquatable<LineItem>
         Quantity = quantity;
     }
 
+    [SetsRequiredMembers]
+    public LineItem(Guid id, Guid orderId, Guid productId, int quantity)
+    {
+        Id = id;
+        OrderId = orderId;
+        ProductId = productId;
+        Quantity = quantity;
+    }
+
     #region Equatable
     public bool Equals(LineItem? other)
     {

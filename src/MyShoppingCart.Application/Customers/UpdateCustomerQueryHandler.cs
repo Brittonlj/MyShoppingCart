@@ -3,10 +3,11 @@
 public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQuery, Response<Customer>>
 {
     private readonly IRepository<Customer> _customerRepository;
-
-    public UpdateCustomerQueryHandler(IRepository<Customer> customerRepository)
+    private readonly IMapper _mapper;
+    public UpdateCustomerQueryHandler(IRepository<Customer> customerRepository, IMapper mapper)
     {
         _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _mapper = Guard.Against.Null(mapper, nameof(mapper));
     }
 
     public async Task<Response<Customer>> Handle(UpdateCustomerQuery request, CancellationToken cancellationToken)
@@ -19,29 +20,10 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
             return NotFound.Instance;
         }
 
-        _customerRepository.UpdateEntityProperties(customer, request);
-
-        UpdateAddress(customer.BillingAddress, request.BillingAddress);
-        UpdateAddress(customer.ShippingAddress, request.ShippingAddress);
+        _mapper.From(request).AdaptTo(customer);
 
         await _customerRepository.UpdateAsync(customer, cancellationToken);
 
         return customer;
-    }
-
-    private void UpdateAddress(Address? original, Address? request)
-    {
-        if (original is null && request is not null)
-        {
-            original = request;
-        }
-        if (original is not null && request is null)
-        {
-            original = null;
-        }
-        if (original is not null && request is not null)
-        {
-            _customerRepository.UpdateEntityProperties(original, request);
-        }
     }
 }

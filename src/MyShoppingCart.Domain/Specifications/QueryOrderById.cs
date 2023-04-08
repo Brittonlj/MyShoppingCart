@@ -7,16 +7,9 @@ public sealed class QueryOrderById : BaseSpecification<Order>, ISingleResultSpec
     public QueryOrderById(Guid orderId, Guid customerId)
     {
         Query
-            .Where(x => x.Id == orderId && x.CustomerId == customerId);
-    }
-
-    public QueryOrderById WithProducts()
-    {
-        Query
+            .Where(x => x.Id == orderId && x.CustomerId == customerId)
             .Include(x => x.LineItems)
             .ThenInclude(x => x.Product)
             .AsSplitQuery();
-
-        return this;
     }
 }

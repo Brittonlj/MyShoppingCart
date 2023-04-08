@@ -11,9 +11,4 @@ public class Repository<TEntity> : RepositoryBase<TEntity>, IRepository<TEntity>
     {
         _context = context;
     }
-
-    public void UpdateEntityProperties<T>(T entity, object request) where T : class, IEntity<Guid>
-    {
-        _context.Entry(entity).CurrentValues.SetValues(request);
-    }
 }

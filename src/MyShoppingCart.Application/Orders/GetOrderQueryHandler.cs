@@ -12,7 +12,6 @@
         public async Task<Response<Order>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
             var query = new QueryOrderById(request.OrderId, request.CustomerId)
-                .WithProducts()
                 .WithNoTracking();
 
             var order = await _orderRepository.FirstOrDefaultAsync(query);

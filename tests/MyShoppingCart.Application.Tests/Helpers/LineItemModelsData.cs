@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Validators.Helpers;
+﻿namespace MyShoppingCart.Application.Tests.Helpers;
 
 public static class LineItemModelsData
 {

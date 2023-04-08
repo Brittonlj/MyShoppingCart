@@ -3,10 +3,12 @@
 public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQuery, Response<Product>>
 {
     private readonly IRepository<Product> _productRepository;
+    private readonly IMapper _mapper;
 
-    public UpdateProductQueryHandler(IRepository<Product> productRepository)
+    public UpdateProductQueryHandler(IRepository<Product> productRepository, IMapper mapper)
     {
         _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
+        _mapper = Guard.Against.Null(mapper, nameof(mapper));
     }
 
     public async Task<Response<Product>> Handle(UpdateProductQuery request, CancellationToken cancellationToken)
@@ -19,7 +21,7 @@ public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQue
             return NotFound.Instance;
         }
 
-        _productRepository.UpdateEntityProperties(product, request);
+        _mapper.From(request).AdaptTo(product);
 
         await _productRepository.UpdateAsync(product, cancellationToken);
 

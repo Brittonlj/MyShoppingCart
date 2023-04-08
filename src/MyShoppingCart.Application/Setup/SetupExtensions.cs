@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyShoppingCart.Application.Services;
+using MapsterMapper;
 
 namespace MyShoppingCart.Application.Setup;
 
@@ -16,6 +17,8 @@ public static class SetupExtensions
         });
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+        services.AddTransient<IMapper, Mapper>();
 
         return services;
     }

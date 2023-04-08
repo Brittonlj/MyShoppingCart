@@ -7,62 +7,31 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
 {
     private readonly IRepository<Customer> _customerRepository;
     private readonly IRepository<SecurityClaim> _securityClaimRepository;
+    private readonly IMapper _mapper;
 
     public CreateCustomerQueryHandler(
         IRepository<Customer> customerRepository, 
-        IRepository<SecurityClaim> securityClaimRepository)
+        IRepository<SecurityClaim> securityClaimRepository,
+        IMapper mapper)
     {
         _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
         _securityClaimRepository = Guard.Against.Null(securityClaimRepository, nameof(securityClaimRepository));
+        _mapper = Guard.Against.Null(mapper, nameof(mapper));
     }
 
     public async Task<Response<Customer>> Handle(CreateCustomerQuery request, CancellationToken cancellationToken)
     {
-        var customer = MapToCustomer(request);
+        var customer = _mapper.Map<Customer>(request);
 
         var claims = GetDefaultClaims(customer.Id);
 
         using var transaction = new TransactionScope();
 
-        await _customerRepository.AddAsync(customer, cancellationToken);
+        customer = await _customerRepository.AddAsync(customer, cancellationToken);
 
         await _securityClaimRepository.AddRangeAsync(claims, cancellationToken);
 
         transaction.Complete();
-
-        return customer;
-    }
-
-    private Customer MapToCustomer(CreateCustomerQuery request)
-    {
-        var customer = new Customer
-        {
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            Email = request.Email
-        };
-
-        if (request.BillingAddress is not null)
-        {
-            customer.BillingAddress = new Address
-            {
-                Street = request.BillingAddress.Street,
-                City = request.BillingAddress.City,
-                State = request.BillingAddress.State,
-                PostalCode = request.BillingAddress.PostalCode
-            };
-        }
-
-        if (request.ShippingAddress is not null)
-        {
-            customer.ShippingAddress = new Address
-            {
-                Street = request.ShippingAddress.Street,
-                City = request.ShippingAddress.City,
-                State = request.ShippingAddress.State,
-                PostalCode = request.ShippingAddress.PostalCode
-            };
-        }
 
         return customer;
     }

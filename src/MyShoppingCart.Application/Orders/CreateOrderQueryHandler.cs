@@ -1,4 +1,6 @@
-﻿namespace MyShoppingCart.Application.Orders;
+﻿using MyShoppingCart.Domain.Entities;
+
+namespace MyShoppingCart.Application.Orders;
 
 public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, Response<Order>>
 {
@@ -23,10 +25,7 @@ public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, 
 
         var order = new Order { CustomerId = customer.Id };
 
-        foreach (var lineItem in request.LineItems)
-        {
-            order.LineItems.Add(new LineItem(order.Id, lineItem.ProductId, lineItem.Quantity));
-        }
+        order.AddUpdateLineItemRange(request.LineItems);
 
         await _orderRepository.AddAsync(order);
 

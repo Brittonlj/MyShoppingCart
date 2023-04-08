@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Validators.Orders;
+﻿namespace MyShoppingCart.Application.Tests.Orders;
 
 public class DeleteOrderCommandValidatorTests
 {

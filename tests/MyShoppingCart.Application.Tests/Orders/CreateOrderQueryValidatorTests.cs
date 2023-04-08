@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Validators.Orders;
+﻿namespace MyShoppingCart.Application.Tests.Orders;
 
 public class CreateOrderQueryValidatorTests
 {
@@ -88,7 +88,7 @@ public class CreateOrderQueryValidatorTests
     private static IRepository<Product> GetRepository()
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
-        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllProductsByProductIds>(), It.IsAny<CancellationToken>())).ReturnsAsync(ProductsData.GetProducts());
+        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllProductsByProductIds>(), It.IsAny<CancellationToken>())).ReturnsAsync(DataHelper.GetProducts());
 
         return mockProductRepository.Object;
     }

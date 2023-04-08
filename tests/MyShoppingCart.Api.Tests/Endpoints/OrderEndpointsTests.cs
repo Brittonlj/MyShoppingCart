@@ -497,14 +497,14 @@ public class OrderEndpointsTests
             }
         };
 
-        orders[0].LineItems.Add(new LineItem(orders[0].Id, Guid.NewGuid(), 10));
-        orders[0].LineItems.Add(new LineItem(orders[0].Id, Guid.NewGuid(), 5));
+        orders[0].AddUpdateLineItem(new LineItem(orders[0].Id, Guid.NewGuid(), 10));
+        orders[0].AddUpdateLineItem(new LineItem(orders[0].Id, Guid.NewGuid(), 5));
 
-        orders[1].LineItems.Add(new LineItem(orders[1].Id, Guid.NewGuid(), 10));
-        orders[1].LineItems.Add(new LineItem(orders[1].Id, Guid.NewGuid(), 5));
+        orders[1].AddUpdateLineItem(new LineItem(orders[1].Id, Guid.NewGuid(), 10));
+        orders[1].AddUpdateLineItem(new LineItem(orders[1].Id, Guid.NewGuid(), 5));
 
-        orders[2].LineItems.Add(new LineItem(orders[2].Id, Guid.NewGuid(), 10));
-        orders[2].LineItems.Add(new LineItem(orders[2].Id, Guid.NewGuid(), 5));
+        orders[2].AddUpdateLineItem(new LineItem(orders[2].Id, Guid.NewGuid(), 10));
+        orders[2].AddUpdateLineItem(new LineItem(orders[2].Id, Guid.NewGuid(), 5));
 
         return orders;
     }
@@ -516,8 +516,8 @@ public class OrderEndpointsTests
             CustomerId = Guid.NewGuid(),
             OrderDateTimeUtc = DateTime.UtcNow,
         };
-        order.LineItems.Add(new LineItem(order.Id, Guid.NewGuid(), 10));
-        order.LineItems.Add(new LineItem(order.Id, Guid.NewGuid(), 5));
+        order.AddUpdateLineItem(new LineItem(order.Id, Guid.NewGuid(), 10));
+        order.AddUpdateLineItem(new LineItem(order.Id, Guid.NewGuid(), 5));
 
         return order;
     }

@@ -11,8 +11,8 @@ public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustome
 
     public async Task<Response<Success>> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
-        var spec = new QueryCustomerById(request.CustomerId);
-        var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
+        var query = new QueryCustomerById(request.CustomerId);
+        var customer = await _customerRepository.FirstOrDefaultAsync(query, cancellationToken);
 
         if (customer is null)
         {

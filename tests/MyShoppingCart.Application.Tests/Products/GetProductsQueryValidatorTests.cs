@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Validators.Products;
+﻿namespace MyShoppingCart.Application.Tests.Products;
 
 public class GetProductsQueryValidatorTests
 {

@@ -3,10 +3,12 @@
 public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, Response<Order>>
 {
     private readonly IRepository<Order> _orderRepository;
+    private readonly IMapper _mapper;
 
-    public UpdateOrderQueryHandler(IRepository<Order> orderRepository)
+    public UpdateOrderQueryHandler(IRepository<Order> orderRepository, IMapper mapper)
     {
         _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
+        _mapper = Guard.Against.Null(mapper, nameof(mapper));
     }
 
     public async Task<Response<Order>> Handle(UpdateOrderQuery request, CancellationToken cancellationToken)
@@ -19,42 +21,22 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
             return NotFound.Instance;
         }
 
-        if (order.OrderDateTimeUtc != request.OrderDateTimeUtc)
-        {
-            order.OrderDateTimeUtc = request.OrderDateTimeUtc;
-        }
+        _mapper.From(request).AdaptTo(order);
 
-        MergeLineItemChanges(order.LineItems, request);
+        MergeLineItemChanges(order, request);
 
         await _orderRepository.UpdateAsync(order, cancellationToken);
 
         return order;
     }
 
-    private void MergeLineItemChanges(List<LineItem> originals, UpdateOrderQuery request)
+    private void MergeLineItemChanges(Order original, UpdateOrderQuery request)
     {
-        var matches = originals.Join(request.LineItems,
-            originalId => originalId.Id,
-            requestId => requestId.Id,
-            (original, request) => new { Original = original, Request = request });
+        var lineItemsToDelete = original.LineItems.Where(x => !request.LineItems.Any(y => x.Id == y.Id)).ToList();
 
-        matches
-            .Where(x => x.Original != x.Request)
-            .ToList()
-            .ForEach(x =>
-            {
-                x.Original.Quantity = x.Request.Quantity;
-                x.Original.ProductId = x.Request.ProductId;
-            });
+        original.RemoveLineItemRange(lineItemsToDelete);
 
-        //Add
-        var lineItemsToAdd = request.LineItems.Where(x => !originals.Any(y => x.Id == y.Id));
-        originals.AddRange(lineItemsToAdd);
-
-        //Delete
-        var lineItemsToDelete = originals.Where(x => !request.LineItems.Any(y => x.Id == y.Id)).ToList();
-
-        lineItemsToDelete.ForEach(x => originals.Remove(x));
+        original.AddUpdateLineItemRange(request.LineItems);
     }
 
     
