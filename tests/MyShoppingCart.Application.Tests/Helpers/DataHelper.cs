@@ -20,7 +20,38 @@ public static class DataHelper
             LastName = "Flintstone",
             Email = "fred.flintstone@test.com",
             ShippingAddress = address,
-            BillingAddress = address 
+            BillingAddress = address
+        };
+    }
+
+    public static List<Customer> GetCustomers()
+    {
+        var address = new Address(
+            new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+            "123 Test Street",
+            "Test Town",
+            "MO",
+            "12345");
+        return new List<Customer>
+        {
+            new Customer
+            {
+                Id = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+                FirstName = "Fred",
+                LastName = "Flintstone",
+                Email = "fred.flintstone@test.com",
+                ShippingAddress = address,
+                BillingAddress = address
+            },
+            new Customer
+            {
+                Id = new Guid("79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
+                FirstName = "George",
+                LastName = "Jetson",
+                Email = "george.jetson@test.com",
+                ShippingAddress = address,
+                BillingAddress = address
+            }
         };
     }
 
@@ -77,6 +108,17 @@ public static class DataHelper
             "fred.flintstone@test.com",
             address,
             address);
+    }
+
+    public static GetCustomersQuery GetGetCustomersQuery()
+    {
+        return new GetCustomersQuery(
+            "Fred",
+            "test.com",
+            1,
+            20,
+            "LastName");
+
     }
 
 }

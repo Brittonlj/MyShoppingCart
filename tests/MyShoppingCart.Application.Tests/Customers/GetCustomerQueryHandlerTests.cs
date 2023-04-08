@@ -12,10 +12,12 @@ public class GetCustomerQueryHandlerTests
         //Arrange
         var customer = DataHelper.GetCustomer();
         var request = new GetCustomerQuery(Guid.NewGuid());
+
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
         mockCustomerRepository
             .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
             .ReturnsAsync(customer);
+       
         var handler = new GetCustomerQueryHandler(mockCustomerRepository.Object);
 
         //Act
@@ -38,9 +40,11 @@ public class GetCustomerQueryHandlerTests
         var customer = DataHelper.GetCustomer();
         var request = new GetCustomerQuery(Guid.NewGuid());
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
+        
         mockCustomerRepository
             .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
             .ReturnsAsync(() => null);
+        
         var handler = new GetCustomerQueryHandler(mockCustomerRepository.Object);
 
         //Act

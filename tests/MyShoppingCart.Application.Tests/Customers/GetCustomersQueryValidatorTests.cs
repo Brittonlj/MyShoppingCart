@@ -10,7 +10,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenRequestIsValid()
     {
         //Arrange
-        var request = GetGetCustomersQuery();
+        var request = DataHelper.GetGetCustomersQuery();
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -24,7 +24,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenNamesLikeEmpty()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { NamesLike = string.Empty };
+        var request = DataHelper.GetGetCustomersQuery() with { NamesLike = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -38,7 +38,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenNamesLikeIsNull()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { NamesLike = null };
+        var request = DataHelper.GetGetCustomersQuery() with { NamesLike = null };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -52,7 +52,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenEmailLikeIsEmpty()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { EmailLike = string.Empty };
+        var request = DataHelper.GetGetCustomersQuery() with { EmailLike = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -66,7 +66,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenEmailLikeIsNull()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { EmailLike = null };
+        var request = DataHelper.GetGetCustomersQuery() with { EmailLike = null };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -102,7 +102,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenSortColumnIsEmpty()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { SortColumn = string.Empty };
+        var request = DataHelper.GetGetCustomersQuery() with { SortColumn = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -117,7 +117,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenSortColumnIsInvalid()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { SortColumn = "BadSortColumn" };
+        var request = DataHelper.GetGetCustomersQuery() with { SortColumn = "BadSortColumn" };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -125,7 +125,7 @@ public class GetCustomersQueryValidatorTests
         //Assert
         results.AssertValidationErrors(
             nameof(GetCustomersQuery.SortColumn),
-            "'BadSortColumn' is an invalid value for 'Sort Column'");
+            "'BadSortColumn' is an invalid value for 'Sort Column'.  Please use one of 'LastName, FirstName, Email'.");
     }
 
     #endregion
@@ -136,7 +136,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPageNumberIsZero()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { PageNumber = 0 };
+        var request = DataHelper.GetGetCustomersQuery() with { PageNumber = 0 };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -155,7 +155,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPageSizeIsZero()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { PageSize = 0 };
+        var request = DataHelper.GetGetCustomersQuery() with { PageSize = 0 };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -170,7 +170,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPageSizeIsTooLarge()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { PageSize = 51 };
+        var request = DataHelper.GetGetCustomersQuery() with { PageSize = 51 };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -189,7 +189,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenNamesLikeIsTooLarge()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { NamesLike = LongStrings.LONG_STRING_51 };
+        var request = DataHelper.GetGetCustomersQuery() with { NamesLike = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -208,7 +208,7 @@ public class GetCustomersQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenEmailLikeIsTooLarge()
     {
         //Arrange
-        var request = GetGetCustomersQuery() with { EmailLike = LongStrings.LONG_STRING_51 };
+        var request = DataHelper.GetGetCustomersQuery() with { EmailLike = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(request);
@@ -217,21 +217,6 @@ public class GetCustomersQueryValidatorTests
         results.AssertValidationErrors(
             nameof(GetCustomersQuery.EmailLike),
             "The length of 'Email Like' must be 50 characters or fewer. You entered 51 characters.");
-    }
-
-    #endregion
-
-    #region Private Helpers
-
-    private static GetCustomersQuery GetGetCustomersQuery()
-    {
-        return new GetCustomersQuery(
-            "Fred",
-            "test.com",
-            1,
-            20,
-            "FirstName");
-
     }
 
     #endregion

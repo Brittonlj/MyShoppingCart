@@ -5,6 +5,13 @@ namespace MyShoppingCart.Domain.Specifications;
 
 public sealed class QueryAllOrders : BaseSpecification<Order>
 {
+    public const SortColumns DEFAULT_SORT_COLUMN = SortColumns.OrderDateTimeUtc;
+
+    public enum SortColumns
+    {
+        OrderDateTimeUtc
+    }
+
     public QueryAllOrders(
         Guid customerId,
         int pageNumber,

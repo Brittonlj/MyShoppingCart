@@ -14,10 +14,12 @@ public sealed class DeleteCustomerCommandHandlerTests
         //Arrange
         var customer = DataHelper.GetCustomer();
         var request = new DeleteCustomerCommand(customer.Id);
+
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
         mockCustomerRepository
             .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
             .ReturnsAsync(customer);
+       
         var handler = new DeleteCustomerCommandHandler(mockCustomerRepository.Object);
 
         //Act
@@ -41,9 +43,11 @@ public sealed class DeleteCustomerCommandHandlerTests
         //Arrange
         var request = new DeleteCustomerCommand(Guid.NewGuid());
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
+       
         mockCustomerRepository
             .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
             .ReturnsAsync(() => null);
+        
         var handler = new DeleteCustomerCommandHandler(mockCustomerRepository.Object);
 
         //Act

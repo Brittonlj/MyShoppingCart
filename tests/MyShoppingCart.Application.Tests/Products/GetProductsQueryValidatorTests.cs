@@ -79,7 +79,7 @@ public class GetProductsQueryValidatorTests
         //Assert
         results.AssertValidationErrors(
             nameof(GetProductsQuery.SortColumn),
-            "'BadSortColumn' is an invalid value for 'Sort Column'");
+            "'BadSortColumn' is an invalid value for 'Sort Column'.  Please use one of 'Name, Description, Price'.");
     }
 
     #endregion

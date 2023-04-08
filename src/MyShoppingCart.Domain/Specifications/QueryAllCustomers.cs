@@ -5,7 +5,15 @@ namespace MyShoppingCart.Domain.Specifications;
 
 public class QueryAllCustomers : BaseSpecification<Customer>
 {
-    public const string DEFAULT_SORT_COLUMN = "LastName";
+    public const SortColumns DEFAULT_SORT_COLUMN = SortColumns.LastName;
+
+    public enum SortColumns
+    {
+        LastName,
+        FirstName,
+        Email
+    }
+
     public QueryAllCustomers(
         string? namesLike,
         string? emailLike,
@@ -25,18 +33,40 @@ public class QueryAllCustomers : BaseSpecification<Customer>
             Query.Where(x => x.Email.Contains(emailLike));
         }
 
-        if (!SortColumns.Customers.TryGetValue(sortColumn, out var orderByClause))
+        if (!Enum.TryParse<SortColumns>(sortColumn, true, out var orderByEnum))
         {
-            orderByClause = SortColumns.Customers[DEFAULT_SORT_COLUMN];
+            orderByEnum = DEFAULT_SORT_COLUMN;
         }
 
         if (sortAscending)
         {
-            Query.OrderBy(orderByClause);
+            switch(orderByEnum)
+            {
+                case SortColumns.LastName:
+                    Query.OrderBy(x => x.LastName);
+                    break;
+                case SortColumns.FirstName:
+                    Query.OrderBy(x => x.FirstName);
+                    break;
+                case SortColumns.Email:
+                    Query.OrderBy(x => x.Email);
+                    break;
+            }
         }
         else
         {
-            Query.OrderByDescending(orderByClause);
+            switch (orderByEnum)
+            {
+                case SortColumns.LastName:
+                    Query.OrderByDescending(x => x.LastName);
+                    break;
+                case SortColumns.FirstName:
+                    Query.OrderByDescending(x => x.FirstName);
+                    break;
+                case SortColumns.Email:
+                    Query.OrderByDescending(x => x.Email);
+                    break;
+            }
         }
 
         Query

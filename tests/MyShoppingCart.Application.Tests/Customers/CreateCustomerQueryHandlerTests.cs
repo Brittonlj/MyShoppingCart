@@ -22,6 +22,7 @@ public class CreateCustomerQueryHandlerTests
             .ReturnsAsync(customer);
 
         var mockSecurityClaimRepository = new Mock<IRepository<SecurityClaim>>();
+
         var handler = new CreateCustomerQueryHandler(
             mockCustomerRepository.Object, 
             mockSecurityClaimRepository.Object, 
