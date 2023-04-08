@@ -3,6 +3,7 @@
 public class UpdateCustomerQueryValidatorTests
 {
     private readonly IValidator<UpdateCustomerQuery> _validator = new UpdateCustomerQueryValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery();
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -31,7 +32,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { CustomerId = Guid.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -48,7 +49,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { FirstName = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -63,7 +64,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { FirstName = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -80,7 +81,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { LastName = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -95,7 +96,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { LastName = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -114,7 +115,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { Email = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -130,7 +131,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { Email = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -148,7 +149,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { Email = "test" };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -166,7 +167,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { BillingAddress = null };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -184,7 +185,7 @@ public class UpdateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -211,7 +212,7 @@ public class UpdateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -239,7 +240,7 @@ public class UpdateCustomerQueryValidatorTests
         var query = GetUpdateCustomerQuery() with { ShippingAddress = null };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -257,7 +258,7 @@ public class UpdateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -284,7 +285,7 @@ public class UpdateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

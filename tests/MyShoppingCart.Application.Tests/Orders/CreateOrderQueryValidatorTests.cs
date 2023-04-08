@@ -3,6 +3,7 @@
 public class CreateOrderQueryValidatorTests
 {
     private readonly IValidator<CreateOrderQuery> _validator;
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     public CreateOrderQueryValidatorTests()
     {
@@ -18,7 +19,7 @@ public class CreateOrderQueryValidatorTests
         var query = GetCreateOrderQuery();
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -36,7 +37,7 @@ public class CreateOrderQueryValidatorTests
         var query = GetCreateOrderQuery() with { CustomerId = Guid.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -55,7 +56,7 @@ public class CreateOrderQueryValidatorTests
         var query = GetCreateOrderQuery() with { LineItems = new List<LineItemModel>() };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -67,13 +68,13 @@ public class CreateOrderQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenLineItemsContainUnknownProducts()
     {
         //Arrange
-        var lineItems = LineItemModelsData.GetLineItemModels();
+        var lineItems = DataHelper.GetLineItemModels();
         var newProductId = Guid.NewGuid();
         lineItems.Add(new LineItemModel(newProductId, 12));
         var query = GetCreateOrderQuery() with { LineItems = lineItems };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -85,10 +86,10 @@ public class CreateOrderQueryValidatorTests
 
     #region Private Helpers
 
-    private static IRepository<Product> GetRepository()
+    private IRepository<Product> GetRepository()
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
-        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllProductsByProductIds>(), It.IsAny<CancellationToken>())).ReturnsAsync(DataHelper.GetProducts());
+        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllProductsByProductIds>(), _cancellationToken)).ReturnsAsync(DataHelper.GetProducts());
 
         return mockProductRepository.Object;
     }
@@ -97,7 +98,7 @@ public class CreateOrderQueryValidatorTests
     {
         return new CreateOrderQuery(
             Guid.NewGuid(),
-            LineItemModelsData.GetLineItemModels());
+            DataHelper.GetLineItemModels());
     }
 
     #endregion

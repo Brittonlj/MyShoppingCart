@@ -3,6 +3,7 @@
 public class CreateCustomerQueryValidatorTests
 {
     private readonly IValidator<CreateCustomerQuery> _validator = new CreateCustomerQueryValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery();
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -30,7 +31,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { FirstName = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -45,7 +46,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { FirstName = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -62,7 +63,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { LastName = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -77,7 +78,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { LastName = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -96,7 +97,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { Email = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -112,7 +113,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { Email = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -130,7 +131,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { Email = "test" };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -148,7 +149,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { BillingAddress = null };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -166,7 +167,7 @@ public class CreateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -193,7 +194,7 @@ public class CreateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -221,7 +222,7 @@ public class CreateCustomerQueryValidatorTests
         var query = DataHelper.GetCreateCustomerQuery() with { ShippingAddress = null };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -239,7 +240,7 @@ public class CreateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -266,7 +267,7 @@ public class CreateCustomerQueryValidatorTests
         };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Entities;
-
-namespace MyShoppingCart.Application.Orders;
+﻿namespace MyShoppingCart.Application.Orders;
 
 public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, Response<Order>>
 {

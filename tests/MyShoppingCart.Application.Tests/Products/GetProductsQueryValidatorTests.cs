@@ -3,6 +3,7 @@
 public class GetProductsQueryValidatorTests
 {
     private readonly IValidator<GetProductsQuery> _validator = new GetProductsQueryValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery();
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -27,7 +28,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { SearchString = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -41,7 +42,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { SearchString = null };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -59,7 +60,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { SortColumn = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -74,7 +75,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { SortColumn = "BadSortColumn" };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -93,7 +94,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { PageNumber = 0 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -112,7 +113,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { PageSize = 0 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -127,7 +128,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { PageSize = 51 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -146,7 +147,7 @@ public class GetProductsQueryValidatorTests
         var request = GetGetProductsQuery() with { SearchString = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

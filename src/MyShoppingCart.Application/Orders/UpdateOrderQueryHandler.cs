@@ -21,7 +21,7 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
             return NotFound.Instance;
         }
 
-        _mapper.From(request).AdaptTo(order);
+        order = _mapper.Map(request, order);
 
         MergeLineItemChanges(order, request);
 

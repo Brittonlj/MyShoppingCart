@@ -3,6 +3,7 @@
 public class DeleteProductCommandValidatorTests
 {
     private readonly IValidator<DeleteProductCommand> _validator = new DeleteProductCommandValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class DeleteProductCommandValidatorTests
         var request = new DeleteProductCommand(Guid.NewGuid());
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -31,7 +32,7 @@ public class DeleteProductCommandValidatorTests
         var request = new DeleteProductCommand(Guid.Empty);
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

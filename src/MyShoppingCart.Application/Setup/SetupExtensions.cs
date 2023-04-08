@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyShoppingCart.Application.Services;
-using MapsterMapper;
 
 namespace MyShoppingCart.Application.Setup;
 

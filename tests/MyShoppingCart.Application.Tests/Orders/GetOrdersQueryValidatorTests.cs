@@ -3,6 +3,7 @@
 public class GetOrdersQueryValidatorTests
 {
     private readonly IValidator<GetOrdersQuery> _validator = new GetOrdersQueryValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class GetOrdersQueryValidatorTests
         var request = GetGetOrdersQuery();
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -31,7 +32,7 @@ public class GetOrdersQueryValidatorTests
         var request = GetGetOrdersQuery() with { SortColumn = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -46,7 +47,7 @@ public class GetOrdersQueryValidatorTests
         var request = GetGetOrdersQuery() with { SortColumn = "BadSortColumn" };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -65,7 +66,7 @@ public class GetOrdersQueryValidatorTests
         var request = GetGetOrdersQuery() with { PageNumber = 0 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -84,7 +85,7 @@ public class GetOrdersQueryValidatorTests
         var request = GetGetOrdersQuery() with { PageSize = 0 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -99,7 +100,7 @@ public class GetOrdersQueryValidatorTests
         var request = GetGetOrdersQuery() with { PageSize = 51 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -118,7 +119,7 @@ public class GetOrdersQueryValidatorTests
         var request = GetGetOrdersQuery() with { CustomerId = Guid.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

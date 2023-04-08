@@ -3,6 +3,7 @@
 public class CreateProductQueryValidatorTests
 {
     private readonly IValidator<CreateProductQuery> _validator = new CreateProductQueryValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery();
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -27,7 +28,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { ImageUrl = null };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -41,7 +42,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { ImageUrl = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -55,7 +56,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Price = 0.0M };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -69,7 +70,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Price = 1.0M };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -83,7 +84,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Price = 100 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -101,7 +102,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Name = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -116,7 +117,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Name = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -134,7 +135,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Description = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -149,7 +150,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Description = LongStrings.LONG_STRING_501 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -168,7 +169,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Price = 1.100M };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -183,7 +184,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { Price = 10000000.00M };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -202,7 +203,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { ImageUrl = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -220,7 +221,7 @@ public class CreateProductQueryValidatorTests
         var query = GetCreateProductQuery() with { ImageUrl = "sometext" };
 
         //Act
-        var results = await _validator.ValidateAsync(query);
+        var results = await _validator.ValidateAsync(query, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

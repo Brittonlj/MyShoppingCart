@@ -3,6 +3,7 @@
 public class GetCustomersQueryValidatorTests
 {
     private readonly IValidator<GetCustomersQuery> _validator = new GetCustomersQueryValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery();
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -27,7 +28,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { NamesLike = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -41,7 +42,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { NamesLike = null };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -55,7 +56,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { EmailLike = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -69,7 +70,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { EmailLike = null };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -87,7 +88,7 @@ public class GetCustomersQueryValidatorTests
             20);
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -105,7 +106,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { SortColumn = string.Empty };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -120,7 +121,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { SortColumn = "BadSortColumn" };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -139,7 +140,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { PageNumber = 0 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -158,7 +159,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { PageSize = 0 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -173,7 +174,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { PageSize = 51 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -192,7 +193,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { NamesLike = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -211,7 +212,7 @@ public class GetCustomersQueryValidatorTests
         var request = DataHelper.GetGetCustomersQuery() with { EmailLike = LongStrings.LONG_STRING_51 };
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

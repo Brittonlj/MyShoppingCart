@@ -3,6 +3,7 @@
 public class GetOrderQueryValidatorTests
 {
     private readonly IValidator<GetOrderQuery> _validator = new GetOrderQueryValidator();
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
 
@@ -13,7 +14,7 @@ public class GetOrderQueryValidatorTests
         var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.Should().NotBeNull();
@@ -31,7 +32,7 @@ public class GetOrderQueryValidatorTests
         var request = new GetOrderQuery(Guid.NewGuid(), Guid.Empty);
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
@@ -50,7 +51,7 @@ public class GetOrderQueryValidatorTests
         var request = new GetOrderQuery(Guid.Empty, Guid.NewGuid());
 
         //Act
-        var results = await _validator.ValidateAsync(request);
+        var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(

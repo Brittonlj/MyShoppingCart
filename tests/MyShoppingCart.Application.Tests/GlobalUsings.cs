@@ -1,4 +1,3 @@
-global using Mapster;
 global using MapsterMapper;
 global using Moq;
 global using Xunit;
