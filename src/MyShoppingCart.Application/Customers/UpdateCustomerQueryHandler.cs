@@ -20,7 +20,7 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
             return NotFound.Instance;
         }
 
-        _mapper.From(request).AdaptTo(customer);
+        customer = _mapper.Map(request, customer);
 
         await _customerRepository.UpdateAsync(customer, cancellationToken);
 

@@ -110,6 +110,23 @@ public static class DataHelper
             address);
     }
 
+    public static UpdateCustomerQuery GetUpdateCustomerQuery()
+    {
+        var address = new Address(
+            new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+            "123 Test Street",
+            "Test Town",
+            "MO",
+            "12345");
+        return new UpdateCustomerQuery(
+            new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+            "Fred",
+            "Flintstone",
+            "fred.flintstone@test.com",
+            address,
+            address);
+    }
+
     public static GetCustomersQuery GetGetCustomersQuery()
     {
         return new GetCustomersQuery(

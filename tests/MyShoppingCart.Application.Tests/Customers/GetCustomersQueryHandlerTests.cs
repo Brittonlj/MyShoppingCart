@@ -30,6 +30,9 @@ public class GetCustomersQueryHandlerTests
     }
 
     #endregion
+
+    #region CustomerId
+
     [Fact]
     public async Task Handle_ShouldReturnNoCustomers_WhenNoParametersMatch()
     {
@@ -52,10 +55,6 @@ public class GetCustomersQueryHandlerTests
         mockCustomerRepository
             .Verify(x => x.ListAsync(It.IsAny<QueryAllCustomers>(), _cancellationToken), Times.Once);
     }
-
-    #region CustomerId
-
-
 
     #endregion
 
