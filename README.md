@@ -4,7 +4,7 @@ Welcome to my portfolio project for a simple shopping cart. I wasn't setting out
 
 Some things you will find examples of in this code base:
 
-- [Design Patterns](https://refactoring.guru/design-patterns/behavioral-patterns) not limited to:
+- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID) and [Design Patterns](https://refactoring.guru/design-patterns/behavioral-patterns) not limited to:
   - The [Mediator Pattern](https://refactoring.guru/design-patterns/mediator) using the popular open source [MediatR](https://github.com/jbogard/MediatR) project. I used MediatR Pipeline Behaviors to handle cross-cutting concerns like error logging as well as request and security validation.
   - The [Options Pattern](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-7.0) with option validation and option validation on startup for easy problem detection.
   - The [Specification Pattern](https://deviq.com/design-patterns/specification-pattern) and the [Repository Pattern](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design) using [Ardalis's Specification](https://github.com/ardalis/Specification) open-source project. I started off this project with the plan to forgo the repository pattern and just use my context as a UnitOfWork, but when it came time to unit test I couldn't find a reasonable way to mock EF Core calls. So I found this easy to generic repository package that works with the Specification pattern and EF Core. When using dapper, I don't typically use generic repositories but instead build out common use cases for the repository manually.

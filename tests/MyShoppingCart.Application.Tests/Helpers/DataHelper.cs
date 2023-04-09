@@ -75,44 +75,92 @@ public static class DataHelper
         };
     }
 
-    public static List<Product> GetProducts()
+    public static List<Product> GetProducts(int productCount = 10)
     {
-        return new List<Product>
+        var products = new List<Product>
         {
             new Product
             {
-                Id = new Guid("452D3B0A-5FB2-43E5-A7BE-F4E49B930B1D"),
-                Name = "Tennis Shoes",
-                Description = "Some Tennis Shoes",
-                Price = 10.00M,
-                ImageUrl = null
+                Id = new Guid("7BC8AE1B-031A-4F3A-815C-2111288FF58C"),
+                Name = "Nike Tennis Shoes",
+                Description = "These are some dope Nike Tennis Shoes!",
+                Price = 100.00M
             },
             new Product
             {
-                Id = new Guid("516874DD-6CE7-4A5A-A2C0-E6FBA73DB4FC"),
-                Name = "Running Shorts",
-                Description = "Some Running Shorts",
-                Price = 25.00M,
-                ImageUrl = null
+                Id = new Guid("9955F4D7-3E40-4111-A76D-23406F93334B"),
+                Name = "Fruit Stripe Gum",
+                Description = "This is some tasty gum, but the flavor doesn't last!",
+                Price = 1.99M
             },
             new Product
             {
-                Id = new Guid("739FCB33-4A09-43D7-8CCD-949AA41053F1"),
-                Name = "Baseball Cap",
-                Description = "A Baseball Cap",
-                Price = 15.00M,
-                ImageUrl = null
+                Id = new Guid("AD7D0CF7-CE00-477D-AE2A-5691F65EBA0E"),
+                Name = "Cheerios",
+                Description = "Cheerios are a healthy part of your breakfast!",
+                Price = 6.00M
+            },
+            new Product
+            {
+                Id = new Guid("E226D6B2-324F-4508-B5E5-0DB77B345C69"),
+                Name = "7Up",
+                Description = "Crisp and clean with no caffeine!",
+                Price = 1.50M
+            },
+            new Product
+            {
+                Id = new Guid("E3B2BCCE-A8F4-4F7E-9C9E-6AC93E03554A"),
+                Name = "A Plaid Flannel Shirt",
+                Description = "The 90s are calling and they want you back!",
+                Price = 20.00M
+            },
+            new Product
+            {
+                Id = new Guid("1CAA7FB0-8C2E-4304-A1EC-747A89623131"),
+                Name = "Garbage Pale Kids Stickers",
+                Description = "The 80s are calling and they want you back!",
+                Price = 4.00M
+            },
+            new Product
+            {
+                Id = new Guid("A9C15177-E1A4-4DC8-BCB0-5D78128FDEAE"),
+                Name = "Pink Stuffed Dinosaur",
+                Description = "Raaawwwrrrr!",
+                Price = 15.99M
+            },
+            new Product
+            {
+                Id = new Guid("24EF70C3-0FC1-48D7-994F-380D4C533419"),
+                Name = "Black Trenchcoat",
+                Description = "Dark and mysterious!  Good for 2 kids who want to impersonate an adult.",
+                Price = 100.00M
+            },
+            new Product
+            {
+                Id = new Guid("2DF1A80E-651A-417A-9028-B81D30A9A26E"),
+                Name = "Monopoly",
+                Description = "The game that destroys friendships and families!",
+                Price = 100.00M
+            },
+            new Product
+            {
+                Id = new Guid("0553CA62-284D-4379-AFC5-C2D4903F7A4C"),
+                Name = "A Dog Collar",
+                Description = "Heavy duty!  Fits most dogs and some people.",
+                Price = 100.00M
             }
         };
+
+        return products.Take(productCount).ToList();
     }
 
     public static List<LineItemModel> GetLineItemModels()
     {
         return new List<LineItemModel>
         {
-            new LineItemModel(new Guid("452D3B0A-5FB2-43E5-A7BE-F4E49B930B1D"), 10),
-            new LineItemModel(new Guid("516874DD-6CE7-4A5A-A2C0-E6FBA73DB4FC"), 6),
-            new LineItemModel(new Guid("739FCB33-4A09-43D7-8CCD-949AA41053F1"), 14)
+            new LineItemModel(new Guid("7BC8AE1B-031A-4F3A-815C-2111288FF58C"), 10),
+            new LineItemModel(new Guid("9955F4D7-3E40-4111-A76D-23406F93334B"), 6),
+            new LineItemModel(new Guid("E3B2BCCE-A8F4-4F7E-9C9E-6AC93E03554A"), 14)
         };
     }
 
