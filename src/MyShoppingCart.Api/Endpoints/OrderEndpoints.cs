@@ -7,7 +7,7 @@ public class OrderEndpoints
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
         var customer = app.MapGroup("/customer")
-            .RequireAuthorization();
+            .RequireAuthorization(Policies.CustomerAccess);
 
         customer.MapGet("/{customerId}/order", GetAllOrders);
         customer.MapGet("/{customerId}/order/{orderId}", GetOrderById);

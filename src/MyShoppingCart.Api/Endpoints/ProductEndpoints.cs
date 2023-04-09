@@ -8,7 +8,7 @@ public static class ProductEndpoints
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
         var group = app.MapGroup("/product")
-            .RequireAuthorization();
+            .RequireAuthorization(Policies.AdminAccess);
 
         group.MapGet("/", GetAllProducts)
             .AllowAnonymous();

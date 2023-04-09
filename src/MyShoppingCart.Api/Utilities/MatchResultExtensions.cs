@@ -6,7 +6,7 @@ public static class MatchResultExtensions
     {
         return response.Match(
             success => (success is Success) ? Ok() : Ok(success),
-            unauthorized => Unauthorized(),
+            unauthorized => Forbid(),
             notFound => (notFound.Message is null) ? NotFound() : NotFound(notFound.Message),
             error => Problem(error.ToJson()),
             validationFailed => ValidationProblem(validationFailed.Results));

@@ -40,7 +40,17 @@ public static class SetupExtensions
 
         services.AddHttpContextAccessor();
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Policies.AdminAccess, policy => policy.RequireRole(Roles.Admin));
+
+            options.AddPolicy(Policies.CustomerAccess, policy =>
+            {
+                policy.RequireAssertion(context =>
+                context.User.IsInRole(Roles.Customer) ||
+                context.User.IsInRole(Roles.Admin));
+            });
+        });
 
         return services;
     }

@@ -6,7 +6,8 @@ public class AuthenticationEndpoints
 {
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
-        var group = app.MapGroup("/authentication").AllowAnonymous();
+        var group = app.MapGroup("/authentication")
+            .AllowAnonymous();
 
         group.MapGet("/token/{customerId}", GetToken); //This is just a dummy authentication method to test with
 

@@ -10,16 +10,21 @@ public sealed class CustomerEndpoints
         var group = app.MapGroup("/customer")
             .RequireAuthorization();
 
-        group.MapGet("/", GetAllCustomers);
-        group.MapGet("/{customerId}", GetCustomerById);
-        group.MapPost("/", CreateCustomer);
-        group.MapPut("/", UpdateCustomer);
-        group.MapDelete("/{customerId}", DeleteCustomer);
+        group.MapGet("/", GetAllCustomers)
+            .RequireAuthorization(Policies.AdminAccess);
+        group.MapGet("/{customerId}", GetCustomerById)
+            .RequireAuthorization(Policies.CustomerAccess);
+        group.MapPost("/", CreateCustomer)
+            .AllowAnonymous();
+        group.MapPut("/", UpdateCustomer)
+            .RequireAuthorization(Policies.CustomerAccess);
+        group.MapDelete("/{customerId}", DeleteCustomer)
+            .RequireAuthorization(Policies.AdminAccess);
+
 
         return app;
     }
 
-    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> GetAllCustomers(
         [FromServices] IMediator mediator,
         IOptionsSnapshot<MyShoppingCartSettings> settings,
@@ -59,7 +64,6 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> CreateCustomer(
         [FromServices] IMediator mediator,
         [FromBody] CreateCustomerQuery request,
