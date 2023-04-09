@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public class CreateCustomerQueryHandlerTests
 {
@@ -10,20 +10,20 @@ public class CreateCustomerQueryHandlerTests
     public async Task Handle_ShouldReturnCustomer_WhenAllParametersAreValid()
     {
         //Arrange
-        var request = DataHelper.GetCreateCustomerQuery();
-        var customer = DataHelper.GetCustomer();
-        
+        var request = QueryProvider.GetCreateCustomerQuery();
+        var customer = DataProvider.GetCustomer();
+
         var mockMapper = new Mock<IMapper>();
         mockMapper.Setup(x => x.Map<Customer>(request)).Returns(customer);
-        
+
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
         mockCustomerRepository.Setup(x => x.AddAsync(customer, _cancellationToken)).ReturnsAsync(customer);
 
         var mockSecurityClaimRepository = new Mock<IRepository<SecurityClaim>>();
 
         var handler = new CreateCustomerQueryHandler(
-            mockCustomerRepository.Object, 
-            mockSecurityClaimRepository.Object, 
+            mockCustomerRepository.Object,
+            mockSecurityClaimRepository.Object,
             mockMapper.Object);
 
         //Act

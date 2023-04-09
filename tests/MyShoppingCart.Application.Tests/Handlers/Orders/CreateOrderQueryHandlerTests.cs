@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Orders;
+﻿namespace MyShoppingCart.Application.Tests.Handlers.Orders;
 
 public class CreateOrderQueryHandlerTests
 {
@@ -10,10 +10,10 @@ public class CreateOrderQueryHandlerTests
     public async Task Handle_ShouldReturnOrder_WhenAllParametersAreValid()
     {
         //Arrange
-        var request = DataHelper.GetCreateOrderQuery();
-        var customer = DataHelper.GetCustomer();
-        var order = DataHelper.GetOrder();
-        
+        var request = QueryProvider.GetCreateOrderQuery();
+        var customer = DataProvider.GetCustomer();
+        var order = DataProvider.GetOrder();
+
         var dateTimeProvider = MockProvider.GetUtcDateTimeProvider();
 
         var mockMapper = new Mock<IMapper>();
@@ -44,37 +44,37 @@ public class CreateOrderQueryHandlerTests
 
     #endregion
 
-    #region CustomerId
+        #region CustomerId
 
-    [Fact]
-    public async Task Handle_ShouldReturnNotFound_WhenCustomerIsNotFound()
-    {
-        //Arrange
-        var request = DataHelper.GetCreateOrderQuery();
-        var mapper = new Mapper();
+        [Fact]
+        public async Task Handle_ShouldReturnNotFound_WhenCustomerIsNotFound()
+        {
+            //Arrange
+            var request = QueryProvider.GetCreateOrderQuery();
+            var mapper = new Mapper();
 
-        var dateTimeProvider = MockProvider.GetUtcDateTimeProvider();
+            var dateTimeProvider = MockProvider.GetUtcDateTimeProvider();
 
-        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);
+            var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);
 
-        var mockOrdersRepository = new Mock<IRepository<Order>>();
+            var mockOrdersRepository = new Mock<IRepository<Order>>();
 
-        var handler = new CreateOrderQueryHandler(
-            mockOrdersRepository.Object,
-            mockCustomerRepository.Object,
-            mapper,
-            dateTimeProvider);
+            var handler = new CreateOrderQueryHandler(
+                mockOrdersRepository.Object,
+                mockCustomerRepository.Object,
+                mapper,
+                dateTimeProvider);
 
-        //Act
-        var results = await handler.Handle(request, _cancellationToken);
+            //Act
+            var results = await handler.Handle(request, _cancellationToken);
 
-        //Assert
-        results.NotFound.Should().NotBeNull();
-        mockCustomerRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken), Times.Once);
-        mockOrdersRepository
-            .Verify(x => x.AddAsync(It.IsAny<Order>(), _cancellationToken), Times.Never);
-    }
+            //Assert
+            results.NotFound.Should().NotBeNull();
+            mockCustomerRepository
+                .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken), Times.Once);
+            mockOrdersRepository
+                .Verify(x => x.AddAsync(It.IsAny<Order>(), _cancellationToken), Times.Never);
+        }
 
-    #endregion
+        #endregion
 }

@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public class GetCustomersQueryHandlerTests
 {
@@ -10,8 +10,8 @@ public class GetCustomersQueryHandlerTests
     public async Task Handle_ShouldReturnCustomers_WhenAllParametersAreValid()
     {
         //Arrange
-        var request = DataHelper.GetGetCustomersQuery();
-        var customers = DataHelper.GetCustomers();
+        var request = QueryProvider.GetGetCustomersQuery();
+        var customers = DataProvider.GetCustomers();
 
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithManyResponses(customers, _cancellationToken);
 
@@ -34,7 +34,7 @@ public class GetCustomersQueryHandlerTests
     public async Task Handle_ShouldReturnNoCustomers_WhenNoParametersMatch()
     {
         //Arrange
-        var request = DataHelper.GetGetCustomersQuery();
+        var request = QueryProvider.GetGetCustomersQuery();
         var customers = new List<Customer>();
 
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithManyResponses(customers, _cancellationToken);

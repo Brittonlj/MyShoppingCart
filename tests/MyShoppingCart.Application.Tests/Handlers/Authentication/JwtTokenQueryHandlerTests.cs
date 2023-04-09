@@ -1,16 +1,16 @@
 ﻿using MyShoppingCart.Application.Services;
 
-namespace MyShoppingCart.Application.Tests.Authentication;
+namespace MyShoppingCart.Application.Tests.Handlers.Authentication;
 
 public sealed class JwtTokenQueryHandlerTests
 {
-	private const string TOKEN = "TEST123";
-	private readonly List<SecurityClaim> _validClaims;
-	private readonly CancellationToken _cancellationToken = new CancellationToken();
-	public JwtTokenQueryHandlerTests()
-	{
-		_validClaims = DataHelper.GetClaims();
-	}
+    private const string TOKEN = "TEST123";
+    private readonly List<SecurityClaim> _validClaims;
+    private readonly CancellationToken _cancellationToken = new CancellationToken();
+    public JwtTokenQueryHandlerTests()
+    {
+        _validClaims = DataProvider.GetClaims();
+    }
 
     #region Happy Path
 
@@ -18,7 +18,7 @@ public sealed class JwtTokenQueryHandlerTests
     public async Task Handle_ShouldReturnToken_WhenAllParametersAreValid()
     {
         //Arrange
-        var request = new JwtTokenQuery(DataHelper.DefaultCustomerId);
+        var request = new JwtTokenQuery(DataProvider.DefaultCustomerId);
         var claimsRepository = GetClaimsRepository(_validClaims);
         var jwtTokenService = GetJwtTokenService(TOKEN);
         var jwtTokenQueryHandler = new JwtTokenQueryHandler(claimsRepository, jwtTokenService);
@@ -73,7 +73,7 @@ public sealed class JwtTokenQueryHandlerTests
         var jwtTokenService = GetJwtTokenService(TOKEN);
         var jwtTokenQueryHandler = new JwtTokenQueryHandler(claimsRepository, jwtTokenService);
 
-        var request = new JwtTokenQuery(DataHelper.DefaultCustomerId);
+        var request = new JwtTokenQuery(DataProvider.DefaultCustomerId);
 
         //Act
         var results = await jwtTokenQueryHandler.Handle(request, _cancellationToken);
@@ -87,18 +87,18 @@ public sealed class JwtTokenQueryHandlerTests
     #region Private Helper
 
     private IRepository<SecurityClaim> GetClaimsRepository(List<SecurityClaim> claims)
-	{
+    {
         var mockSecurityClaimRepository = new Mock<IRepository<SecurityClaim>>();
         mockSecurityClaimRepository.Setup(x => x.ListAsync(It.IsAny<QuerySecurityClaims>(), It.IsAny<CancellationToken>())).ReturnsAsync(claims);
-		return mockSecurityClaimRepository.Object;
-	}
+        return mockSecurityClaimRepository.Object;
+    }
 
-	private IJwtTokenService GetJwtTokenService(string token)
-	{
+    private IJwtTokenService GetJwtTokenService(string token)
+    {
         var mockJwtTokenService = new Mock<IJwtTokenService>();
         mockJwtTokenService.Setup(x => x.GenerateToken(_validClaims)).Returns(token);
-		return mockJwtTokenService.Object;
-	}
+        return mockJwtTokenService.Object;
+    }
 
-	#endregion
+    #endregion
 }

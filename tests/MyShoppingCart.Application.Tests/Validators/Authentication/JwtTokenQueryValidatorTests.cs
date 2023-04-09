@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Authentication;
+﻿namespace MyShoppingCart.Application.Tests.Validators.Authentication;
 
 public class JwtTokenQueryValidatorTests
 {

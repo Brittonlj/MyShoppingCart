@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public class GetCustomerQueryHandlerTests
 {
@@ -10,7 +10,7 @@ public class GetCustomerQueryHandlerTests
     public async Task Handle_ShouldReturnCustomer_WhenAllParametersAreValid()
     {
         //Arrange
-        var customer = DataHelper.GetCustomer();
+        var customer = DataProvider.GetCustomer();
         var request = new GetCustomerQuery(Guid.NewGuid());
 
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
@@ -34,7 +34,7 @@ public class GetCustomerQueryHandlerTests
     public async Task Handle_ShouldReturnNotFound_WhenCustomerIsNotFound()
     {
         //Arrange
-        var customer = DataHelper.GetCustomer();
+        var customer = DataProvider.GetCustomer();
         var request = new GetCustomerQuery(Guid.NewGuid());
 
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);

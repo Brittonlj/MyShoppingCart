@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public class GetCustomerSecurityQueryHandlerTests
 {
@@ -10,8 +10,8 @@ public class GetCustomerSecurityQueryHandlerTests
     public async Task Handle_ShouldReturnSecurityClaims_WhenAllParametersAreValid()
     {
         //Arrange
-        var customer = DataHelper.GetCustomer();
-        var claims = DataHelper.GetClaims();
+        var customer = DataProvider.GetCustomer();
+        var claims = DataProvider.GetClaims();
         var request = new GetCustomerSecurityQuery(customer.Id);
 
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
@@ -20,7 +20,7 @@ public class GetCustomerSecurityQueryHandlerTests
         mockSecurityClaimsRepository
             .Setup(x => x.ListAsync(It.IsAny<QuerySecurityClaims>(), _cancellationToken))
             .ReturnsAsync(claims);
-        
+
         var handler = new GetCustomerSecurityQueryHandler(mockCustomerRepository.Object, mockSecurityClaimsRepository.Object);
 
         //Act
@@ -42,7 +42,7 @@ public class GetCustomerSecurityQueryHandlerTests
     public async Task Handle_ShouldReturnNotFound_WhenCustomerIsNotFound()
     {
         //Arrange
-        var customer = DataHelper.GetCustomer();
+        var customer = DataProvider.GetCustomer();
         var request = new GetCustomerSecurityQuery(Guid.NewGuid());
 
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);
@@ -66,7 +66,7 @@ public class GetCustomerSecurityQueryHandlerTests
     public async Task Handle_ShouldReturnEmptySecurityClaims_WhenNoSecurityClaimsFound()
     {
         //Arrange
-        var customer = DataHelper.GetCustomer();
+        var customer = DataProvider.GetCustomer();
         var claims = new List<SecurityClaim>();
         var request = new GetCustomerSecurityQuery(customer.Id);
 

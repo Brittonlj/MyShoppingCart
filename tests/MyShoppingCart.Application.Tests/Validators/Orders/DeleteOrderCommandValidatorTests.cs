@@ -1,8 +1,8 @@
-﻿namespace MyShoppingCart.Application.Tests.Orders;
+﻿namespace MyShoppingCart.Application.Tests.Validators.Orders;
 
-public class GetOrderQueryValidatorTests
+public class DeleteOrderCommandValidatorTests
 {
-    private readonly IValidator<GetOrderQuery> _validator = new GetOrderQueryValidator();
+    private readonly IValidator<DeleteOrderCommand> _validator = new DeleteOrderCommandValidator();
     private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
@@ -11,7 +11,7 @@ public class GetOrderQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenRequestIsValid()
     {
         //Arrange
-        var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
+        var request = new DeleteOrderCommand(Guid.NewGuid(), Guid.NewGuid());
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
@@ -29,14 +29,14 @@ public class GetOrderQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenOrderIdIsEmpty()
     {
         //Arrange
-        var request = new GetOrderQuery(Guid.NewGuid(), Guid.Empty);
+        var request = new DeleteOrderCommand(Guid.NewGuid(), Guid.Empty);
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetOrderQuery.OrderId),
+            nameof(DeleteOrderCommand.OrderId),
             "'Order Id' must not be empty.");
     }
 
@@ -48,14 +48,14 @@ public class GetOrderQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenCustomerIdIsEmpty()
     {
         //Arrange
-        var request = new GetOrderQuery(Guid.Empty, Guid.NewGuid());
+        var request = new DeleteOrderCommand(Guid.Empty, Guid.NewGuid());
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetOrderQuery.CustomerId),
+            nameof(DeleteOrderCommand.CustomerId),
             "'Customer Id' must not be empty.");
     }
 

@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public class UpdateCustomerQueryHandlerTests
 {
@@ -11,9 +11,9 @@ public class UpdateCustomerQueryHandlerTests
     {
         //Arrange
         const string NEW_EMAIL = "changed@gmail.com";
-        var request = DataHelper.GetUpdateCustomerQuery() with { Email = NEW_EMAIL };
-        var originalCustomer = DataHelper.GetCustomer();
-        var updatedCustomer = DataHelper.GetCustomer();
+        var request = QueryProvider.GetUpdateCustomerQuery() with { Email = NEW_EMAIL };
+        var originalCustomer = DataProvider.GetCustomer();
+        var updatedCustomer = DataProvider.GetCustomer();
         updatedCustomer.Email = NEW_EMAIL;
 
         var mapper = new Mapper();
@@ -44,9 +44,9 @@ public class UpdateCustomerQueryHandlerTests
     {
         //Arrange
         const string NEW_EMAIL = "changed@gmail.com";
-        var request = DataHelper.GetUpdateCustomerQuery() with { Email = NEW_EMAIL };
-        var originalCustomer = DataHelper.GetCustomer();
-        var updatedCustomer = DataHelper.GetCustomer();
+        var request = QueryProvider.GetUpdateCustomerQuery() with { Email = NEW_EMAIL };
+        var originalCustomer = DataProvider.GetCustomer();
+        var updatedCustomer = DataProvider.GetCustomer();
         updatedCustomer.Email = NEW_EMAIL;
 
         var mapper = new Mapper();

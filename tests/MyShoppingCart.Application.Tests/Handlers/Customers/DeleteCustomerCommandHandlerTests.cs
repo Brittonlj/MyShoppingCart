@@ -1,6 +1,6 @@
 ﻿using MyShoppingCart.Domain.Mediator;
 
-namespace MyShoppingCart.Application.Tests.Customers;
+namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public sealed class DeleteCustomerCommandHandlerTests
 {
@@ -12,7 +12,7 @@ public sealed class DeleteCustomerCommandHandlerTests
     public async Task Handle_ShouldReturnSuccess_WhenAllParametersAreValid()
     {
         //Arrange
-        var customer = DataHelper.GetCustomer();
+        var customer = DataProvider.GetCustomer();
         var request = new DeleteCustomerCommand(customer.Id);
 
         var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
@@ -33,7 +33,7 @@ public sealed class DeleteCustomerCommandHandlerTests
     #endregion
 
     #region Handle
-    
+
     [Fact]
     public async Task Handle_ShouldReturnNotFound_WhenCustomerIsNotFound()
     {

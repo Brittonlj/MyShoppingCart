@@ -15,7 +15,7 @@ public class CreateOrderQueryMappingTests
     public void Map_ShouldMapLineItems_WhenTheRequestHasLineItems()
     {
         //Arrange
-        var request = DataHelper.GetCreateOrderQuery();
+        var request = QueryProvider.GetCreateOrderQuery();
 
         //Act
         var order = _mapper.Map<Order>(request);

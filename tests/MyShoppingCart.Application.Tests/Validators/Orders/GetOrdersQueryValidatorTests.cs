@@ -1,8 +1,8 @@
-﻿namespace MyShoppingCart.Application.Tests.Products;
+﻿namespace MyShoppingCart.Application.Tests.Validators.Orders;
 
-public class GetProductsQueryValidatorTests
+public class GetOrdersQueryValidatorTests
 {
-    private readonly IValidator<GetProductsQuery> _validator = new GetProductsQueryValidator();
+    private readonly IValidator<GetOrdersQuery> _validator = new GetOrdersQueryValidator();
     private readonly CancellationToken _cancellationToken = new CancellationToken();
 
     #region Happy Path
@@ -11,35 +11,7 @@ public class GetProductsQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenRequestIsValid()
     {
         //Arrange
-        var request = GetGetProductsQuery();
-
-        //Act
-        var results = await _validator.ValidateAsync(request, _cancellationToken);
-
-        //Assert
-        results.Should().NotBeNull();
-        results.Errors.Should().NotBeNull().And.BeEmpty();
-    }
-
-    [Fact]
-    public async Task Validate_ShouldReturnNoResults_WhenSearchStringEmpty()
-    {
-        //Arrange
-        var request = GetGetProductsQuery() with { SearchString = string.Empty };
-
-        //Act
-        var results = await _validator.ValidateAsync(request, _cancellationToken);
-
-        //Assert
-        results.Should().NotBeNull();
-        results.Errors.Should().NotBeNull().And.BeEmpty();
-    }
-
-    [Fact]
-    public async Task Validate_ShouldReturnNoResults_WhenSearchStringIsNull()
-    {
-        //Arrange
-        var request = GetGetProductsQuery() with { SearchString = null };
+        var request = GetGetOrdersQuery();
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
@@ -57,14 +29,14 @@ public class GetProductsQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenSortColumnIsEmpty()
     {
         //Arrange
-        var request = GetGetProductsQuery() with { SortColumn = string.Empty };
+        var request = GetGetOrdersQuery() with { SortColumn = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetProductsQuery.SortColumn),
+            nameof(GetOrdersQuery.SortColumn),
             "'Sort Column' must not be empty.");
     }
 
@@ -72,15 +44,15 @@ public class GetProductsQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenSortColumnIsInvalid()
     {
         //Arrange
-        var request = GetGetProductsQuery() with { SortColumn = "BadSortColumn" };
+        var request = GetGetOrdersQuery() with { SortColumn = "BadSortColumn" };
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetProductsQuery.SortColumn),
-            "'BadSortColumn' is an invalid value for 'Sort Column'.  Please use one of 'Name, Description, Price'.");
+            nameof(GetOrdersQuery.SortColumn),
+            "'BadSortColumn' is an invalid value for 'Sort Column'");
     }
 
     #endregion
@@ -91,14 +63,14 @@ public class GetProductsQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPageNumberIsZero()
     {
         //Arrange
-        var request = GetGetProductsQuery() with { PageNumber = 0 };
+        var request = GetGetOrdersQuery() with { PageNumber = 0 };
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetProductsQuery.PageNumber),
+            nameof(GetOrdersQuery.PageNumber),
             "'Page Number' must not be empty.");
     }
 
@@ -110,14 +82,14 @@ public class GetProductsQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPageSizeIsZero()
     {
         //Arrange
-        var request = GetGetProductsQuery() with { PageSize = 0 };
+        var request = GetGetOrdersQuery() with { PageSize = 0 };
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetProductsQuery.PageSize),
+            nameof(GetOrdersQuery.PageSize),
             "'Page Size' must not be empty.");
     }
 
@@ -125,50 +97,49 @@ public class GetProductsQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPageSizeIsTooLarge()
     {
         //Arrange
-        var request = GetGetProductsQuery() with { PageSize = 51 };
+        var request = GetGetOrdersQuery() with { PageSize = 51 };
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetProductsQuery.PageSize),
+            nameof(GetOrdersQuery.PageSize),
             "'Page Size' must be less than or equal to '50'.");
     }
 
     #endregion
 
-    #region SearchString
+    #region CustomerId
 
     [Fact]
-    public async Task Validate_ShouldReturnResults_WhenSearchStringIsTooLarge()
+    public async Task Validate_ShouldReturnResults_WhenCustomerIdIsEmpty()
     {
         //Arrange
-        var request = GetGetProductsQuery() with { SearchString = LongStrings.LONG_STRING_51 };
+        var request = GetGetOrdersQuery() with { CustomerId = Guid.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(request, _cancellationToken);
 
         //Assert
         results.AssertValidationErrors(
-            nameof(GetProductsQuery.SearchString),
-            "The length of 'Search String' must be 50 characters or fewer. You entered 51 characters.");
+            nameof(GetOrdersQuery.CustomerId),
+            "'Customer Id' must not be empty.");
     }
 
     #endregion
 
     #region Private Helpers
 
-    private static GetProductsQuery GetGetProductsQuery()
+    private static GetOrdersQuery GetGetOrdersQuery()
     {
-        return new GetProductsQuery(
-            "Tennis Shoes",
+        return new GetOrdersQuery(
+            Guid.NewGuid(),
             1,
             20,
-            "Name");
+            "OrderDateTimeUtc");
 
     }
 
     #endregion
-
 }

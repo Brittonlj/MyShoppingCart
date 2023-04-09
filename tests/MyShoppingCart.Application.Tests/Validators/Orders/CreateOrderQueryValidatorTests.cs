@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Orders;
+﻿namespace MyShoppingCart.Application.Tests.Validators.Orders;
 
 public class CreateOrderQueryValidatorTests
 {
@@ -68,7 +68,7 @@ public class CreateOrderQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenLineItemsContainUnknownProducts()
     {
         //Arrange
-        var lineItems = DataHelper.GetLineItemModels();
+        var lineItems = DataProvider.GetLineItemModels();
         var newProductId = Guid.NewGuid();
         lineItems.Add(new LineItemModel(newProductId, 12));
         var query = GetCreateOrderQuery() with { LineItems = lineItems };
@@ -89,7 +89,7 @@ public class CreateOrderQueryValidatorTests
     private IRepository<Product> GetRepository()
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
-        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllProductsByProductIds>(), _cancellationToken)).ReturnsAsync(DataHelper.GetProducts());
+        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllProductsByProductIds>(), _cancellationToken)).ReturnsAsync(DataProvider.GetProducts());
 
         return mockProductRepository.Object;
     }
@@ -98,7 +98,7 @@ public class CreateOrderQueryValidatorTests
     {
         return new CreateOrderQuery(
             Guid.NewGuid(),
-            DataHelper.GetLineItemModels());
+            DataProvider.GetLineItemModels());
     }
 
     #endregion

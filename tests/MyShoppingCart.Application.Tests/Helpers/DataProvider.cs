@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace MyShoppingCart.Application.Tests.Helpers;
 
-public static class DataHelper
+public static class DataProvider
 {
     public static readonly Guid DefaultCustomerId = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5");
     public static readonly Guid DefaultAddressId = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5");
@@ -219,70 +219,5 @@ public static class DataHelper
         return order;
     }
 
-    public static CreateCustomerQuery GetCreateCustomerQuery()
-    {
-        var address = new AddressModel(
-            "123 Test Street",
-            "Test Town",
-            "MO",
-            "12345");
-        return new CreateCustomerQuery(
-            "Fred",
-            "Flintstone",
-            "fred.flintstone@test.com",
-            address,
-            address);
-    }
-
-    public static UpdateCustomerQuery GetUpdateCustomerQuery()
-    {
-        return new UpdateCustomerQuery(
-            DefaultCustomerId,
-            "Fred",
-            "Flintstone",
-            "fred.flintstone@test.com",
-            new Address
-            {
-                Id = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
-                Street = "123 Test St",
-                City = "Bedrock",
-                State = "MO",
-                PostalCode = "12345"
-            },
-            new Address
-            {
-                Id = new Guid("6B760260-799C-4AF1-A173-0BF83A2A74D5"),
-                Street = "123 Test St",
-                City = "Bedrock",
-                State = "MO",
-                PostalCode = "12345"
-            });
-    }
-
-    public static GetCustomersQuery GetGetCustomersQuery()
-    {
-        return new GetCustomersQuery(
-            "Fred",
-            "test.com",
-            1,
-            20,
-            "LastName");
-
-    }
-
-    public static CreateOrderQuery GetCreateOrderQuery()
-    {
-        return new CreateOrderQuery(
-            DefaultCustomerId,
-            GetLineItemModels());
-    }
-
-    public static UpdateOrderQuery GetUpdateOrderQuery(int itemsCount = 3)
-    {
-        return new UpdateOrderQuery(
-            DefaultCustomerId,
-            DefaultOrderId,
-            GetLineItems(itemsCount));
-    }
 
 }

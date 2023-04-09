@@ -32,4 +32,8 @@
     <ProjectReference Include="..\..\src\MyShoppingCart.Domain\MyShoppingCart.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Handlers\Products\" />
+  </ItemGroup>
+
 </Project>
