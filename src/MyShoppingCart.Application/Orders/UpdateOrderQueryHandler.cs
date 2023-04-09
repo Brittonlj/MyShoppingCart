@@ -23,21 +23,8 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
 
         order = _mapper.Map(request, order);
 
-        MergeLineItemChanges(order, request);
-
         await _orderRepository.UpdateAsync(order, cancellationToken);
 
         return order;
     }
-
-    private void MergeLineItemChanges(Order original, UpdateOrderQuery request)
-    {
-        var lineItemsToDelete = original.LineItems.Where(x => !request.LineItems.Any(y => x.Id == y.Id)).ToList();
-
-        original.RemoveLineItemRange(lineItemsToDelete);
-
-        original.AddUpdateLineItemRange(request.LineItems);
-    }
-
-    
 }

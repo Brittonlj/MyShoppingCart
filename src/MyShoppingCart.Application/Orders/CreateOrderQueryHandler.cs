@@ -1,14 +1,24 @@
-﻿namespace MyShoppingCart.Application.Orders;
+﻿using MyShoppingCart.Domain.Utilities;
+
+namespace MyShoppingCart.Application.Orders;
 
 public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, Response<Order>>
 {
     private readonly IRepository<Order> _orderRepository;
     private readonly IRepository<Customer> _customerRepository;
+    private readonly IMapper _mapper;
+    private readonly IUtcDateTimeProvider _dateTimeProvider;
 
-    public CreateOrderQueryHandler(IRepository<Order> orderRepository, IRepository<Customer> customerRepository)
+    public CreateOrderQueryHandler(
+        IRepository<Order> orderRepository, 
+        IRepository<Customer> customerRepository, 
+        IMapper mapper, 
+        IUtcDateTimeProvider dateTimeProvider)
     {
         _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
         _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _mapper = Guard.Against.Null(mapper, nameof(mapper));
+        _dateTimeProvider = Guard.Against.Null(dateTimeProvider, nameof(dateTimeProvider));
     }
 
     public async Task<Response<Order>> Handle(CreateOrderQuery request, CancellationToken cancellationToken)
@@ -21,11 +31,10 @@ public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, 
             return new NotFound(Error.CustomerNotFound.Message);
         }
 
-        var order = new Order { CustomerId = customer.Id };
+        var order = _mapper.Map<Order>(request);
+        order.OrderDateTimeUtc = _dateTimeProvider.GetUtcDateTime();
 
-        order.AddUpdateLineItemRange(request.LineItems);
-
-        await _orderRepository.AddAsync(order);
+        order = await _orderRepository.AddAsync(order);
 
         return order;
     }

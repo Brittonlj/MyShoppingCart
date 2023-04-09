@@ -66,14 +66,6 @@ public sealed class Order : IEntity<Guid>
         }
     }
 
-    public void RemoveLineItemRange(IEnumerable<LineItem> lineItems)
-    {
-        foreach (var lineItem in lineItems)
-        {
-            RemoveLineItem(lineItem.Id);
-        }
-    }
-
     #region Equatable
     public bool Equals(Order? other)
     {

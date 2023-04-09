@@ -462,7 +462,6 @@ public class OrderEndpointsTests
         return new UpdateOrderQuery(
             Guid.NewGuid(),
             orderId,
-            DateTime.UtcNow,
             new List<LineItem>
             {
                 new LineItem(orderId, Guid.NewGuid(), 10)
@@ -475,24 +474,24 @@ public class OrderEndpointsTests
         return new List<Order>();
     }
 
-    private static IReadOnlyList<Order> GetOrderList(Guid orderId)
+    private static IReadOnlyList<Order> GetOrderList(Guid customerId)
     {
 
         var orders = new List<Order>
         {
             new Order
             {
-                CustomerId = orderId,
+                CustomerId = customerId,
                 OrderDateTimeUtc = DateTime.UtcNow,
             },
             new Order
             {
-                CustomerId = orderId,
+                CustomerId = customerId,
                 OrderDateTimeUtc = DateTime.UtcNow,
             },
             new Order
             {
-                CustomerId = orderId,
+                CustomerId = customerId,
                 OrderDateTimeUtc = DateTime.UtcNow,
             }
         };

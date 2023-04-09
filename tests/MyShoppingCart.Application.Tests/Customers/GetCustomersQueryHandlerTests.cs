@@ -13,10 +13,7 @@ public class GetCustomersQueryHandlerTests
         var request = DataHelper.GetGetCustomersQuery();
         var customers = DataHelper.GetCustomers();
 
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.ListAsync(It.IsAny<QueryAllCustomers>(), _cancellationToken))
-            .ReturnsAsync(customers);
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithManyResponses(customers, _cancellationToken);
 
         var handler = new GetCustomersQueryHandler(mockCustomerRepository.Object);
 
@@ -40,10 +37,7 @@ public class GetCustomersQueryHandlerTests
         var request = DataHelper.GetGetCustomersQuery();
         var customers = new List<Customer>();
 
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.ListAsync(It.IsAny<QueryAllCustomers>(), _cancellationToken))
-            .ReturnsAsync(customers);
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithManyResponses(customers, _cancellationToken);
 
         var handler = new GetCustomersQueryHandler(mockCustomerRepository.Object);
 

@@ -14,11 +14,8 @@ public class GetCustomerSecurityQueryHandlerTests
         var claims = DataHelper.GetClaims();
         var request = new GetCustomerSecurityQuery(customer.Id);
 
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
-            .ReturnsAsync(customer);
-        
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
+
         var mockSecurityClaimsRepository = new Mock<IRepository<SecurityClaim>>();
         mockSecurityClaimsRepository
             .Setup(x => x.ListAsync(It.IsAny<QuerySecurityClaims>(), _cancellationToken))
@@ -47,11 +44,8 @@ public class GetCustomerSecurityQueryHandlerTests
         //Arrange
         var customer = DataHelper.GetCustomer();
         var request = new GetCustomerSecurityQuery(Guid.NewGuid());
-        
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
-            .ReturnsAsync(() => null);
+
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);
 
         var mockSecurityClaimsRepository = new Mock<IRepository<SecurityClaim>>();
 
@@ -76,10 +70,7 @@ public class GetCustomerSecurityQueryHandlerTests
         var claims = new List<SecurityClaim>();
         var request = new GetCustomerSecurityQuery(customer.Id);
 
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
-            .ReturnsAsync(customer);
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
 
         var mockSecurityClaimsRepository = new Mock<IRepository<SecurityClaim>>();
         mockSecurityClaimsRepository

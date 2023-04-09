@@ -18,10 +18,7 @@ public class UpdateCustomerQueryHandlerTests
 
         var mapper = new Mapper();
 
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
-            .ReturnsAsync(originalCustomer);
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(updatedCustomer, _cancellationToken);
         mockCustomerRepository
             .Setup(x => x.UpdateAsync(updatedCustomer, _cancellationToken));
 
@@ -54,12 +51,7 @@ public class UpdateCustomerQueryHandlerTests
 
         var mapper = new Mapper();
 
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken))
-            .ReturnsAsync(() => null);
-        mockCustomerRepository
-            .Setup(x => x.UpdateAsync(updatedCustomer, _cancellationToken));
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);
 
         var handler = new UpdateCustomerQueryHandler(mockCustomerRepository.Object, mapper);
 

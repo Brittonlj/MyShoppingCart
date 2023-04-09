@@ -6,7 +6,6 @@ public sealed class UpdateOrderQueryValidator : AbstractValidator<UpdateOrderQue
     {
         RuleFor(x => x.CustomerId).NotEmpty();
         RuleFor(x => x.OrderId).NotEmpty();
-        RuleFor(x => x.LineItems).NotEmpty();
         RuleForEach(x => x.LineItems).NotEmpty().SetValidator(new LineItemValidator());
     }
 }

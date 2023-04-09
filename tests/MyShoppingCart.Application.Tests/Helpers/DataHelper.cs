@@ -1,4 +1,5 @@
 ﻿using MyShoppingCart.Application.Configuration;
+using MyShoppingCart.Domain.Entities;
 using System.Security.Claims;
 
 namespace MyShoppingCart.Application.Tests.Helpers;
@@ -115,16 +116,22 @@ public static class DataHelper
         };
     }
 
-    public static Order GetOrder()
+    public static List<LineItem> GetLineItems(int take)
+    {
+        return GetLineItemModels().Take(take).Select(x => new LineItem(DefaultOrderId, x.ProductId, x.Quantity)).ToList();
+
+    }
+
+    public static Order GetOrder(int itemsCount = 3)
     {
         var order = new Order
         {
             Id = DefaultOrderId,
             CustomerId = DefaultCustomerId,
             Customer = GetCustomer(),
-            OrderDateTimeUtc = new DateTime(2023, 1, 1, 1, 1, 1, DateTimeKind.Utc)
+            OrderDateTimeUtc = MockProvider.DefaultUtcDateTime
         };
-        order.AddUpdateLineItemRange(GetLineItemModels());
+        order.AddUpdateLineItemRange(GetLineItems(itemsCount));
 
         return order;
     }
@@ -177,6 +184,14 @@ public static class DataHelper
         return new CreateOrderQuery(
             DefaultCustomerId,
             GetLineItemModels());
+    }
+
+    public static UpdateOrderQuery GetUpdateOrderQuery(int itemsCount = 3)
+    {
+        return new UpdateOrderQuery(
+            DefaultCustomerId,
+            DefaultOrderId,
+            GetLineItems(itemsCount));
     }
 
 }

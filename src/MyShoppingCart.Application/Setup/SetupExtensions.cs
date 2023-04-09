@@ -19,8 +19,11 @@ public static class SetupExtensions
 
         services.AddTransient<IMapper, Mapper>();
 
+        MapsterConfig.AddMapsterConfig();
+
         return services;
     }
+
 
     private static MediatRServiceConfiguration RegisterPipelines(this MediatRServiceConfiguration options)
     {

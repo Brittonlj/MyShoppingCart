@@ -16,10 +16,8 @@ public class CreateCustomerQueryHandlerTests
         var mockMapper = new Mock<IMapper>();
         mockMapper.Setup(x => x.Map<Customer>(request)).Returns(customer);
         
-        var mockCustomerRepository = new Mock<IRepository<Customer>>();
-        mockCustomerRepository
-            .Setup(x => x.AddAsync(customer, _cancellationToken))
-            .ReturnsAsync(customer);
+        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
+        mockCustomerRepository.Setup(x => x.AddAsync(customer, _cancellationToken)).ReturnsAsync(customer);
 
         var mockSecurityClaimRepository = new Mock<IRepository<SecurityClaim>>();
 
