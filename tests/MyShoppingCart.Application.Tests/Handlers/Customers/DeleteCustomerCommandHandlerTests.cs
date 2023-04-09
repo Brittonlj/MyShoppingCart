@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Mediator;
-
-namespace MyShoppingCart.Application.Tests.Handlers.Customers;
+﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public sealed class DeleteCustomerCommandHandlerTests
 {

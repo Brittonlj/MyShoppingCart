@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
+﻿using MyShoppingCart.Application.Services;
 
 namespace MyShoppingCart.Application.PipelineBehaviors;
 
@@ -8,11 +7,11 @@ public sealed class AuthorizedCustomerPipelineBehavior<TRequest, TEntity> :
     where TRequest : IRequest<Response<TEntity>>
     where TEntity : class
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserSecurityService _userSecurityService;
 
-    public AuthorizedCustomerPipelineBehavior(IHttpContextAccessor httpContextAccessor)
+    public AuthorizedCustomerPipelineBehavior(IUserSecurityService userSecurityService)
     {
-        _httpContextAccessor = httpContextAccessor;
+        _userSecurityService = Guard.Against.Null(userSecurityService, nameof(userSecurityService));
     }
 
     public async Task<Response<TEntity>> Handle(
@@ -25,20 +24,16 @@ public sealed class AuthorizedCustomerPipelineBehavior<TRequest, TEntity> :
             return await next();
         }
 
-        var user = _httpContextAccessor.HttpContext.User;
-
-        var isAdmin = user.IsInRole(Roles.Admin);
+        var isAdmin = _userSecurityService.IsInRole(Roles.Admin);
 
         if (isAdmin)
         {
             return await next();
         }
 
-        var customerIdClaim = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+        var customerId = _userSecurityService.GetCustomerId();
 
-        if (customerIdClaim is null ||
-            !Guid.TryParse(customerIdClaim.Value, out var customerId) ||
-            authorizedCustomerRequest.CustomerId != customerId)
+        if (customerId is null || authorizedCustomerRequest.CustomerId != customerId)
         {
             return Unauthorized.Instance;
         }

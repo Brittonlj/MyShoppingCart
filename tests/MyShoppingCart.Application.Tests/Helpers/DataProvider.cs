@@ -219,5 +219,15 @@ public static class DataProvider
         return order;
     }
 
-
+    public static Product GetProduct()
+    {
+        return new Product
+        {
+            Id = new Guid("AA9F20AE-B5F2-44C4-8757-C6259CFDC794"),
+            Name = "New Product #123",
+            Description = "The latest and greatest in 123!",
+            Price = 1000.00M,
+            ImageUrl = "http://somedomain.com/image.jpg"
+        };
+    }
 }

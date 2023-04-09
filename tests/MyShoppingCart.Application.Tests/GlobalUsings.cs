@@ -12,6 +12,7 @@ global using MyShoppingCart.Domain.Models;
 global using MyShoppingCart.Domain.Entities;
 global using MyShoppingCart.Domain.Repositories;
 global using MyShoppingCart.Domain.Specifications;
+global using MyShoppingCart.Domain.Mediator;
 
 
 

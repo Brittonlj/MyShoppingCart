@@ -39,7 +39,35 @@ public static class MockProvider
         mockCustomerRepository
             .Setup(x => x.ListAsync(It.IsAny<QueryAllCustomers>(), token))
             .ReturnsAsync(customers);
-
         return mockCustomerRepository;
+    }
+
+    public static Mock<IRepository<Product>> GetMockProductRepositoryWithSingleResponse(Product response, CancellationToken token = default)
+    {
+        var mockProductRepository = new Mock<IRepository<Product>>();
+        mockProductRepository
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), token))
+            .ReturnsAsync(response);
+
+        return mockProductRepository;
+    }
+
+    public static Mock<IRepository<Product>> GetMockProductRepositoryWithNullResponse(CancellationToken token = default)
+    {
+        var mockProductRepository = new Mock<IRepository<Product>>();
+        mockProductRepository
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), token))
+            .ReturnsAsync(() => null);
+
+        return mockProductRepository;
+    }
+
+    public static Mock<IRepository<Product>> GetMockProductRepositoryWithManyResponses(List<Product> products, CancellationToken token = default)
+    {
+        var mockProductRepository = new Mock<IRepository<Product>>();
+        mockProductRepository
+            .Setup(x => x.ListAsync(It.IsAny<QueryAllProducts>(), token))
+            .ReturnsAsync(products);
+        return mockProductRepository;
     }
 }

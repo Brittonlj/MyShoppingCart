@@ -68,4 +68,33 @@ public static class QueryProvider
             DataProvider.GetLineItems(itemsCount));
     }
 
+    public static CreateProductQuery GetCreateProductQuery()
+    {
+        return new CreateProductQuery(
+            "New Product #123",
+            "The latest and greatest in 123!",
+            1000.00M,
+            "http://somedomain.com/image.jpg");
+    }
+
+    public static GetProductsQuery GetGetProductsQuery()
+    {
+        return new GetProductsQuery(
+            "test",
+            1,
+            20,
+            "Name",
+            true);
+    }
+
+    public static UpdateProductQuery GetUpdateProductQuery()
+    {
+        return new UpdateProductQuery(
+            new Guid("7BC8AE1B-031A-4F3A-815C-2111288FF58C"),
+            "New Nike Tennis Shoes",
+            "New Nike Tennis Shoes Description",
+            100.00M,
+            null);
+    }
+
 }
