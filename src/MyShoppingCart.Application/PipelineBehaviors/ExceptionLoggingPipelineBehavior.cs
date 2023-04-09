@@ -25,7 +25,7 @@ public sealed class ExceptionLoggingPipelineBehavior<TRequest, TEntity> :
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error caught in pipeline: {message}", ex.Message);
+            _logger.LogError(ex, "An exception was caught.");
             return new ErrorList(ex);
         }
     }

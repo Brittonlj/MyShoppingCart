@@ -82,14 +82,41 @@ public class AuthorizedCustomerPipelineBehaviorTests
 
     #endregion
 
+    #region Not IAuthorizedCustomerRequest
+
+    [Fact]
+    public async Task Handle_ShouldProcessNext_WhenNotIAuthorizedCustomerRequest()
+    {
+        //Arrange
+        var request = new GetProductsQuery(null, 1, 20, "Name", true);
+        var next = new RequestHandlerDelegate<Response<IReadOnlyList<Product>>>(NextProduct);
+        var unitUnderTest = new AuthorizedCustomerPipelineBehavior<GetProductsQuery, IReadOnlyList<Product>>(_mockUserSecurityService.Object);
+
+        //Act
+        var result = await unitUnderTest.Handle(request, next, _cancellationToken);
+
+        //Assert
+        result.Success.Should().NotBeNull().And.BeEquivalentTo(DataProvider.GetProducts());
+        _mockUserSecurityService.Verify(x => x.IsInRole(Roles.Admin), Times.Never);
+        _mockUserSecurityService.Verify(x => x.GetCustomerId(), Times.Never);
+    }
+
+
+    #endregion
+
     #region Private Helpers
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     private async Task<Response<Customer>> Next()
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-	{
-		return Response<Customer>.FromSuccess(DataProvider.GetCustomer());
-	}
+    {
+        return Response<Customer>.FromSuccess(DataProvider.GetCustomer());
+    }
 
-	#endregion
+    private async Task<Response<IReadOnlyList<Product>>> NextProduct()
+    {
+        return Response<IReadOnlyList<Product>>.FromSuccess(DataProvider.GetProducts());
+    }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+
+    #endregion
 }
