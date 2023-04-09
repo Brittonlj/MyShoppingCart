@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyShoppingCart.Api.Endpoints;
 using MyShoppingCart.Domain.Configuration;
+using System.Security.Claims;
 using System.Text;
 
 namespace MyShoppingCart.Api.Setup;
@@ -42,13 +43,18 @@ public static class SetupExtensions
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(Policies.AdminAccess, policy => policy.RequireRole(Roles.Admin));
+            options.AddPolicy(Policies.AdminAccess, policy => policy
+            .RequireRole(Roles.Admin)
+            .RequireAuthenticatedUser()
+            .RequireClaim(ClaimTypes.NameIdentifier));
 
             options.AddPolicy(Policies.CustomerAccess, policy =>
             {
                 policy.RequireAssertion(context =>
-                context.User.IsInRole(Roles.Customer) ||
-                context.User.IsInRole(Roles.Admin));
+                    context.User.IsInRole(Roles.Customer) ||
+                    context.User.IsInRole(Roles.Admin))
+                .RequireAuthenticatedUser()
+                .RequireClaim(ClaimTypes.NameIdentifier);
             });
         });
 
