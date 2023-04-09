@@ -74,7 +74,6 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> UpdateCustomer(
         [FromServices] IMediator mediator,
         [FromBody] UpdateCustomerQuery request,
@@ -85,7 +84,6 @@ public sealed class CustomerEndpoints
         return response.MatchResult();
     }
 
-    [Authorize(Roles = Roles.Admin)]
     public static async Task<IResult> DeleteCustomer(
         [FromServices] IMediator mediator,
         [FromRoute] Guid customerId,
