@@ -1,5 +1,4 @@
 ﻿using MyShoppingCart.Domain.Utilities;
-using System.Threading;
 
 namespace MyShoppingCart.Application.Tests.Helpers;
 

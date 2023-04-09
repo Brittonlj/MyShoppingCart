@@ -1,5 +1,4 @@
 ﻿using MyShoppingCart.Application.Configuration;
-using MyShoppingCart.Domain.Entities;
 using System.Security.Claims;
 
 namespace MyShoppingCart.Application.Tests.Helpers;
@@ -33,24 +32,32 @@ public static class DataHelper
 
     public static List<Customer> GetCustomers()
     {
-        var address = new Address(
-            DefaultAddressId,
-            "123 Test Street",
-            "Test Town",
-            "MO",
-            "12345");
         return new List<Customer>
         {
             new Customer
             {
-                Id = DefaultCustomerId,
+                Id = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
                 FirstName = "Fred",
                 LastName = "Flintstone",
                 Email = "fred.flintstone@test.com",
-                ShippingAddress = address,
-                ShippingAddressId = address.Id,
-                BillingAddress = address,
-                BillingAddressId = address.Id,
+                BillingAddressId = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+                BillingAddress = new Address
+                {
+                    Id = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+                    Street = "123 Test St",
+                    City = "Bedrock",
+                    State = "MO",
+                    PostalCode = "12345"
+                },
+                ShippingAddressId = new Guid("6B760260-799C-4AF1-A173-0BF83A2A74D5"),
+                ShippingAddress = new Address
+                {
+                    Id = new Guid("6B760260-799C-4AF1-A173-0BF83A2A74D5"),
+                    Street = "123 Test St",
+                    City = "Bedrock",
+                    State = "MO",
+                    PostalCode = "12345"
+                },
             },
             new Customer
             {
@@ -58,10 +65,24 @@ public static class DataHelper
                 FirstName = "George",
                 LastName = "Jetson",
                 Email = "george.jetson@test.com",
-                ShippingAddress = address,
-                ShippingAddressId = address.Id,
-                BillingAddress = address,
-                BillingAddressId = address.Id,
+                BillingAddressId = new Guid("B592FA04-541A-4BF2-967C-C07468AF2014"),
+                BillingAddress = new Address
+                {
+                    Id = new Guid("B592FA04-541A-4BF2-967C-C07468AF2014"),
+                    Street = "123 Test St",
+                    City = "Space City",
+                    State = "MO",
+                    PostalCode = "12345"
+                },
+                ShippingAddressId = new Guid("CCB9F54B-F5A0-4D42-927D-C65294E0F629"),
+                ShippingAddress = new Address
+                {
+                    Id = new Guid("CCB9F54B-F5A0-4D42-927D-C65294E0F629"),
+                    Street = "123 Test St",
+                    City = "Space City",
+                    State = "MO",
+                    PostalCode = "12345"
+                }
             }
         };
     }
@@ -70,8 +91,22 @@ public static class DataHelper
     {
         return new List<SecurityClaim>
         {
-            new SecurityClaim(new Guid("B27DE938-6647-42E3-8DB2-145AB037F295"), DefaultCustomerId, ClaimTypes.Name, DefaultCustomerId.ToString()),
-            new SecurityClaim(new Guid("1E51A7C1-D3C2-4DC0-96BE-A2A056A2331A"), DefaultCustomerId, ClaimTypes.Role, Roles.Customer)
+            new SecurityClaim(
+                new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+                ClaimTypes.NameIdentifier,
+                "4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+            new SecurityClaim(
+                new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+                ClaimTypes.Role,
+                Roles.Customer),
+            new SecurityClaim(
+                new Guid("79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
+                ClaimTypes.NameIdentifier,
+                "79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
+            new SecurityClaim(
+                new Guid("79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
+                ClaimTypes.Role,
+                Roles.Admin)
         };
     }
 
@@ -201,19 +236,27 @@ public static class DataHelper
 
     public static UpdateCustomerQuery GetUpdateCustomerQuery()
     {
-        var address = new Address(
-            DefaultAddressId,
-            "123 Test Street",
-            "Test Town",
-            "MO",
-            "12345");
         return new UpdateCustomerQuery(
             DefaultCustomerId,
             "Fred",
             "Flintstone",
             "fred.flintstone@test.com",
-            address,
-            address);
+            new Address
+            {
+                Id = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+                Street = "123 Test St",
+                City = "Bedrock",
+                State = "MO",
+                PostalCode = "12345"
+            },
+            new Address
+            {
+                Id = new Guid("6B760260-799C-4AF1-A173-0BF83A2A74D5"),
+                Street = "123 Test St",
+                City = "Bedrock",
+                State = "MO",
+                PostalCode = "12345"
+            });
     }
 
     public static GetCustomersQuery GetGetCustomersQuery()
