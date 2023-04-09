@@ -5,29 +5,35 @@ namespace MyShoppingCart.Application.Tests.Helpers;
 
 public static class DataHelper
 {
+    public static readonly Guid DefaultCustomerId = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5");
+    public static readonly Guid DefaultAddressId = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5");
+    public static readonly Guid DefaultOrderId = new Guid("29D74756-8F33-4AE9-B534-F596252EB97B");
+
     public static Customer GetCustomer()
     {
         var address = new Address(
-            new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+            DefaultAddressId,
             "123 Test Street",
             "Test Town",
             "MO",
             "12345");
         return new Customer
         {
-            Id = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+            Id = DefaultCustomerId,
             FirstName = "Fred",
             LastName = "Flintstone",
             Email = "fred.flintstone@test.com",
             ShippingAddress = address,
-            BillingAddress = address
+            ShippingAddressId = address.Id,
+            BillingAddress = address,
+            BillingAddressId = address.Id,
         };
     }
 
     public static List<Customer> GetCustomers()
     {
         var address = new Address(
-            new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+            DefaultAddressId,
             "123 Test Street",
             "Test Town",
             "MO",
@@ -36,12 +42,14 @@ public static class DataHelper
         {
             new Customer
             {
-                Id = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+                Id = DefaultCustomerId,
                 FirstName = "Fred",
                 LastName = "Flintstone",
                 Email = "fred.flintstone@test.com",
                 ShippingAddress = address,
-                BillingAddress = address
+                ShippingAddressId = address.Id,
+                BillingAddress = address,
+                BillingAddressId = address.Id,
             },
             new Customer
             {
@@ -50,17 +58,19 @@ public static class DataHelper
                 LastName = "Jetson",
                 Email = "george.jetson@test.com",
                 ShippingAddress = address,
-                BillingAddress = address
+                ShippingAddressId = address.Id,
+                BillingAddress = address,
+                BillingAddressId = address.Id,
             }
         };
     }
 
-    public static List<SecurityClaim> GetClaims(Guid customerId)
+    public static List<SecurityClaim> GetClaims()
     {
         return new List<SecurityClaim>
         {
-            new SecurityClaim(new Guid("B27DE938-6647-42E3-8DB2-145AB037F295"), customerId, ClaimTypes.Name, customerId.ToString()),
-            new SecurityClaim(new Guid("1E51A7C1-D3C2-4DC0-96BE-A2A056A2331A"), customerId, ClaimTypes.Role, Roles.Customer)
+            new SecurityClaim(new Guid("B27DE938-6647-42E3-8DB2-145AB037F295"), DefaultCustomerId, ClaimTypes.Name, DefaultCustomerId.ToString()),
+            new SecurityClaim(new Guid("1E51A7C1-D3C2-4DC0-96BE-A2A056A2331A"), DefaultCustomerId, ClaimTypes.Role, Roles.Customer)
         };
     }
 
@@ -105,6 +115,20 @@ public static class DataHelper
         };
     }
 
+    public static Order GetOrder()
+    {
+        var order = new Order
+        {
+            Id = DefaultOrderId,
+            CustomerId = DefaultCustomerId,
+            Customer = GetCustomer(),
+            OrderDateTimeUtc = new DateTime(2023, 1, 1, 1, 1, 1, DateTimeKind.Utc)
+        };
+        order.AddUpdateLineItemRange(GetLineItemModels());
+
+        return order;
+    }
+
     public static CreateCustomerQuery GetCreateCustomerQuery()
     {
         var address = new AddressModel(
@@ -123,13 +147,13 @@ public static class DataHelper
     public static UpdateCustomerQuery GetUpdateCustomerQuery()
     {
         var address = new Address(
-            new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+            DefaultAddressId,
             "123 Test Street",
             "Test Town",
             "MO",
             "12345");
         return new UpdateCustomerQuery(
-            new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+            DefaultCustomerId,
             "Fred",
             "Flintstone",
             "fred.flintstone@test.com",
@@ -146,6 +170,13 @@ public static class DataHelper
             20,
             "LastName");
 
+    }
+
+    public static CreateOrderQuery GetCreateOrderQuery()
+    {
+        return new CreateOrderQuery(
+            DefaultCustomerId,
+            GetLineItemModels());
     }
 
 }

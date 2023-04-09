@@ -11,7 +11,7 @@ public class GetCustomerSecurityQueryHandlerTests
     {
         //Arrange
         var customer = DataHelper.GetCustomer();
-        var claims = DataHelper.GetClaims(customer.Id);
+        var claims = DataHelper.GetClaims();
         var request = new GetCustomerSecurityQuery(customer.Id);
 
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
@@ -46,7 +46,6 @@ public class GetCustomerSecurityQueryHandlerTests
     {
         //Arrange
         var customer = DataHelper.GetCustomer();
-        var claims = new List<SecurityClaim>();
         var request = new GetCustomerSecurityQuery(Guid.NewGuid());
         
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
@@ -55,9 +54,6 @@ public class GetCustomerSecurityQueryHandlerTests
             .ReturnsAsync(() => null);
 
         var mockSecurityClaimsRepository = new Mock<IRepository<SecurityClaim>>();
-        mockSecurityClaimsRepository
-            .Setup(x => x.ListAsync(It.IsAny<QuerySecurityClaims>(), _cancellationToken))
-            .ReturnsAsync(claims);
 
         var handler = new GetCustomerSecurityQueryHandler(mockCustomerRepository.Object, mockSecurityClaimsRepository.Object);
 

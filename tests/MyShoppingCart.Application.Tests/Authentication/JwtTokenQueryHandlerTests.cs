@@ -6,11 +6,10 @@ public sealed class JwtTokenQueryHandlerTests
 {
 	private const string TOKEN = "TEST123";
 	private readonly List<SecurityClaim> _validClaims;
-    private readonly Guid _customerId = new Guid("ED3FBC1E-2B64-427B-A96B-7DFCCCE11AF1");
 	private readonly CancellationToken _cancellationToken = new CancellationToken();
 	public JwtTokenQueryHandlerTests()
 	{
-		_validClaims = DataHelper.GetClaims(_customerId);
+		_validClaims = DataHelper.GetClaims();
 	}
 
     #region Happy Path
@@ -19,7 +18,7 @@ public sealed class JwtTokenQueryHandlerTests
     public async Task Handle_ShouldReturnToken_WhenAllParametersAreValid()
     {
         //Arrange
-        var request = new JwtTokenQuery(_customerId);
+        var request = new JwtTokenQuery(DataHelper.DefaultCustomerId);
         var claimsRepository = GetClaimsRepository(_validClaims);
         var jwtTokenService = GetJwtTokenService(TOKEN);
         var jwtTokenQueryHandler = new JwtTokenQueryHandler(claimsRepository, jwtTokenService);
@@ -74,7 +73,7 @@ public sealed class JwtTokenQueryHandlerTests
         var jwtTokenService = GetJwtTokenService(TOKEN);
         var jwtTokenQueryHandler = new JwtTokenQueryHandler(claimsRepository, jwtTokenService);
 
-        var request = new JwtTokenQuery(_customerId);
+        var request = new JwtTokenQuery(DataHelper.DefaultCustomerId);
 
         //Act
         var results = await jwtTokenQueryHandler.Handle(request, _cancellationToken);
