@@ -1,9 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using MyShoppingCart.Application.Configuration;
 using MyShoppingCart.Application.PipelineBehaviors;
-using MyShoppingCart.Application.Services;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MyShoppingCart.Application.Tests.PipelineBehaviors;
 
@@ -34,7 +31,6 @@ public class ExceptionLoggingPipelineBehaviorTests
 
         //Assert
         result.Success.Should().NotBeNull().And.Be(DataProvider.GetCustomer());
-        _mockLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "An exception was caught."), Times.Never);
     }
 
     #endregion

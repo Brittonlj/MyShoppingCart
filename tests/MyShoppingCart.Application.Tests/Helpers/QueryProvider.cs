@@ -97,4 +97,14 @@ public static class QueryProvider
             null);
     }
 
+    public static GetOrdersQuery GetGetOrdersQuery()
+    {
+        return new GetOrdersQuery(
+            DataProvider.DefaultCustomerId,
+            1,
+            20,
+            "OrderDateTimeUtc",
+            true);
+    }
+
 }

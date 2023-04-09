@@ -1,4 +1,5 @@
 ﻿using MyShoppingCart.Application.Configuration;
+using MyShoppingCart.Domain.Entities;
 using System.Security.Claims;
 
 namespace MyShoppingCart.Application.Tests.Helpers;
@@ -217,6 +218,32 @@ public static class DataProvider
         order.AddUpdateLineItemRange(GetLineItems(itemsCount));
 
         return order;
+    }
+
+    public static List<Order> GetOrders()
+    {
+        var orders = new List<Order>();
+        var orderToAdd = new Order
+        {
+            Id = DefaultOrderId,
+            CustomerId = DefaultCustomerId,
+            Customer = GetCustomer(),
+            OrderDateTimeUtc = MockProvider.DefaultUtcDateTime
+        };
+        orderToAdd.AddUpdateLineItemRange(GetLineItems(3));
+        orders.Add(orderToAdd);
+        
+        orderToAdd = new Order
+        {
+            Id = DefaultOrderId,
+            CustomerId = DefaultCustomerId,
+            Customer = GetCustomer(),
+            OrderDateTimeUtc = MockProvider.DefaultUtcDateTime
+        };
+        orderToAdd.AddUpdateLineItemRange(GetLineItems(3));
+        orders.Add(orderToAdd);
+
+        return orders;
     }
 
     public static Product GetProduct()
