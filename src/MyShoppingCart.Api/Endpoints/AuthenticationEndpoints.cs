@@ -16,11 +16,10 @@ public class AuthenticationEndpoints
 
     public static async Task<IResult> GetToken(
     [FromServices] IMediator mediator,
-    [FromRoute] Guid customerId,
+    [AsParameters] JwtTokenQuery request,
     CancellationToken cancellationToken
 )
     {
-        var request = new JwtTokenQuery(customerId);
         var response = await mediator.Send(request, cancellationToken);
 
         return response.Match(

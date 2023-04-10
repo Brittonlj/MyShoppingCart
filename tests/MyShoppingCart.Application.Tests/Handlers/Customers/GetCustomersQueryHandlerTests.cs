@@ -23,7 +23,7 @@ public class GetCustomersQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.BeEquivalentTo(customers);
         mockCustomerRepository
-            .Verify(x => x.ListAsync(It.IsAny<GetAllCustomersSpec>(), _cancellationToken), Times.Once);
+            .Verify(x => x.ListAsync(It.IsAny<GetCustomersSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion
@@ -47,7 +47,7 @@ public class GetCustomersQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.BeEquivalentTo(customers);
         mockCustomerRepository
-            .Verify(x => x.ListAsync(It.IsAny<GetAllCustomersSpec>(), _cancellationToken), Times.Once);
+            .Verify(x => x.ListAsync(It.IsAny<GetCustomersSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion

@@ -89,7 +89,7 @@ public sealed class JwtTokenQueryHandlerTests
     private IRepository<SecurityClaim> GetClaimsRepository(List<SecurityClaim> claims)
     {
         var mockSecurityClaimRepository = new Mock<IRepository<SecurityClaim>>();
-        mockSecurityClaimRepository.Setup(x => x.ListAsync(It.IsAny<GetAllSecurityClaimsByCustomerIdSpec>(), It.IsAny<CancellationToken>())).ReturnsAsync(claims);
+        mockSecurityClaimRepository.Setup(x => x.ListAsync(It.IsAny<GetSecurityClaimsByCustomerIdSpec>(), It.IsAny<CancellationToken>())).ReturnsAsync(claims);
         return mockSecurityClaimRepository.Object;
     }
 

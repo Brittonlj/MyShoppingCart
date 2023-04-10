@@ -14,7 +14,7 @@ public sealed class GetProductsQueryHandler :
         GetProductsQuery request,
         CancellationToken cancellationToken)
     {
-        var spec = new GetAllProductsSpec(
+        var spec = new GetProductsSpec(
             request.SearchString,
             request.PageNumber,
             request.PageSize,

@@ -26,7 +26,7 @@ public sealed class GetCustomerSecurityQueryHandler :
             return NotFound.Instance;
         }
 
-        var claimsSpec = new GetAllSecurityClaimsByCustomerIdSpec(request.CustomerId);
+        var claimsSpec = new GetSecurityClaimsByCustomerIdSpec(request.CustomerId);
         var claims = await _securityClaimRepository.ListAsync(claimsSpec, cancellationToken);
 
         return claims;

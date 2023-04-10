@@ -6,8 +6,6 @@ public class ProductEndpointsTests
 {
     private readonly Mock<IMediator> _mockMediator = new Mock<IMediator>();
     private readonly CancellationToken _cancellationToken = new CancellationToken();
-    private readonly IOptionsSnapshot<MyShoppingCartSettings> _settings =
-        SettingsHelper.GetMyShoppingCartSettings();
     private readonly Dictionary<string, string[]> _validationErrors =
         new Dictionary<string, string[]>();
     private readonly ErrorList _errors = new ErrorList();
@@ -19,18 +17,14 @@ public class ProductEndpointsTests
     public async Task GetAllProducts_ShouldReturnProducts_WhenValidParametersAreChosen()
     {
         //Arrange
+        var request = new GetProductsQuery();
         var response = Response<IReadOnlyList<Product>>.FromSuccess(GetProductList()); ;
         SetupMediator(response);
 
         //Act
-        var httpResult = (Ok<IReadOnlyList<Product>>)await ProductEndpoints.GetAllProducts(
+        var httpResult = (Ok<IReadOnlyList<Product>>)await ProductEndpoints.GetProducts(
             _mockMediator.Object,
-            _settings,
-            null,
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -42,18 +36,14 @@ public class ProductEndpointsTests
     public async Task GetAllProducts_ShouldReturnNoProducts_WhenBadParametersAreChosen()
     {
         //Arrange
+        var request = new GetProductsQuery("UnavailableName");
         var response = Response<IReadOnlyList<Product>>.FromSuccess(GetEmptyProductsList()); ;
         SetupMediator(response);
 
         //Act
-        var httpResult = (Ok<IReadOnlyList<Product>>)await ProductEndpoints.GetAllProducts(
+        var httpResult = (Ok<IReadOnlyList<Product>>)await ProductEndpoints.GetProducts(
             _mockMediator.Object,
-            _settings,
-            "UnavailableName",
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -65,19 +55,15 @@ public class ProductEndpointsTests
     public async Task GetAllProducts_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var request = new GetProductsQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<IReadOnlyList<Product>>.FromErrorList(_errors);
         SetupMediator(response);
 
         //Act
-        var httpResult = (ProblemHttpResult)await ProductEndpoints.GetAllProducts(
+        var httpResult = (ProblemHttpResult)await ProductEndpoints.GetProducts(
             _mockMediator.Object,
-            _settings,
-            null,
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -88,6 +74,7 @@ public class ProductEndpointsTests
     public async Task GetAllProducts_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var request = new GetProductsQuery(SortColumn: "InvalidSortColumn");
         const string ERROR_KEY = "SortColumn";
         const string ERROR_MESSAGE = "InvalidSortColumn is an invalid value for SortColumn";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -95,14 +82,9 @@ public class ProductEndpointsTests
         SetupMediator(response);
 
         //Act
-        var httpResult = (ProblemHttpResult)await ProductEndpoints.GetAllProducts(
+        var httpResult = (ProblemHttpResult)await ProductEndpoints.GetProducts(
             _mockMediator.Object,
-            _settings,
-            null,
-            null,
-            null,
-            "InvalidSortColumn",
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -117,15 +99,15 @@ public class ProductEndpointsTests
     public async Task CreateProduct_ShouldReturnProduct_WhenValidParametersAreChosen()
     {
         //Arrange
-        var customer = GetProduct();
-        var query = GetCreateProductQuery();
-        var response = Response<Product>.FromSuccess(customer); ;
+        var product = GetProduct();
+        var request = GetCreateProductQuery();
+        var response = Response<Product>.FromSuccess(product); ;
         SetupMediator<CreateProductQuery>(response);
 
         //Act
         var httpResult = (Ok<Product>)await ProductEndpoints.CreateProduct(
             _mockMediator.Object,
-            query,
+            request,
             _cancellationToken);
 
         //Assert
@@ -137,8 +119,7 @@ public class ProductEndpointsTests
     public async Task CreateProduct_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var customer = GetProduct();
-        var query = GetCreateProductQuery();
+        var request = GetCreateProductQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Product>.FromErrorList(_errors);
         SetupMediator<CreateProductQuery>(response);
@@ -146,7 +127,7 @@ public class ProductEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await ProductEndpoints.CreateProduct(
             _mockMediator.Object,
-            query,
+            request,
             _cancellationToken);
 
         //Assert
@@ -157,9 +138,9 @@ public class ProductEndpointsTests
     public async Task CreateProduct_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var customer = GetProduct();
-        customer.Name = string.Empty;
-        var query = GetCreateProductQuery();
+        var product = GetProduct();
+        product.Name = string.Empty;
+        var request = GetCreateProductQuery();
         const string ERROR_KEY = "Name";
         const string ERROR_MESSAGE = "Name cannot be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -169,7 +150,7 @@ public class ProductEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await ProductEndpoints.CreateProduct(
             _mockMediator.Object,
-            query,
+            request,
             _cancellationToken);
 
         //Assert
@@ -183,14 +164,14 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnProduct_WhenValidParametersAreChosen()
     {
         //Arrange
-        var query = GetUpdateProductQuery();
+        var request = GetUpdateProductQuery();
         var response = Response<Product>.FromSuccess(GetProduct()); ;
         SetupMediator<UpdateProductQuery>(response);
 
         //Act
         var httpResult = (Ok<Product>)await ProductEndpoints.UpdateProduct(
             _mockMediator.Object,
-            query,
+            request,
             _cancellationToken);
 
         //Assert
@@ -202,7 +183,7 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnNotFound_WhenBadProductIdIsChosen()
     {
         //Arrange
-        var query = GetUpdateProductQuery();
+        var request = GetUpdateProductQuery();
         var response = Response<Product>.FromNotFound();
         SetupMediator<UpdateProductQuery>(response);
 
@@ -210,7 +191,7 @@ public class ProductEndpointsTests
         var httpResult = (Microsoft.AspNetCore.Http.HttpResults.NotFound)await
             ProductEndpoints.UpdateProduct(
             _mockMediator.Object,
-            query,
+            request,
             _cancellationToken);
 
         //Assert
@@ -221,7 +202,7 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var query = GetUpdateProductQuery();
+        var request = GetUpdateProductQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Product>.FromErrorList(_errors);
         SetupMediator<UpdateProductQuery>(response);
@@ -229,7 +210,7 @@ public class ProductEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await ProductEndpoints.UpdateProduct(
             _mockMediator.Object,
-            query,
+            request,
             _cancellationToken);
 
         //Assert
@@ -240,8 +221,7 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var query = GetUpdateProductQuery();
-        query = query with { ProductId = Guid.Empty };
+        var request = GetUpdateProductQuery() with { ProductId = Guid.Empty };
         const string ERROR_KEY = "ProductId";
         const string ERROR_MESSAGE = "ProductId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -251,7 +231,7 @@ public class ProductEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await ProductEndpoints.UpdateProduct(
             _mockMediator.Object,
-            query,
+            request,
             _cancellationToken);
 
         //Assert
@@ -266,13 +246,14 @@ public class ProductEndpointsTests
     public async Task DeleteProduct_ShouldReturnOk_WhenValidParametersAreChosen()
     {
         //Arrange
+        var request = new DeleteProductCommand(Guid.NewGuid());
         var response = Response<Success>.FromSuccess(Success.Instance); ;
         SetupMediator(response);
 
         //Act
         var httpResult = (Ok)await ProductEndpoints.DeleteProduct(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -283,6 +264,7 @@ public class ProductEndpointsTests
     public async Task DeleteProduct_ShouldReturnNotFound_WhenBadProductIdIsChosen()
     {
         //Arrange
+        var request = new DeleteProductCommand(Guid.NewGuid());
         var response = Response<Success>.FromNotFound();
         SetupMediator(response);
 
@@ -290,7 +272,7 @@ public class ProductEndpointsTests
         var httpResult = (Microsoft.AspNetCore.Http.HttpResults.NotFound)await
             ProductEndpoints.DeleteProduct(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -301,6 +283,7 @@ public class ProductEndpointsTests
     public async Task DeleteProduct_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var request = new DeleteProductCommand(Guid.NewGuid());
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Success>.FromErrorList(_errors);
         SetupMediator(response);
@@ -308,7 +291,7 @@ public class ProductEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await ProductEndpoints.DeleteProduct(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -319,6 +302,7 @@ public class ProductEndpointsTests
     public async Task DeleteProduct_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var request = new DeleteProductCommand(Guid.NewGuid());
         const string ERROR_KEY = "ProductId";
         const string ERROR_MESSAGE = "ProductId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -328,7 +312,7 @@ public class ProductEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await ProductEndpoints.DeleteProduct(
             _mockMediator.Object,
-            Guid.Empty,
+            request,
             _cancellationToken);
 
         //Assert

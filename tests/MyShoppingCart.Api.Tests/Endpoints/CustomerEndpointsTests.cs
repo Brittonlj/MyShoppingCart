@@ -7,8 +7,6 @@ public class CustomerEndpointsTests
 {
     private readonly Mock<IMediator> _mockMediator = new Mock<IMediator>();
     private readonly CancellationToken _cancellationToken = new CancellationToken();
-    private readonly IOptionsSnapshot<MyShoppingCartSettings> _settings = 
-        SettingsHelper.GetMyShoppingCartSettings();
     private readonly Dictionary<string, string[]> _validationErrors = 
         new Dictionary<string, string[]>();
     private readonly ErrorList _errors = new ErrorList();
@@ -18,19 +16,14 @@ public class CustomerEndpointsTests
     public async Task GetAllCustomers_ShouldReturnCustomers_WhenValidParametersAreChosen()
     {
         //Arrange
-        var response = Response<IReadOnlyList<Customer>>.FromSuccess(GetCustomerList()); ;
+        var request = new GetCustomersQuery();
+        var response = Response<IReadOnlyList<Customer>>.FromSuccess(GetCustomerList());
         SetupMediator(response);
 
         //Act
         var httpResult = (Ok<IReadOnlyList<Customer>>)await CustomerEndpoints.GetAllCustomers(
             _mockMediator.Object,
-            _settings,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            request,            
             _cancellationToken);
 
         //Assert
@@ -42,19 +35,14 @@ public class CustomerEndpointsTests
     public async Task GetAllCustomers_ShouldReturnNoCustomers_WhenBadParametersAreChosen()
     {
         //Arrange
-        var response = Response<IReadOnlyList<Customer>>.FromSuccess(GetEmptyCustomersList()); ;
+        var request = new GetCustomersQuery("UnavailableName", "UnavailableEmail");
+        var response = Response<IReadOnlyList<Customer>>.FromSuccess(GetEmptyCustomersList());
         SetupMediator(response);
 
         //Act
         var httpResult = (Ok<IReadOnlyList<Customer>>)await CustomerEndpoints.GetAllCustomers(
             _mockMediator.Object,
-            _settings,
-            "UnavailableName",
-            "UnavailableEmail",
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -66,6 +54,7 @@ public class CustomerEndpointsTests
     public async Task GetAllCustomers_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var request = new GetCustomersQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<IReadOnlyList<Customer>>.FromErrorList(_errors);
         SetupMediator(response);
@@ -73,13 +62,7 @@ public class CustomerEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult) await CustomerEndpoints.GetAllCustomers(
             _mockMediator.Object,
-            _settings,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -90,6 +73,7 @@ public class CustomerEndpointsTests
     public async Task GetAllCustomers_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var request = new GetCustomersQuery(SortColumn: "InvalidSortColumn");
         const string ERROR_KEY = "SortColumn";
         const string ERROR_MESSAGE = "InvalidSortColumn is an invalid value for SortColumn";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -99,13 +83,7 @@ public class CustomerEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await CustomerEndpoints.GetAllCustomers(
             _mockMediator.Object,
-            _settings,
-            null,
-            null,
-            null,
-            null,
-            "InvalidSortColumn",
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -119,13 +97,14 @@ public class CustomerEndpointsTests
     public async Task GetCustomerById_ShouldReturnCustomer_WhenValidParametersAreChosen()
     {
         //Arrange
-        var response = Response<Customer>.FromSuccess(GetCustomer()); ;
+        var request = new GetCustomerQuery(Guid.NewGuid());
+        var response = Response<Customer>.FromSuccess(GetCustomer());
         SetupMediator<GetCustomerQuery>(response);
 
         //Act
         var httpResult = (Ok<Customer>)await CustomerEndpoints.GetCustomerById(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -137,6 +116,7 @@ public class CustomerEndpointsTests
     public async Task GetCustomerById_ShouldReturnNotFound_WhenBadParametersAreChosen()
     {
         //Arrange
+        var request = new GetCustomerQuery(Guid.NewGuid());
         var response = Response<Customer>.FromNotFound();
         SetupMediator<GetCustomerQuery>(response);
 
@@ -144,7 +124,7 @@ public class CustomerEndpointsTests
         var httpResult = (Microsoft.AspNetCore.Http.HttpResults.NotFound)await
             CustomerEndpoints.GetCustomerById(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -155,6 +135,7 @@ public class CustomerEndpointsTests
     public async Task GetCustomerById_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var request = new GetCustomerQuery(Guid.NewGuid());
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Customer>.FromErrorList(_errors);
         SetupMediator<GetCustomerQuery>(response);
@@ -162,7 +143,7 @@ public class CustomerEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await CustomerEndpoints.GetCustomerById(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -173,6 +154,7 @@ public class CustomerEndpointsTests
     public async Task GetCustomerById_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var request = new GetCustomerQuery(Guid.NewGuid());
         const string ERROR_KEY = "CustomerId";
         const string ERROR_MESSAGE = "CustomerId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -182,7 +164,7 @@ public class CustomerEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await CustomerEndpoints.GetCustomerById(
             _mockMediator.Object,
-            Guid.Empty,
+            request,
             _cancellationToken);
 
         //Assert
@@ -199,7 +181,7 @@ public class CustomerEndpointsTests
         //Arrange
         var customer = GetCustomer();
         var query = GetCreateCustomerQuery();
-        var response = Response<Customer>.FromSuccess(customer); ;
+        var response = Response<Customer>.FromSuccess(customer);
         SetupMediator<CreateCustomerQuery>(response);
 
         //Act
@@ -264,7 +246,7 @@ public class CustomerEndpointsTests
     {
         //Arrange
         var query = GetUpdateCustomerQuery();
-        var response = Response<Customer>.FromSuccess(GetCustomer()); ;
+        var response = Response<Customer>.FromSuccess(GetCustomer());
         SetupMediator<UpdateCustomerQuery>(response);
 
         //Act
@@ -346,13 +328,14 @@ public class CustomerEndpointsTests
     public async Task DeleteCustomer_ShouldReturnOk_WhenValidParametersAreChosen()
     {
         //Arrange
-        var response = Response<Success>.FromSuccess(Success.Instance); ;
+        var request = new DeleteCustomerCommand(Guid.NewGuid());
+        var response = Response<Success>.FromSuccess(Success.Instance);
         SetupMediator(response);
 
         //Act
         var httpResult = (Ok)await CustomerEndpoints.DeleteCustomer(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -363,6 +346,7 @@ public class CustomerEndpointsTests
     public async Task DeleteCustomer_ShouldReturnNotFound_WhenBadCustomerIdIsChosen()
     {
         //Arrange
+        var request = new DeleteCustomerCommand(Guid.NewGuid());
         var response = Response<Success>.FromNotFound();
         SetupMediator(response);
 
@@ -370,7 +354,7 @@ public class CustomerEndpointsTests
         var httpResult = (Microsoft.AspNetCore.Http.HttpResults.NotFound)await
             CustomerEndpoints.DeleteCustomer(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -381,6 +365,7 @@ public class CustomerEndpointsTests
     public async Task DeleteCustomer_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var request = new DeleteCustomerCommand(Guid.NewGuid());
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Success>.FromErrorList(_errors);
         SetupMediator(response);
@@ -388,7 +373,7 @@ public class CustomerEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await CustomerEndpoints.DeleteCustomer(
             _mockMediator.Object,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -399,6 +384,7 @@ public class CustomerEndpointsTests
     public async Task DeleteCustomer_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var request = new DeleteCustomerCommand(Guid.Empty);
         const string ERROR_KEY = "CustomerId";
         const string ERROR_MESSAGE = "CustomerId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -408,7 +394,7 @@ public class CustomerEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await CustomerEndpoints.DeleteCustomer(
             _mockMediator.Object,
-            Guid.Empty,
+            request,
             _cancellationToken);
 
         //Assert

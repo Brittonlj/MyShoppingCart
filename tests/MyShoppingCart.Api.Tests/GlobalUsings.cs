@@ -8,6 +8,5 @@ global using MyShoppingCart.Api.Endpoints;
 global using FluentAssertions;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.Extensions.Options;
-global using MyShoppingCart.Domain.Configuration;
 global using MyShoppingCart.Api.Tests.Helpers;
 

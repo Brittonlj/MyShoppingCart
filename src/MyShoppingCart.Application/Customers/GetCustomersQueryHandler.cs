@@ -14,7 +14,7 @@ public sealed class GetCustomersQueryHandler :
         GetCustomersQuery request,
         CancellationToken cancellationToken)
     {
-        var spec = new GetAllCustomersSpec(
+        var spec = new GetCustomersSpec(
             request.NamesLike,
             request.EmailLike,
             request.PageNumber,

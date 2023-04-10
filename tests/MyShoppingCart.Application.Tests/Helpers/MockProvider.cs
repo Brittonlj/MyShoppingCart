@@ -37,7 +37,7 @@ public static class MockProvider
     {
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
         mockCustomerRepository
-            .Setup(x => x.ListAsync(It.IsAny<GetAllCustomersSpec>(), token))
+            .Setup(x => x.ListAsync(It.IsAny<GetCustomersSpec>(), token))
             .ReturnsAsync(customers);
         return mockCustomerRepository;
     }
@@ -66,7 +66,7 @@ public static class MockProvider
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
         mockProductRepository
-            .Setup(x => x.ListAsync(It.IsAny<GetAllProductsSpec>(), token))
+            .Setup(x => x.ListAsync(It.IsAny<GetProductsSpec>(), token))
             .ReturnsAsync(products);
         return mockProductRepository;
     }

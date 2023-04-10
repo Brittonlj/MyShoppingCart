@@ -25,7 +25,7 @@ public sealed class CreateOrderQueryValidator : AbstractValidator<CreateOrderQue
     {
         var request = context.InstanceToValidate;
         var productIds = request.LineItems.Select(x => x.ProductId).ToList();
-        var query = new GetAllProductsByIdListSpec(productIds).WithNoTracking();
+        var query = new GetProductsByIdListSpec(productIds).WithNoTracking();
 
         var products = await _productRepository.ListAsync(query, cancellation);
 

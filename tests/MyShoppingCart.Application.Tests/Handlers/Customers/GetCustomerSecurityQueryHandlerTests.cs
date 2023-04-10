@@ -18,7 +18,7 @@ public class GetCustomerSecurityQueryHandlerTests
 
         var mockSecurityClaimsRepository = new Mock<IRepository<SecurityClaim>>();
         mockSecurityClaimsRepository
-            .Setup(x => x.ListAsync(It.IsAny<GetAllSecurityClaimsByCustomerIdSpec>(), _cancellationToken))
+            .Setup(x => x.ListAsync(It.IsAny<GetSecurityClaimsByCustomerIdSpec>(), _cancellationToken))
             .ReturnsAsync(claims);
 
         var handler = new GetCustomerSecurityQueryHandler(mockCustomerRepository.Object, mockSecurityClaimsRepository.Object);
@@ -31,7 +31,7 @@ public class GetCustomerSecurityQueryHandlerTests
         mockCustomerRepository
             .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
         mockSecurityClaimsRepository
-            .Verify(x => x.ListAsync(It.IsAny<GetAllSecurityClaimsByCustomerIdSpec>(), _cancellationToken), Times.Once);
+            .Verify(x => x.ListAsync(It.IsAny<GetSecurityClaimsByCustomerIdSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion
@@ -59,7 +59,7 @@ public class GetCustomerSecurityQueryHandlerTests
         mockCustomerRepository
             .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
         mockSecurityClaimsRepository
-            .Verify(x => x.ListAsync(It.IsAny<GetAllSecurityClaimsByCustomerIdSpec>(), _cancellationToken), Times.Never);
+            .Verify(x => x.ListAsync(It.IsAny<GetSecurityClaimsByCustomerIdSpec>(), _cancellationToken), Times.Never);
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class GetCustomerSecurityQueryHandlerTests
 
         var mockSecurityClaimsRepository = new Mock<IRepository<SecurityClaim>>();
         mockSecurityClaimsRepository
-            .Setup(x => x.ListAsync(It.IsAny<GetAllSecurityClaimsByCustomerIdSpec>(), _cancellationToken))
+            .Setup(x => x.ListAsync(It.IsAny<GetSecurityClaimsByCustomerIdSpec>(), _cancellationToken))
             .ReturnsAsync(claims);
 
         var handler = new GetCustomerSecurityQueryHandler(mockCustomerRepository.Object, mockSecurityClaimsRepository.Object);
@@ -87,7 +87,7 @@ public class GetCustomerSecurityQueryHandlerTests
         mockCustomerRepository
             .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
         mockSecurityClaimsRepository
-         .Verify(x => x.ListAsync(It.IsAny<GetAllSecurityClaimsByCustomerIdSpec>(), _cancellationToken), Times.Once);
+         .Verify(x => x.ListAsync(It.IsAny<GetSecurityClaimsByCustomerIdSpec>(), _cancellationToken), Times.Once);
     }
 
 

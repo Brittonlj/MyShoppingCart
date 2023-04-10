@@ -7,8 +7,6 @@ public class OrderEndpointsTests
 {
     private readonly Mock<IMediator> _mockMediator = new Mock<IMediator>();
     private readonly CancellationToken _cancellationToken = new CancellationToken();
-    private readonly IOptionsSnapshot<MyShoppingCartSettings> _settings =
-        SettingsHelper.GetMyShoppingCartSettings();
     private readonly Dictionary<string, string[]> _validationErrors =
         new Dictionary<string, string[]>();
     private readonly ErrorList _errors = new ErrorList();
@@ -19,18 +17,14 @@ public class OrderEndpointsTests
     {
         //Arrange
         var customerId = Guid.NewGuid();
+        var request = new GetOrdersQuery(customerId);
         var response = Response<IReadOnlyList<Order>>.FromSuccess(GetOrderList(customerId)); ;
         SetupMediator(response);
 
         //Act
         var httpResult = (Ok<IReadOnlyList<Order>>)await OrderEndpoints.GetAllOrders(
             _mockMediator.Object,
-            _settings,
-            customerId,
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -42,18 +36,15 @@ public class OrderEndpointsTests
     public async Task GetAllOrders_ShouldReturnNoOrders_WhenBadParametersAreChosen()
     {
         //Arrange
+        var customerId = Guid.NewGuid();
+        var request = new GetOrdersQuery(customerId);
         var response = Response<IReadOnlyList<Order>>.FromSuccess(GetEmptyOrdersList()); ;
         SetupMediator(response);
 
         //Act
         var httpResult = (Ok<IReadOnlyList<Order>>)await OrderEndpoints.GetAllOrders(
             _mockMediator.Object,
-            _settings,
-            Guid.NewGuid(),
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -65,6 +56,8 @@ public class OrderEndpointsTests
     public async Task GetAllOrders_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var customerId = Guid.NewGuid();
+        var request = new GetOrdersQuery(customerId);
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<IReadOnlyList<Order>>.FromErrorList(_errors);
         SetupMediator(response);
@@ -72,12 +65,7 @@ public class OrderEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await OrderEndpoints.GetAllOrders(
             _mockMediator.Object,
-            _settings,
-            Guid.NewGuid(),
-            null,
-            null,
-            null,
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -88,6 +76,8 @@ public class OrderEndpointsTests
     public async Task GetAllOrders_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var customerId = Guid.NewGuid();
+        var request = new GetOrdersQuery(customerId);
         const string ERROR_KEY = "SortColumn";
         const string ERROR_MESSAGE = "InvalidSortColumn is an invalid value for SortColumn";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -97,12 +87,7 @@ public class OrderEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await OrderEndpoints.GetAllOrders(
             _mockMediator.Object,
-            _settings,
-            Guid.NewGuid(),
-            null,
-            null,
-            "InvalidSortColumn",
-            null,
+            request,
             _cancellationToken);
 
         //Assert
@@ -116,14 +101,14 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnOrder_WhenValidParametersAreChosen()
     {
         //Arrange
+        var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
         var response = Response<Order>.FromSuccess(GetOrder()); ;
         SetupMediator<GetOrderQuery>(response);
 
         //Act
         var httpResult = (Ok<Order>)await OrderEndpoints.GetOrderById(
             _mockMediator.Object,
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -135,6 +120,7 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnNotFound_WhenBadParametersAreChosen()
     {
         //Arrange
+        var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
         var response = Response<Order>.FromNotFound();
         SetupMediator<GetOrderQuery>(response);
 
@@ -142,9 +128,8 @@ public class OrderEndpointsTests
         var httpResult = (Microsoft.AspNetCore.Http.HttpResults.NotFound)await
             OrderEndpoints.GetOrderById(
             _mockMediator.Object,
-            Guid.NewGuid(),
-            Guid.NewGuid(),
-           _cancellationToken);
+            request,
+            _cancellationToken);
 
         //Assert
         httpResult.Should().NotBeNull();
@@ -154,6 +139,7 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Order>.FromErrorList(_errors);
         SetupMediator<GetOrderQuery>(response);
@@ -161,8 +147,7 @@ public class OrderEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await OrderEndpoints.GetOrderById(
             _mockMediator.Object,
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -173,6 +158,7 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var request = new GetOrderQuery(Guid.Empty, Guid.NewGuid());
         const string ERROR_KEY = "OrderId";
         const string ERROR_MESSAGE = "OrderId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -182,8 +168,7 @@ public class OrderEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await OrderEndpoints.GetOrderById(
             _mockMediator.Object,
-            Guid.Empty,
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -347,14 +332,14 @@ public class OrderEndpointsTests
     public async Task DeleteOrder_ShouldReturnOk_WhenValidParametersAreChosen()
     {
         //Arrange
+        var request = new DeleteOrderCommand(Guid.NewGuid(), Guid.NewGuid());
         var response = Response<Success>.FromSuccess(Success.Instance); ;
         SetupMediator(response);
 
         //Act
         var httpResult = (Ok)await OrderEndpoints.DeleteOrder(
             _mockMediator.Object,
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -365,6 +350,7 @@ public class OrderEndpointsTests
     public async Task DeleteOrder_ShouldReturnNotFound_WhenBadOrderIdIsChosen()
     {
         //Arrange
+        var request = new DeleteOrderCommand(Guid.NewGuid(), Guid.NewGuid());
         var response = Response<Success>.FromNotFound();
         SetupMediator(response);
 
@@ -372,8 +358,7 @@ public class OrderEndpointsTests
         var httpResult = (Microsoft.AspNetCore.Http.HttpResults.NotFound)await
             OrderEndpoints.DeleteOrder(
             _mockMediator.Object,
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -384,6 +369,7 @@ public class OrderEndpointsTests
     public async Task DeleteOrder_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
+        var request = new DeleteOrderCommand(Guid.NewGuid(), Guid.NewGuid());
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Success>.FromErrorList(_errors);
         SetupMediator(response);
@@ -391,8 +377,7 @@ public class OrderEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await OrderEndpoints.DeleteOrder(
             _mockMediator.Object,
-            Guid.NewGuid(),
-            Guid.NewGuid(),
+            request,
             _cancellationToken);
 
         //Assert
@@ -403,6 +388,7 @@ public class OrderEndpointsTests
     public async Task DeleteOrder_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
+        var request = new DeleteOrderCommand(Guid.NewGuid(), Guid.NewGuid());
         const string ERROR_KEY = "OrderId";
         const string ERROR_MESSAGE = "OrderId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -412,8 +398,7 @@ public class OrderEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await OrderEndpoints.DeleteOrder(
             _mockMediator.Object,
-            Guid.NewGuid(),
-            Guid.Empty,
+            request,
             _cancellationToken);
 
         //Assert

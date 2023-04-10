@@ -15,13 +15,13 @@ public class AuthenticationEndpointsTests
         const string token = "VALID_TOKEN";
         var customerId = new Guid("50EAD54E-CFEC-44CA-9325-FCE68F6E85C3");
         var query = new JwtTokenQuery(customerId);
-        var response = Response<string>.FromSuccess(token); ;
+        var response = Response<string>.FromSuccess(token);
         SetupMediator(query, response);
 
         //Act
         var httpResult = (ContentHttpResult) await AuthenticationEndpoints.GetToken(
             _mockMediator.Object,
-            customerId,
+            query,
             _cancellationToken);
 
         //Assert
@@ -35,13 +35,13 @@ public class AuthenticationEndpointsTests
         //Arrange
         var customerId = new Guid("3D46089B-892D-423C-8D42-1CF555616208");
         var query = new JwtTokenQuery(customerId);
-        var response = Response<string>.FromUnauthorized(); ;
+        var response = Response<string>.FromUnauthorized();
         SetupMediator(query, response);
 
         //Act
         var httpResult = (UnauthorizedHttpResult)await AuthenticationEndpoints.GetToken(
             _mockMediator.Object,
-            customerId,
+            query,
             _cancellationToken);
 
         //Assert
@@ -63,7 +63,7 @@ public class AuthenticationEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await AuthenticationEndpoints.GetToken(
             _mockMediator.Object,
-            customerId,
+            query,
             _cancellationToken);
 
         //Assert
@@ -83,7 +83,7 @@ public class AuthenticationEndpointsTests
         //Act
         var httpResult = (ProblemHttpResult)await AuthenticationEndpoints.GetToken(
             _mockMediator.Object,
-            customerId,
+            query,
             _cancellationToken);
 
         //Assert

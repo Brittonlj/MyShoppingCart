@@ -23,7 +23,7 @@ public class GetProductsQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.BeEquivalentTo(products);
         mockProductRepository
-            .Verify(x => x.ListAsync(It.IsAny<GetAllProductsSpec>(), _cancellationToken), Times.Once);
+            .Verify(x => x.ListAsync(It.IsAny<GetProductsSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion
@@ -47,7 +47,7 @@ public class GetProductsQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.BeEquivalentTo(products);
         mockProductRepository
-            .Verify(x => x.ListAsync(It.IsAny<GetAllProductsSpec>(), _cancellationToken), Times.Once);
+            .Verify(x => x.ListAsync(It.IsAny<GetProductsSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion

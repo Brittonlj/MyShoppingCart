@@ -2,14 +2,14 @@
 
 public sealed class GetProductsQueryValidator : AbstractValidator<GetProductsQuery>
 {
-    private readonly string _validSortColumns = string.Join(", ", Enum.GetNames(typeof(GetAllProductsSpec.SortColumns)));
+    private readonly string _validSortColumns = string.Join(", ", Enum.GetNames(typeof(GetProductsSpec.SortColumns)));
 
     public GetProductsQueryValidator()
     {
         RuleFor(x => x.SearchString).MaximumLength(50);
         RuleFor(x => x.SortColumn)
             .NotEmpty()
-            .IsEnumName(typeof(GetAllProductsSpec.SortColumns), caseSensitive: false)
+            .IsEnumName(typeof(GetProductsSpec.SortColumns), caseSensitive: false)
             .WithErrorCode("InvalidSortColumn")
             .WithMessage("'{PropertyValue}' is an invalid value for '{PropertyName}'.  Please use one of '" + _validSortColumns + "'.");
         RuleFor(x => x.PageNumber).NotEmpty();

@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Configuration;
-
-namespace MyShoppingCart.Api.Endpoints;
+﻿namespace MyShoppingCart.Api.Endpoints;
 
 public sealed class CustomerEndpoints
 {
@@ -26,26 +24,9 @@ public sealed class CustomerEndpoints
 
     public static async Task<IResult> GetAllCustomers(
         [FromServices] IMediator mediator,
-        IOptionsSnapshot<MyShoppingCartSettings> settings,
-        [FromQuery] string? namesLike,
-        [FromQuery] string? emailLike,
-        [FromQuery] int? pageNumber,
-        [FromQuery] int? pageSize,
-        [FromQuery] string? sortColumn,
-        [FromQuery] bool? sortAscending,
+        [AsParameters] GetCustomersQuery request,
         CancellationToken cancellationToken)
     {
-        var defaultPageSize = settings.Value.DefaultPageSize;
-        var defaultSortColumn = settings.Value.DefaultPageSorting.Customer;
-
-        var request = new GetCustomersQuery(
-            namesLike,
-            emailLike,
-            pageNumber ?? 1,
-            pageSize ?? defaultPageSize,
-            sortColumn ?? defaultSortColumn,
-            sortAscending ?? true);
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();
@@ -53,11 +34,9 @@ public sealed class CustomerEndpoints
 
     public static async Task<IResult> GetCustomerById(
         [FromServices] IMediator mediator,
-        [FromRoute] Guid customerId,
+        [AsParameters] GetCustomerQuery request,
         CancellationToken cancellationToken)
     {
-        var request = new GetCustomerQuery(customerId);
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();
@@ -85,11 +64,9 @@ public sealed class CustomerEndpoints
 
     public static async Task<IResult> DeleteCustomer(
         [FromServices] IMediator mediator,
-        [FromRoute] Guid customerId,
+        [AsParameters] DeleteCustomerCommand request,
         CancellationToken cancellationToken)
     {
-        var request = new DeleteCustomerCommand(customerId);
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();

@@ -1,8 +1,8 @@
 ﻿namespace MyShoppingCart.Domain.Specifications;
 
-public sealed class GetAllProductsSpec : BaseSpecification<Product>
+public sealed class GetProductsSpec : BaseSpecification<Product>
 {
-    public const SortColumns DEFAULT_SORT_COLUMN = SortColumns.Name;
+    public const string DEFAULT_SORT_COLUMN = "Name";
 
     public enum SortColumns
     {
@@ -12,7 +12,7 @@ public sealed class GetAllProductsSpec : BaseSpecification<Product>
     }
 
 
-    public GetAllProductsSpec(
+    public GetProductsSpec(
         string? searchString,
         int pageNumber,
         int pageSize,
@@ -28,7 +28,7 @@ public sealed class GetAllProductsSpec : BaseSpecification<Product>
 
         if (!Enum.TryParse<SortColumns>(sortColumn, true, out var orderByEnum))
         {
-            orderByEnum = DEFAULT_SORT_COLUMN;
+            orderByEnum = Enum.Parse<SortColumns>(DEFAULT_SORT_COLUMN);
         }
 
         if (sortAscending)

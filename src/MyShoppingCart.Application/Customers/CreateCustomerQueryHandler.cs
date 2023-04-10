@@ -25,7 +25,7 @@ public sealed class CreateCustomerQueryHandler : IRequestHandler<CreateCustomerQ
 
         var claims = GetDefaultClaims(customer.Id);
 
-        using var transaction = new TransactionScope();
+        using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
         customer = await _customerRepository.AddAsync(customer, cancellationToken);
 

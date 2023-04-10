@@ -89,7 +89,7 @@ public class CreateOrderQueryValidatorTests
     private IRepository<Product> GetRepository()
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
-        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<GetAllProductsByIdListSpec>(), _cancellationToken)).ReturnsAsync(DataProvider.GetProducts());
+        mockProductRepository.Setup(x => x.ListAsync(It.IsAny<GetProductsByIdListSpec>(), _cancellationToken)).ReturnsAsync(DataProvider.GetProducts());
 
         return mockProductRepository.Object;
     }

@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Configuration;
-
-namespace MyShoppingCart.Api.Endpoints;
+﻿namespace MyShoppingCart.Api.Endpoints;
 
 public class OrderEndpoints
 {
@@ -24,12 +22,9 @@ public class OrderEndpoints
 
     public static async Task<IResult> GetOrderById(
          [FromServices] IMediator mediator,
-         [FromRoute] Guid customerId,
-         [FromRoute] Guid orderId,
+         [AsParameters] GetOrderQuery request,
          CancellationToken cancellationToken)
     {
-        var request = new GetOrderQuery(customerId, orderId);
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();
@@ -37,25 +32,9 @@ public class OrderEndpoints
 
     public static async Task<IResult> GetAllOrders(
         [FromServices] IMediator mediator,
-        IOptionsSnapshot<MyShoppingCartSettings> settings,
-        [FromRoute] Guid customerId,
-        [FromQuery] int? pageNumber,
-        [FromQuery] int? pageSize,
-        [FromQuery] string? sortColumn,
-        [FromQuery] bool? sortAscending,
+        [AsParameters] GetOrdersQuery request,
         CancellationToken cancellationToken)
     {
-        var defaultPageSize = settings.Value.DefaultPageSize;
-        var defaultSortColumn = settings.Value.DefaultPageSorting.Order;
-
-        var request = new GetOrdersQuery(
-            customerId,
-            pageNumber ?? 1,
-            pageSize ?? defaultPageSize,
-            defaultSortColumn,
-            sortAscending ?? true
-            );
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();
@@ -82,12 +61,9 @@ public class OrderEndpoints
 
     public static async Task<IResult> DeleteOrder(
             [FromServices] IMediator mediator,
-            [FromRoute] Guid customerId,
-            [FromRoute] Guid orderId,
+            [AsParameters] DeleteOrderCommand request,
             CancellationToken cancellationToken)
     {
-        var request = new DeleteOrderCommand(customerId, orderId);
-
         var response = await mediator.Send(request, cancellationToken);
 
         return response.MatchResult();

@@ -2,7 +2,6 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyShoppingCart.Api.Endpoints;
-using MyShoppingCart.Domain.Configuration;
 using System.Security.Claims;
 using System.Text;
 
@@ -24,12 +23,6 @@ public static class SetupExtensions
         ConfigurationManager config)
     {
         AddSwaggerGen(services);
-
-        services
-            .AddOptions<MyShoppingCartSettings>()
-            .BindConfiguration(MyShoppingCartSettings.SECTION_NAME)
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
 
         services
             .AddOptions<JwtSettings>()
