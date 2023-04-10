@@ -8,13 +8,16 @@ public class OrderEndpoints
             .RequireAuthorization(Policies.CustomerAccess);
 
         customer.MapGet("/{customerId}/order", GetAllOrders);
+
         customer.MapGet("/{customerId}/order/{orderId}", GetOrderById);
+
         customer.MapDelete("{customerId}/order/{orderId}", DeleteOrder);
 
         var order = app.MapGroup("/order")
             .RequireAuthorization();
 
         order.MapPost("/", CreateOrder);
+
         order.MapPut("/", UpdateOrder);
 
         return app;

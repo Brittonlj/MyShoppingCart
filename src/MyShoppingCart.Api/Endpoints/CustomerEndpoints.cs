@@ -9,15 +9,18 @@ public sealed class CustomerEndpoints
 
         group.MapGet("/", GetAllCustomers)
             .RequireAuthorization(Policies.AdminAccess);
+
         group.MapGet("/{customerId}", GetCustomerById)
             .RequireAuthorization(Policies.CustomerAccess);
+        
         group.MapPost("/", CreateCustomer)
             .AllowAnonymous();
+        
         group.MapPut("/", UpdateCustomer)
             .RequireAuthorization(Policies.CustomerAccess);
+        
         group.MapDelete("/{customerId}", DeleteCustomer)
             .RequireAuthorization(Policies.AdminAccess);
-
 
         return app;
     }

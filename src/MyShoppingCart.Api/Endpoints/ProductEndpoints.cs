@@ -9,8 +9,11 @@ public static class ProductEndpoints
 
         group.MapGet("/", GetProducts)
             .AllowAnonymous();
+
         group.MapPost("/", CreateProduct);
+        
         group.MapPut("/", UpdateProduct);
+        
         group.MapDelete("/{productId}", DeleteProduct);
 
         return app;
