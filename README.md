@@ -17,6 +17,6 @@ Some things you will find examples of in this code base:
 - I used the [OneOf](https://github.com/mcintyre321/OneOf) package to implement Value Objects as F#-like [Discriminated Unions](https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/discriminated-unions). This cuts down on using null values and exception throwing as flow control.
 - I used [xUnit](https://xunit.net/), [Moq](https://github.com/moq/) and [FluentAssertions](https://fluentassertions.com/) for unit testing
 
-My next steps are to add unit tests and a simple front-end.
+My next steps are to add a simple front-end.
 
 Thanks for taking a look and have a great day!
