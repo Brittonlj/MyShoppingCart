@@ -1,5 +1,5 @@
 ﻿using OneOf;
-namespace MyShoppingCart.Domain.Mediator;
+namespace MyShoppingCart.Domain.ValueObjects;
 
 [GenerateOneOf]
 public partial class Response<TSuccess> : 

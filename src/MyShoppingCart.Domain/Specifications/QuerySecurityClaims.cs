@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Entities;
-
-namespace MyShoppingCart.Domain.Specifications;
+﻿namespace MyShoppingCart.Domain.Specifications;
 
 public class QuerySecurityClaims : BaseSpecification<SecurityClaim>
 {

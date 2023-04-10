@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Domain.Mediator;
+﻿namespace MyShoppingCart.Domain.ValueObjects;
 
 public interface IQueryManyPaged<TEntity> : IRequest<Response<IReadOnlyList<TEntity>>>
     where TEntity : class

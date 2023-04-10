@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Entities;
-
-namespace MyShoppingCart.Domain.Specifications;
+﻿namespace MyShoppingCart.Domain.Specifications;
 
 public sealed class QueryCustomerById : BaseSpecification<Customer>, ISingleResultSpecification
 {

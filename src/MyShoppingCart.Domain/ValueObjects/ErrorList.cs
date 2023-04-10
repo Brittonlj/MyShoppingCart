@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace MyShoppingCart.Domain.Mediator;
+namespace MyShoppingCart.Domain.ValueObjects;
 
 public sealed class ErrorList : List<Error>
 {

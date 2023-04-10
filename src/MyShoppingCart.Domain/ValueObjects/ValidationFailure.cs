@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace MyShoppingCart.Domain.Mediator;
+namespace MyShoppingCart.Domain.ValueObjects;
 
 public sealed class ValidationFailure
 {

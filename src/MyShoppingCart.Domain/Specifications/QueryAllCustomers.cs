@@ -1,7 +1,4 @@
-﻿using MyShoppingCart.Domain.Data;
-using MyShoppingCart.Domain.Entities;
-
-namespace MyShoppingCart.Domain.Specifications;
+﻿namespace MyShoppingCart.Domain.Specifications;
 
 public class QueryAllCustomers : BaseSpecification<Customer>
 {

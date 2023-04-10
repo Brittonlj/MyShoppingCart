@@ -3,7 +3,7 @@ global using Moq;
 global using MediatR;
 global using MyShoppingCart.Application.Authentication;
 global using MyShoppingCart.Domain.Entities;
-global using MyShoppingCart.Domain.Mediator;
+global using MyShoppingCart.Domain.ValueObjects;
 global using MyShoppingCart.Api.Endpoints;
 global using FluentAssertions;
 global using Microsoft.AspNetCore.Http.HttpResults;

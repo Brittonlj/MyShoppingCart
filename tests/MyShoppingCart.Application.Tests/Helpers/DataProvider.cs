@@ -1,5 +1,4 @@
 ﻿using MyShoppingCart.Application.Configuration;
-using MyShoppingCart.Domain.Entities;
 using System.Security.Claims;
 
 namespace MyShoppingCart.Application.Tests.Helpers;
