@@ -30,7 +30,7 @@ public class UpdateProductQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.Be(updatedProduct);
         mockProductRepository
-           .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), _cancellationToken), Times.Once);
+           .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), _cancellationToken), Times.Once);
         mockProductRepository
              .Verify(x => x.UpdateAsync(updatedProduct, _cancellationToken), Times.Once);
     }
@@ -61,7 +61,7 @@ public class UpdateProductQueryHandlerTests
         //Assert
         results.NotFound.Should().NotBeNull();
         mockProductRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), _cancellationToken), Times.Once);
         mockProductRepository
             .Verify(x => x.UpdateAsync(updatedProduct, _cancellationToken), Times.Never);
     }

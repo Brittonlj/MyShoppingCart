@@ -21,7 +21,7 @@ public class DeleteOrderCommandHandlerTests
         var request = new DeleteOrderCommand(order.CustomerId, order.Id);
 
         _mockOrderRepository.Setup(x => x
-        .FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken))
+        .FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken))
             .ReturnsAsync(order);
 
         //Act
@@ -30,7 +30,7 @@ public class DeleteOrderCommandHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.Be(Success.Instance);
         _mockOrderRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken), Times.Once);
         _mockOrderRepository
             .Verify(x => x.DeleteAsync(order, _cancellationToken), Times.Once);
     }
@@ -47,7 +47,7 @@ public class DeleteOrderCommandHandlerTests
         var request = new DeleteOrderCommand(order.CustomerId, order.Id);
 
         _mockOrderRepository.Setup(x => x
-        .FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken))
+        .FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken))
             .ReturnsAsync(() => null);
 
         //Act
@@ -56,7 +56,7 @@ public class DeleteOrderCommandHandlerTests
         //Assert
         results.NotFound.Should().NotBeNull();
         _mockOrderRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken), Times.Once);
         _mockOrderRepository
             .Verify(x => x.DeleteAsync(It.IsAny<Order>(), _cancellationToken), Times.Never);
     }

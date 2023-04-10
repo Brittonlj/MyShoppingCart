@@ -11,8 +11,8 @@ public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductC
 
     public async Task<Response<Success>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var query = new QueryProductById(request.ProductId);
-        var product = await _productRepository.FirstOrDefaultAsync(query, cancellationToken);
+        var spec = new GetProductByIdSpec(request.ProductId);
+        var product = await _productRepository.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (product is null)
         {

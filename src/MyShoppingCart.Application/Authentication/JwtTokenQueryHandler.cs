@@ -15,8 +15,8 @@ public class JwtTokenQueryHandler : IRequestHandler<JwtTokenQuery, Response<stri
 
     public async Task<Response<string>> Handle(JwtTokenQuery request, CancellationToken cancellationToken)
     {
-        var claimsQuery = new QuerySecurityClaims(request.CustomerId).WithNoTracking();
-        var claims = await _claimsRepository.ListAsync(claimsQuery, cancellationToken);
+        var spec = new GetAllSecurityClaimsByCustomerIdSpec(request.CustomerId).WithNoTracking();
+        var claims = await _claimsRepository.ListAsync(spec, cancellationToken);
 
         if (claims.Count == 0) 
         {

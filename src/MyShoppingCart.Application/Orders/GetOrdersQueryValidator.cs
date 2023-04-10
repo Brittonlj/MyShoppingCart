@@ -6,7 +6,7 @@ public sealed class GetOrdersQueryValidator : AbstractValidator<GetOrdersQuery>
     {
         RuleFor(x => x.SortColumn)
             .NotEmpty()
-            .IsEnumName(typeof(QueryAllOrders.SortColumns), caseSensitive: false)
+            .IsEnumName(typeof(GetAllOrdersSpec.SortColumns), caseSensitive: false)
             .WithErrorCode("InvalidSortColumn")
             .WithMessage("'{PropertyValue}' is an invalid value for '{PropertyName}'");
         RuleFor(x => x.CustomerId).NotEmpty();

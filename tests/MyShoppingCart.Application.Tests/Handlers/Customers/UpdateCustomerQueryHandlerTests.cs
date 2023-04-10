@@ -30,7 +30,7 @@ public class UpdateCustomerQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.Be(updatedCustomer);
         mockCustomerRepository
-           .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken), Times.Once);
+           .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
         mockCustomerRepository
              .Verify(x => x.UpdateAsync(updatedCustomer, _cancellationToken), Times.Once);
     }
@@ -61,7 +61,7 @@ public class UpdateCustomerQueryHandlerTests
         //Assert
         results.NotFound.Should().NotBeNull();
         mockCustomerRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
         mockCustomerRepository
             .Verify(x => x.UpdateAsync(updatedCustomer, _cancellationToken), Times.Never);
     }

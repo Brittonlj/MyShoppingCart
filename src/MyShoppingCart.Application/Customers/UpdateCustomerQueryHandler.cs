@@ -12,8 +12,8 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
 
     public async Task<Response<Customer>> Handle(UpdateCustomerQuery request, CancellationToken cancellationToken)
     {
-        var customerQuery = new QueryCustomerById(request.CustomerId);
-        var customer = await _customerRepository.FirstOrDefaultAsync(customerQuery, cancellationToken);
+        var spec = new GetCustomerByIdSpec(request.CustomerId);
+        var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (customer is null)
         {

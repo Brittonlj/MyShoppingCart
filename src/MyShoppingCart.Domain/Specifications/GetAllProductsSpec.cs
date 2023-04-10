@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Domain.Specifications;
 
-public sealed class QueryAllProducts : BaseSpecification<Product>
+public sealed class GetAllProductsSpec : BaseSpecification<Product>
 {
     public const SortColumns DEFAULT_SORT_COLUMN = SortColumns.Name;
 
@@ -12,7 +12,7 @@ public sealed class QueryAllProducts : BaseSpecification<Product>
     }
 
 
-    public QueryAllProducts(
+    public GetAllProductsSpec(
         string? searchString,
         int pageNumber,
         int pageSize,

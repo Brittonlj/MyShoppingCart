@@ -26,7 +26,7 @@ public class UpdateOrderQueryHandlerTests
         _mockMapper.Setup(x => x.Map(request, originalOrder)).Returns(updatedOrder);
 
         _mockOrderRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken))
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken))
             .ReturnsAsync(originalOrder);
         _mockOrderRepository
             .Setup(x => x.AddAsync(updatedOrder, _cancellationToken))
@@ -38,7 +38,7 @@ public class UpdateOrderQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.Be(updatedOrder);
         _mockOrderRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken), Times.Once);
         _mockOrderRepository
             .Verify(x => x.UpdateAsync(updatedOrder, _cancellationToken), Times.Once);
     }
@@ -59,7 +59,7 @@ public class UpdateOrderQueryHandlerTests
         _mockMapper.Setup(x => x.Map(updatedOrder, originalOrder)).Returns(updatedOrder);
 
         _mockOrderRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken))
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken))
             .ReturnsAsync(() => null);
 
         //Act
@@ -68,7 +68,7 @@ public class UpdateOrderQueryHandlerTests
         //Assert
         results.NotFound.Should().NotBeNull();
         _mockOrderRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken), Times.Once);
         _mockOrderRepository
             .Verify(x => x.UpdateAsync(updatedOrder, _cancellationToken), Times.Never);
     }

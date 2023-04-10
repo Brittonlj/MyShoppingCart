@@ -23,7 +23,7 @@ public sealed class DeleteCustomerCommandHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.Be(Success.Instance);
         mockCustomerRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
         mockCustomerRepository
             .Verify(x => x.DeleteAsync(customer, _cancellationToken), Times.Once);
     }
@@ -47,7 +47,7 @@ public sealed class DeleteCustomerCommandHandlerTests
         //Assert
         results.NotFound.Should().NotBeNull();
         mockCustomerRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
         mockCustomerRepository
             .Verify(x => x.DeleteAsync(It.IsAny<Customer>(), _cancellationToken), Times.Never);
     }

@@ -14,7 +14,7 @@ public sealed class GetProductsQueryHandler :
         GetProductsQuery request,
         CancellationToken cancellationToken)
     {
-        var query = new QueryAllProducts(
+        var spec = new GetAllProductsSpec(
             request.SearchString,
             request.PageNumber,
             request.PageSize,
@@ -22,7 +22,7 @@ public sealed class GetProductsQueryHandler :
             request.SortAscending)
             .WithNoTracking();
 
-        var products = await _productRepository.ListAsync(query, cancellationToken);
+        var products = await _productRepository.ListAsync(spec, cancellationToken);
 
         return products;
     }

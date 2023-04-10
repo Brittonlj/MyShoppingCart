@@ -17,7 +17,7 @@ public static class MockProvider
     {
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
         mockCustomerRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), token))
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), token))
             .ReturnsAsync(response);
 
         return mockCustomerRepository;
@@ -27,7 +27,7 @@ public static class MockProvider
     {
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
         mockCustomerRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryCustomerById>(), token))
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), token))
             .ReturnsAsync(() => null);
 
         return mockCustomerRepository;
@@ -37,7 +37,7 @@ public static class MockProvider
     {
         var mockCustomerRepository = new Mock<IRepository<Customer>>();
         mockCustomerRepository
-            .Setup(x => x.ListAsync(It.IsAny<QueryAllCustomers>(), token))
+            .Setup(x => x.ListAsync(It.IsAny<GetAllCustomersSpec>(), token))
             .ReturnsAsync(customers);
         return mockCustomerRepository;
     }
@@ -46,7 +46,7 @@ public static class MockProvider
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
         mockProductRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), token))
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), token))
             .ReturnsAsync(response);
 
         return mockProductRepository;
@@ -56,7 +56,7 @@ public static class MockProvider
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
         mockProductRepository
-            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), token))
+            .Setup(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), token))
             .ReturnsAsync(() => null);
 
         return mockProductRepository;
@@ -66,7 +66,7 @@ public static class MockProvider
     {
         var mockProductRepository = new Mock<IRepository<Product>>();
         mockProductRepository
-            .Setup(x => x.ListAsync(It.IsAny<QueryAllProducts>(), token))
+            .Setup(x => x.ListAsync(It.IsAny<GetAllProductsSpec>(), token))
             .ReturnsAsync(products);
         return mockProductRepository;
     }

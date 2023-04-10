@@ -20,7 +20,7 @@ public class GetOrderQueryHandlerTests
         var request = new GetOrderQuery(order.CustomerId, order.Id);
 
         _mockOrderRepository.Setup(x => x
-        .FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken))
+        .FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken))
             .ReturnsAsync(order);
 
         //Act
@@ -29,7 +29,7 @@ public class GetOrderQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.Be(order);
         _mockOrderRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion
@@ -43,7 +43,7 @@ public class GetOrderQueryHandlerTests
         var request = new GetOrderQuery(order.CustomerId, order.Id);
 
         _mockOrderRepository.Setup(x => x
-        .FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken))
+        .FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken))
             .ReturnsAsync(() => null);
 
         //Act
@@ -52,7 +52,7 @@ public class GetOrderQueryHandlerTests
         //Assert
         results.NotFound.Should().NotBeNull();
         _mockOrderRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryOrderById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetOrderByIdSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion

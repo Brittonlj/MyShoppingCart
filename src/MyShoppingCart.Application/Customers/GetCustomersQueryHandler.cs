@@ -14,7 +14,7 @@ public sealed class GetCustomersQueryHandler :
         GetCustomersQuery request,
         CancellationToken cancellationToken)
     {
-        var query = new QueryAllCustomers(
+        var spec = new GetAllCustomersSpec(
             request.NamesLike,
             request.EmailLike,
             request.PageNumber,
@@ -23,7 +23,7 @@ public sealed class GetCustomersQueryHandler :
             request.SortAscending)
             .WithNoTracking();
 
-        var customers = await _customerRepository.ListAsync(query, cancellationToken);
+        var customers = await _customerRepository.ListAsync(spec, cancellationToken);
 
         return customers;
     }

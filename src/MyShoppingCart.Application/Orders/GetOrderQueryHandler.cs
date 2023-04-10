@@ -11,10 +11,10 @@
 
         public async Task<Response<Order>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
-            var query = new QueryOrderById(request.OrderId, request.CustomerId)
+            var spec = new GetOrderByIdSpec(request.OrderId, request.CustomerId)
                 .WithNoTracking();
 
-            var order = await _orderRepository.FirstOrDefaultAsync(query);
+            var order = await _orderRepository.FirstOrDefaultAsync(spec);
 
             if (order is null)
             {

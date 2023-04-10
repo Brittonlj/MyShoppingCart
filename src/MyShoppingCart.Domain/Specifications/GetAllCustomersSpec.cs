@@ -1,6 +1,6 @@
 ﻿namespace MyShoppingCart.Domain.Specifications;
 
-public class QueryAllCustomers : BaseSpecification<Customer>
+public class GetAllCustomersSpec : BaseSpecification<Customer>
 {
     public const SortColumns DEFAULT_SORT_COLUMN = SortColumns.LastName;
 
@@ -11,7 +11,7 @@ public class QueryAllCustomers : BaseSpecification<Customer>
         Email
     }
 
-    public QueryAllCustomers(
+    public GetAllCustomersSpec(
         string? namesLike,
         string? emailLike,
         int pageNumber,

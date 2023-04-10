@@ -23,7 +23,7 @@ public class DeleteProductCommandHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.Be(Success.Instance);
         mockProductRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), _cancellationToken), Times.Once);
         mockProductRepository
             .Verify(x => x.DeleteAsync(product, _cancellationToken), Times.Once);
     }
@@ -47,7 +47,7 @@ public class DeleteProductCommandHandlerTests
         //Assert
         results.NotFound.Should().NotBeNull();
         mockProductRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<QueryProductById>(), _cancellationToken), Times.Once);
+            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), _cancellationToken), Times.Once);
         mockProductRepository
             .Verify(x => x.DeleteAsync(It.IsAny<Product>(), _cancellationToken), Times.Never);
     }

@@ -14,13 +14,13 @@ public sealed class GetOrdersQueryHandler :
         GetOrdersQuery request,
         CancellationToken cancellationToken)
     {
-        var query = new QueryAllOrders(
+        var spec = new GetAllOrdersSpec(
             request.CustomerId,
             request.PageNumber,
             request.PageSize,
             request.SortAscending);
 ;
-        var orders = await _orderRepository.ListAsync(query, cancellationToken);
+        var orders = await _orderRepository.ListAsync(spec, cancellationToken);
 
         return orders;
     }

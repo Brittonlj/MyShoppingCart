@@ -11,8 +11,8 @@ public sealed class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderComma
 
     public async Task<Response<Success>> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
     {
-        var query = new QueryOrderById(request.OrderId, request.CustomerId);
-        var order = await _orderRepository.FirstOrDefaultAsync(query, cancellationToken);
+        var spec = new GetOrderByIdSpec(request.OrderId, request.CustomerId);
+        var order = await _orderRepository.FirstOrDefaultAsync(spec, cancellationToken);
 
         if (order is null)
         {

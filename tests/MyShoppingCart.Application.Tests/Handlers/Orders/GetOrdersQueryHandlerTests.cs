@@ -19,7 +19,7 @@ public class GetOrdersQueryHandlerTests
         var request = QueryProvider.GetGetOrdersQuery();
         var orders = DataProvider.GetOrders();
 
-        _mockOrderRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllOrders>(), _cancellationToken))
+        _mockOrderRepository.Setup(x => x.ListAsync(It.IsAny<GetAllOrdersSpec>(), _cancellationToken))
             .ReturnsAsync(orders);
 
         //Act
@@ -28,7 +28,7 @@ public class GetOrdersQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.BeEquivalentTo(orders);
         _mockOrderRepository
-            .Verify(x => x.ListAsync(It.IsAny<QueryAllOrders>(), _cancellationToken), Times.Once);
+            .Verify(x => x.ListAsync(It.IsAny<GetAllOrdersSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion
@@ -42,7 +42,7 @@ public class GetOrdersQueryHandlerTests
         var request = QueryProvider.GetGetOrdersQuery();
         var orders = new List<Order>();
 
-        _mockOrderRepository.Setup(x => x.ListAsync(It.IsAny<QueryAllOrders>(), _cancellationToken))
+        _mockOrderRepository.Setup(x => x.ListAsync(It.IsAny<GetAllOrdersSpec>(), _cancellationToken))
             .ReturnsAsync(orders);
 
         //Act
@@ -51,7 +51,7 @@ public class GetOrdersQueryHandlerTests
         //Assert
         results.Success.Should().NotBeNull().And.BeEquivalentTo(orders);
         _mockOrderRepository
-            .Verify(x => x.ListAsync(It.IsAny<QueryAllOrders>(), _cancellationToken), Times.Once);
+            .Verify(x => x.ListAsync(It.IsAny<GetAllOrdersSpec>(), _cancellationToken), Times.Once);
     }
 
     #endregion

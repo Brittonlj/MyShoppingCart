@@ -1,8 +1,8 @@
 ﻿namespace MyShoppingCart.Domain.Specifications;
 
-public sealed class QueryOrderById : BaseSpecification<Order>, ISingleResultSpecification
+public sealed class GetOrderByIdSpec : BaseSpecification<Order>, ISingleResultSpecification
 {
-    public QueryOrderById(Guid orderId, Guid customerId)
+    public GetOrderByIdSpec(Guid orderId, Guid customerId)
     {
         Query
             .Where(x => x.Id == orderId && x.CustomerId == customerId)

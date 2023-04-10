@@ -18,16 +18,16 @@ public sealed class GetCustomerSecurityQueryHandler :
         GetCustomerSecurityQuery request, 
         CancellationToken cancellationToken)
     {
-        var customerQuery = new QueryCustomerById(request.CustomerId);
-        var customer = await _customerRepository.FirstOrDefaultAsync(customerQuery, cancellationToken);
+        var customerSpec = new GetCustomerByIdSpec(request.CustomerId);
+        var customer = await _customerRepository.FirstOrDefaultAsync(customerSpec, cancellationToken);
 
         if (customer is null)
         {
             return NotFound.Instance;
         }
 
-        var claimsQuery = new QuerySecurityClaims(request.CustomerId);
-        var claims = await _securityClaimRepository.ListAsync(claimsQuery, cancellationToken);
+        var claimsSpec = new GetAllSecurityClaimsByCustomerIdSpec(request.CustomerId);
+        var claims = await _securityClaimRepository.ListAsync(claimsSpec, cancellationToken);
 
         return claims;
     }
