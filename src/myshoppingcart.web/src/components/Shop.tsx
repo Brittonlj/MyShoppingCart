@@ -1,9 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Container, Form, InputGroup } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import { IGetProductsQuery } from "../models/RequestModels";
 import { IProduct } from "../models/ResponseModels";
 import { ProductsService } from "../services/ProductsService";
-
+import defaultImage from "../img/default-image.png";
 export default function Shop() {
   const searchString = useRef<HTMLInputElement | null>(null);
 
@@ -23,7 +31,6 @@ export default function Shop() {
     try {
       const productsResponse = await ProductsService.getProducts(productsQuery);
       if (productsResponse.error) {
-        // setProducts([]);
         console.log(productsResponse.error);
         return;
       }
@@ -42,7 +49,6 @@ export default function Shop() {
         return [...p];
       });
     } catch (ex) {
-      // setProducts([]);
       console.log(ex);
     }
   }
@@ -91,8 +97,25 @@ export default function Shop() {
           </Form.Group>
         </Form>
       </Container>
-      <Container>
-        {products && products.map((x) => <p key={x.id}>{x.name}</p>)}
+      <Container className="d-flex">
+        <Row xxs={1} sm={2} md={3} lg={4}>
+          {products.map((x) => (
+            <Col key={x.id}>
+              <Card className="lg-3 mb-3">
+                <Card.Img
+                  variant="top"
+                  src={x.imageUrl ?? defaultImage}
+                  className="p-3"
+                />
+                <Card.Body>
+                  <Card.Title>{x.name}</Card.Title>
+                  <Card.Text>{x.description}</Card.Text>
+                  <Button variant="primary">Add to cart</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Container>
     </>
   );

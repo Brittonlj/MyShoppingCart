@@ -6,7 +6,7 @@ namespace MyShoppingCart.Infrastructure.Configurations;
 
 public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
-    private const string DescriptionText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam etiam erat. Mauris vitae ultricies leo integer malesuada nunc vel risus commodo. Imperdiet dui accumsan sit amet nulla facilisi morbi tempus iaculis. Placerat in egestas erat.";
+    private const string DescriptionText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.";
 
     public void Configure(EntityTypeBuilder<Product> builder)
     {
@@ -106,7 +106,8 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
                 Id = new Guid("0553CA62-284D-4379-AFC5-C2D4903F7A4C"),
                 Name = "A Dog Collar",
                 Description = DescriptionText,
-                Price = 100.00M
+                Price = 100.00M,
+                ImageUrl = "/img/dog_collar.jpg"
             });
     }
 }
