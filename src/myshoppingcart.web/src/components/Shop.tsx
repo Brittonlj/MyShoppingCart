@@ -104,7 +104,7 @@ export default function Shop() {
               <Card className="lg-3 mb-3">
                 <Card.Img
                   variant="top"
-                  src={x.imageUrl ?? defaultImage}
+                  src={x.imageUrl ?? "/img/default-image.png"}
                   className="p-3"
                 />
                 <Card.Body>
