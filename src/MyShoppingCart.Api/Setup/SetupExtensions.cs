@@ -9,6 +9,8 @@ namespace MyShoppingCart.Api.Setup;
 
 public static class SetupExtensions
 {
+    public const string CORS_POLICY = "_origins";
+
     public static WebApplication RegisterMyShoppingCartEndpoints(this WebApplication app)
     {
         CustomerEndpoints.RegisterEndpoints(app);
@@ -51,7 +53,26 @@ public static class SetupExtensions
             });
         });
 
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(CORS_POLICY,
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+        });
+
         return services;
+    }
+
+    public static WebApplication SetupUseCors(this WebApplication app)
+    {
+        app.UseCors(CORS_POLICY);
+
+        return app;
     }
 
     private static void AddSwaggerGen(IServiceCollection services)
