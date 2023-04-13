@@ -14,7 +14,7 @@ public sealed class CustomerEndpoints
             .RequireAuthorization(Policies.CustomerAccess);
 
         group.MapPost("/", CreateCustomer)
-            .AllowAnonymous();
+            .RequireAuthorization(Policies.AdminAccess);
 
         group.MapPut("/", UpdateCustomer)
             .RequireAuthorization(Policies.CustomerAccess);

@@ -27,9 +27,20 @@ public class GetCustomersSpec : BaseSpecification<Customer>
 
         if (!string.IsNullOrWhiteSpace(emailLike))
         {
-            Query.Where(x => x.Email.Contains(emailLike));
+            Query.Where(x => x.Email != null && x.Email.Contains(emailLike));
         }
 
+        SetSorting(sortAscending, sortColumn);
+
+        Query
+            .AsSplitQuery()
+            .Paginate(pageNumber, pageSize)
+            .Include(x => x.ShippingAddress)
+            .Include(x => x.BillingAddress);
+    }
+
+    private void SetSorting(bool sortAscending, string sortColumn)
+    {
         if (!Enum.TryParse<SortColumns>(sortColumn, true, out var orderByEnum))
         {
             orderByEnum = Enum.Parse<SortColumns>(DEFAULT_SORT_COLUMN);
@@ -37,7 +48,7 @@ public class GetCustomersSpec : BaseSpecification<Customer>
 
         if (sortAscending)
         {
-            switch(orderByEnum)
+            switch (orderByEnum)
             {
                 case SortColumns.LastName:
                     Query.OrderBy(x => x.LastName);
@@ -65,11 +76,5 @@ public class GetCustomersSpec : BaseSpecification<Customer>
                     break;
             }
         }
-
-        Query
-            .AsSplitQuery()
-            .Paginate(pageNumber, pageSize)
-            .Include(x => x.ShippingAddress)
-            .Include(x => x.BillingAddress);
     }
 }

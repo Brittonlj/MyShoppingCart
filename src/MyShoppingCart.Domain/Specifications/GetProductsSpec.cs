@@ -26,6 +26,13 @@ public sealed class GetProductsSpec : BaseSpecification<Product>
                 .Where(x => x.Name.Contains(searchString) || x.Description.Contains(searchString));
         }
 
+        SetSorting(sortAscending, sortColumn);
+
+        Query.Paginate(pageNumber, pageSize);
+    }
+
+    private void SetSorting(bool sortAscending, string sortColumn)
+    {
         if (!Enum.TryParse<SortColumns>(sortColumn, true, out var orderByEnum))
         {
             orderByEnum = Enum.Parse<SortColumns>(DEFAULT_SORT_COLUMN);
@@ -61,7 +68,5 @@ public sealed class GetProductsSpec : BaseSpecification<Product>
                     break;
             }
         }
-
-        Query.Paginate(pageNumber, pageSize);
     }
 }
