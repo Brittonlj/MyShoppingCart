@@ -37,10 +37,10 @@ If you want to run the project locally you will need a SQL Server instance (I us
 
 ### Start the front end
 5. Open the React project by CD to the src/myshoppingcart.web directory and running the command (if you have VS Code installed):
-		./code
+        ./code
 6. Pull down the dependencies by going to the terminal and typing:
-		npm install
+        npm install
 7. Run the front-end by entering the following command in the terminal:
-		npm start
+        npm start
 8. You should see the home page with some products listed.  You can search or login and play around.  The credentials are login: fred.flintstone password: Password123! and login: george.jetson password: Password123!.  George is setup as an admin and Fred is a customer.
 9. Enjoy!
