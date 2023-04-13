@@ -49,5 +49,5 @@ If you want to run the project locally you will need a SQL Server instance (I us
         
         npm start
 
-8. You should see the home page with some products listed.  You can search or login and play around.  The built-in credentials are "fred.flintstone," password: Password123! and "george.jetson," password: Password123!.  George is setup as an admin and Fred is a customer.  Or you can register your own account.
+8. You should see the home page with some products listed.  You can search or login and play around.  The built-in credentials are "fred.flintstone" password: Password123! and "george.jetson" password: Password123!.  George is setup as an admin and Fred is a customer.  Or you can register your own account.
 9. Enjoy!
