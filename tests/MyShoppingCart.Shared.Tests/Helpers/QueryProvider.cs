@@ -1,4 +1,10 @@
-﻿namespace MyShoppingCart.Application.Tests.Helpers;
+﻿using MyShoppingCart.Application.Customers;
+using MyShoppingCart.Application.Orders;
+using MyShoppingCart.Application.Products;
+using MyShoppingCart.Domain.Entities;
+using MyShoppingCart.Domain.Models;
+
+namespace MyShoppingCart.Shared.Tests.Helpers;
 
 public static class QueryProvider
 {
@@ -13,6 +19,8 @@ public static class QueryProvider
             "Fred",
             "Flintstone",
             "fred.flintstone@test.com",
+            "fred.flintsone",
+            "Fred123",
             address,
             address);
     }
@@ -24,14 +32,15 @@ public static class QueryProvider
             "Fred",
             "Flintstone",
             "fred.flintstone@test.com",
-            new Address
-            {
-                Id = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
-                Street = "123 Test St",
-                City = "Bedrock",
-                State = "MO",
-                PostalCode = "12345"
-            },
+            "fred.flintsone",
+           new Address
+           {
+               Id = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+               Street = "123 Test St",
+               City = "Bedrock",
+               State = "MO",
+               PostalCode = "12345"
+           },
             new Address
             {
                 Id = new Guid("6B760260-799C-4AF1-A173-0BF83A2A74D5"),
@@ -105,6 +114,13 @@ public static class QueryProvider
             20,
             "OrderDateTimeUtc",
             true);
+    }
+
+    public static GetOrderQuery GetGetOrderQuery()
+    {
+        return new GetOrderQuery(
+            DataProvider.DefaultCustomerId,
+            DataProvider.DefaultOrderId);
     }
 
 }

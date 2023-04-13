@@ -22,9 +22,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.SetupUseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-app.SetupUseCors();
 
 app.RegisterMyShoppingCartEndpoints();
 

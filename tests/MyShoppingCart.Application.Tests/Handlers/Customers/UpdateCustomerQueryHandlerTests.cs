@@ -1,9 +1,13 @@
-﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
+﻿using Microsoft.AspNetCore.Identity;
+using MyShoppingCart.Application.Services;
+
+namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public class UpdateCustomerQueryHandlerTests
 {
     private readonly CancellationToken _cancellationToken = new CancellationToken();
-
+    private readonly Mock<IUserManagerFacade> _mockUUserManager = new Mock<IUserManagerFacade>();
+    private readonly Mock<IMapper> _mockMapper = new Mock<IMapper>();
     #region Happy Path
 
     [Fact]
@@ -15,24 +19,35 @@ public class UpdateCustomerQueryHandlerTests
         var originalCustomer = DataProvider.GetCustomer();
         var updatedCustomer = DataProvider.GetCustomer();
         updatedCustomer.Email = NEW_EMAIL;
+        var customerModel = DataProvider.GetCustomerModel();
+        customerModel.Email = NEW_EMAIL;
+        var identityResult = IdentityResult.Success;
 
-        var mapper = new Mapper();
+        _mockMapper.Setup(x => x.Map(request, originalCustomer)).Returns(updatedCustomer);
+        _mockMapper.Setup(x => x.Map<CustomerModel>(updatedCustomer)).Returns(customerModel);
 
-        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(updatedCustomer, _cancellationToken);
-        mockCustomerRepository
-            .Setup(x => x.UpdateAsync(updatedCustomer, _cancellationToken));
+        _mockUUserManager
+            .Setup(x => x.FindByIdAsync(originalCustomer.Id, _cancellationToken))
+            .ReturnsAsync(originalCustomer);
+        _mockUUserManager
+            .Setup(x => x.UpdateAsync(updatedCustomer, null, _cancellationToken))
+            .ReturnsAsync(identityResult);
 
-        var handler = new UpdateCustomerQueryHandler(mockCustomerRepository.Object, mapper);
+        var handler = new UpdateCustomerQueryHandler(_mockUUserManager.Object, _mockMapper.Object);
 
         //Act
         var results = await handler.Handle(request, _cancellationToken);
 
         //Assert
-        results.Success.Should().NotBeNull().And.Be(updatedCustomer);
-        mockCustomerRepository
-           .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
-        mockCustomerRepository
-             .Verify(x => x.UpdateAsync(updatedCustomer, _cancellationToken), Times.Once);
+        results.Success.Should().NotBeNull().And.Be(customerModel);
+        _mockMapper
+            .Verify(x => x.Map(request, originalCustomer), Times.Once);
+        _mockMapper
+            .Verify(x => x.Map<CustomerModel>(updatedCustomer), Times.Once);
+        _mockUUserManager
+           .Verify(x => x.FindByIdAsync(originalCustomer.Id, _cancellationToken), Times.Once);
+        _mockUUserManager
+             .Verify(x => x.UpdateAsync(updatedCustomer, null, _cancellationToken), Times.Once);
     }
 
     #endregion
@@ -49,21 +64,25 @@ public class UpdateCustomerQueryHandlerTests
         var updatedCustomer = DataProvider.GetCustomer();
         updatedCustomer.Email = NEW_EMAIL;
 
-        var mapper = new Mapper();
+        _mockUUserManager
+            .Setup(x => x.FindByIdAsync(originalCustomer.Id, _cancellationToken))
+            .ReturnsAsync(() => null);
 
-        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);
-
-        var handler = new UpdateCustomerQueryHandler(mockCustomerRepository.Object, mapper);
+        var handler = new UpdateCustomerQueryHandler(_mockUUserManager.Object, _mockMapper.Object);
 
         //Act
         var results = await handler.Handle(request, _cancellationToken);
 
         //Assert
         results.NotFound.Should().NotBeNull();
-        mockCustomerRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
-        mockCustomerRepository
-            .Verify(x => x.UpdateAsync(updatedCustomer, _cancellationToken), Times.Never);
+        _mockMapper
+            .Verify(x => x.Map(request, originalCustomer), Times.Never);
+        _mockMapper
+            .Verify(x => x.Map<CustomerModel>(updatedCustomer), Times.Never);
+        _mockUUserManager
+           .Verify(x => x.FindByIdAsync(originalCustomer.Id, _cancellationToken), Times.Once);
+        _mockUUserManager
+             .Verify(x => x.UpdateAsync(updatedCustomer, null, _cancellationToken), Times.Never);
     }
 
     #endregion

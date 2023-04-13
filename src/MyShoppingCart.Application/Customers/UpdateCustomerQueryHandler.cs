@@ -1,19 +1,21 @@
-﻿namespace MyShoppingCart.Application.Customers;
+﻿using Microsoft.AspNetCore.Identity;
+using MyShoppingCart.Application.Services;
 
-public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQuery, Response<Customer>>
+namespace MyShoppingCart.Application.Customers;
+
+public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQuery, Response<CustomerModel>>
 {
-    private readonly IRepository<Customer> _customerRepository;
+    private readonly IUserManagerFacade _userManager;
     private readonly IMapper _mapper;
-    public UpdateCustomerQueryHandler(IRepository<Customer> customerRepository, IMapper mapper)
+    public UpdateCustomerQueryHandler(IUserManagerFacade userManager, IMapper mapper)
     {
-        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _userManager = Guard.Against.Null(userManager, nameof(userManager));
         _mapper = Guard.Against.Null(mapper, nameof(mapper));
     }
 
-    public async Task<Response<Customer>> Handle(UpdateCustomerQuery request, CancellationToken cancellationToken)
+    public async Task<Response<CustomerModel>> Handle(UpdateCustomerQuery request, CancellationToken cancellationToken)
     {
-        var spec = new GetCustomerByIdSpec(request.CustomerId);
-        var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
+        var customer = await _userManager.FindByIdAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)
         {
@@ -22,8 +24,19 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
 
         customer = _mapper.Map(request, customer);
 
-        await _customerRepository.UpdateAsync(customer, cancellationToken);
+        var result = await _userManager.UpdateAsync(customer, cancellationToken: cancellationToken);
 
-        return customer;
+        if (!result.Succeeded)
+        {
+            var errors = new ErrorList();
+            foreach (IdentityError error in result.Errors)
+            {
+                errors.Add(new Error(error.Code, error.Description));
+            }
+            return errors;
+        }
+
+        var customerModel = _mapper.Map<CustomerModel>(customer);
+        return customerModel;
     }
 }

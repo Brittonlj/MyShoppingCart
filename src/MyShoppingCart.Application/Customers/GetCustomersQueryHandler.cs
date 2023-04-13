@@ -1,16 +1,17 @@
 ﻿namespace MyShoppingCart.Application.Customers;
 
 public sealed class GetCustomersQueryHandler :
-    IRequestHandler<GetCustomersQuery, Response<IReadOnlyList<Customer>>>
+    IRequestHandler<GetCustomersQuery, Response<IReadOnlyList<CustomerModel>>>
 {
     private readonly IRepository<Customer> _customerRepository;
-
-    public GetCustomersQueryHandler(IRepository<Customer> customerRepository)
+    private readonly IMapper _mapper;
+    public GetCustomersQueryHandler(IRepository<Customer> customerRepository, IMapper mapper)
     {
         _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository)); ;
+        _mapper = mapper;
     }
 
-    public async Task<Response<IReadOnlyList<Customer>>> Handle(
+    public async Task<Response<IReadOnlyList<CustomerModel>>> Handle(
         GetCustomersQuery request,
         CancellationToken cancellationToken)
     {
@@ -25,6 +26,8 @@ public sealed class GetCustomersQueryHandler :
 
         var customers = await _customerRepository.ListAsync(spec, cancellationToken);
 
-        return customers;
+        var customerModels = customers.Select(x => _mapper.Map<CustomerModel>(x)).ToList();
+
+        return customerModels;
     }
 }

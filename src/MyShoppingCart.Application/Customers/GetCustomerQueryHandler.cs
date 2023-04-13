@@ -1,15 +1,16 @@
 ﻿namespace MyShoppingCart.Application.Customers;
 
-public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Response<Customer>>
+public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Response<CustomerModel>>
 {
     private readonly IRepository<Customer> _customerRepository;
-
-    public GetCustomerQueryHandler(IRepository<Customer> customerRepository)
+    private readonly IMapper _mapper;
+    public GetCustomerQueryHandler(IRepository<Customer> customerRepository, IMapper mapper)
     {
         _customerRepository = customerRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Response<Customer>> Handle(
+    public async Task<Response<CustomerModel>> Handle(
         GetCustomerQuery request,
         CancellationToken cancellationToken = default)
     {
@@ -22,6 +23,7 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
             return NotFound.Instance;
         }
 
-        return customer;
+        var customerModel = _mapper.Map<CustomerModel>(customer);
+        return customerModel;
     }
 }

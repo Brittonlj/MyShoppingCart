@@ -11,7 +11,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenStateIsValid()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery();
+        var query = QueryProvider.GetUpdateCustomerQuery();
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -29,7 +29,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenCustomerIdIsEmpty()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { CustomerId = Guid.Empty };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { CustomerId = Guid.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -46,7 +46,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenFirstNameIsEmpty()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { FirstName = string.Empty };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { FirstName = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -61,7 +61,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenFirstNameIsTooLong()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { FirstName = LongStrings.LONG_STRING_51 };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { FirstName = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -78,7 +78,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenLastNameIsEmpty()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { LastName = string.Empty };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { LastName = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -93,7 +93,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenLastNameTooLong()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { LastName = LongStrings.LONG_STRING_51 };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { LastName = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -112,7 +112,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenEmailIsEmpty()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { Email = string.Empty };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { Email = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -128,7 +128,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenEmailTooLong()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { Email = LongStrings.LONG_STRING_51 };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { Email = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -146,7 +146,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenEmailIsInvalid()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { Email = "test" };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { Email = "test" };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -164,7 +164,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenBillingAddressIsNull()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { BillingAddress = null! };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { BillingAddress = null! };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -179,7 +179,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenBillingAddressIsInvalid()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with
+        var query = QueryProvider.GetUpdateCustomerQuery() with
         {
             BillingAddress = new Address(string.Empty, string.Empty, string.Empty, string.Empty)
         };
@@ -206,7 +206,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenBillingAddressIsTooLong()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with
+        var query = QueryProvider.GetUpdateCustomerQuery() with
         {
             BillingAddress = new Address(LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51)
         };
@@ -237,7 +237,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenShippingAddressIsNull()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with { ShippingAddress = null! };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { ShippingAddress = null! };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -252,7 +252,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenShippingAddressIsInvalid()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with
+        var query = QueryProvider.GetUpdateCustomerQuery() with
         {
             ShippingAddress = new Address(string.Empty, string.Empty, string.Empty, string.Empty)
         };
@@ -279,7 +279,7 @@ public class UpdateCustomerQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenShippingAddressIsTooLong()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery() with
+        var query = QueryProvider.GetUpdateCustomerQuery() with
         {
             ShippingAddress = new Address(LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51, LongStrings.LONG_STRING_51)
         };
@@ -300,26 +300,6 @@ public class UpdateCustomerQueryValidatorTests
         results.AssertValidationErrors(
             "ShippingAddress.PostalCode",
             "The length of 'Postal Code' must be 10 characters or fewer. You entered 51 characters.", 3);
-    }
-
-    #endregion
-
-    #region Private Helpers
-
-    private static UpdateCustomerQuery GetUpdateCustomerQuery()
-    {
-        var address = new Address(
-            "123 Test Street",
-            "Test Town",
-            "MO",
-            "12345");
-        return new UpdateCustomerQuery(
-            Guid.NewGuid(),
-            "Fred",
-            "Flintstone",
-            "fred.flintstone@test.com",
-            address,
-            address);
     }
 
     #endregion

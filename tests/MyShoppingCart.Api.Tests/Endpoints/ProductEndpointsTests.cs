@@ -18,7 +18,7 @@ public class ProductEndpointsTests
     {
         //Arrange
         var request = new GetProductsQuery();
-        var response = Response<IReadOnlyList<Product>>.FromSuccess(GetProductList()); ;
+        var response = Response<IReadOnlyList<Product>>.FromSuccess(DataProvider.GetProducts()); ;
         SetupMediator(response);
 
         //Act
@@ -37,7 +37,7 @@ public class ProductEndpointsTests
     {
         //Arrange
         var request = new GetProductsQuery("UnavailableName");
-        var response = Response<IReadOnlyList<Product>>.FromSuccess(GetEmptyProductsList()); ;
+        var response = Response<IReadOnlyList<Product>>.FromSuccess(DataProvider.GetEmptyProductsList()); ;
         SetupMediator(response);
 
         //Act
@@ -99,8 +99,8 @@ public class ProductEndpointsTests
     public async Task CreateProduct_ShouldReturnProduct_WhenValidParametersAreChosen()
     {
         //Arrange
-        var product = GetProduct();
-        var request = GetCreateProductQuery();
+        var product = DataProvider.GetProduct();
+        var request = QueryProvider.GetCreateProductQuery();
         var response = Response<Product>.FromSuccess(product); ;
         SetupMediator<CreateProductQuery>(response);
 
@@ -119,7 +119,7 @@ public class ProductEndpointsTests
     public async Task CreateProduct_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var request = GetCreateProductQuery();
+        var request = QueryProvider.GetCreateProductQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Product>.FromErrorList(_errors);
         SetupMediator<CreateProductQuery>(response);
@@ -138,11 +138,10 @@ public class ProductEndpointsTests
     public async Task CreateProduct_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var product = GetProduct();
-        product.Name = string.Empty;
-        var request = GetCreateProductQuery();
+        var product = DataProvider.GetProduct();
+        var request = QueryProvider.GetCreateProductQuery() with { Name = string.Empty };
         const string ERROR_KEY = "Name";
-        const string ERROR_MESSAGE = "Name cannot be empty.";
+        const string ERROR_MESSAGE = "'Name' cannot be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
         var response = Response<Product>.FromValidationFailure(_validationErrors);
         SetupMediator<CreateProductQuery>(response);
@@ -164,8 +163,8 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnProduct_WhenValidParametersAreChosen()
     {
         //Arrange
-        var request = GetUpdateProductQuery();
-        var response = Response<Product>.FromSuccess(GetProduct()); ;
+        var request = QueryProvider.GetUpdateProductQuery();
+        var response = Response<Product>.FromSuccess(DataProvider.GetProduct()); ;
         SetupMediator<UpdateProductQuery>(response);
 
         //Act
@@ -183,7 +182,7 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnNotFound_WhenBadProductIdIsChosen()
     {
         //Arrange
-        var request = GetUpdateProductQuery();
+        var request = QueryProvider.GetUpdateProductQuery();
         var response = Response<Product>.FromNotFound();
         SetupMediator<UpdateProductQuery>(response);
 
@@ -202,7 +201,7 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var request = GetUpdateProductQuery();
+        var request = QueryProvider.GetUpdateProductQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Product>.FromErrorList(_errors);
         SetupMediator<UpdateProductQuery>(response);
@@ -221,9 +220,9 @@ public class ProductEndpointsTests
     public async Task UpdateProduct_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var request = GetUpdateProductQuery() with { ProductId = Guid.Empty };
+        var request = QueryProvider.GetUpdateProductQuery() with { ProductId = Guid.Empty };
         const string ERROR_KEY = "ProductId";
-        const string ERROR_MESSAGE = "ProductId may not be empty.";
+        const string ERROR_MESSAGE = "'Product Id' may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
         var response = Response<Product>.FromValidationFailure(_validationErrors);
         SetupMediator<UpdateProductQuery>(response);
@@ -344,70 +343,6 @@ public class ProductEndpointsTests
             .ReturnsAsync(response);
     }
 
-    private static CreateProductQuery GetCreateProductQuery()
-    {
-        return new CreateProductQuery(
-            "Bubble Gum",
-            "Bubble Gum",
-            1.0M,
-            null);
-    }
-
-    private static UpdateProductQuery GetUpdateProductQuery()
-    {
-        return new UpdateProductQuery(
-            Guid.NewGuid(),
-            "Bubble Gum",
-            "Bubble Gum",
-            1.0M,
-            null);
-    }
-
-    private static IReadOnlyList<Product> GetEmptyProductsList()
-    {
-        return new List<Product>();
-    }
-
-    private static IReadOnlyList<Product> GetProductList()
-    {
-        var products = new List<Product>
-        {
-            new Product
-            {
-                Name = "Tennis Shoes",
-                Description = "Tennis Shoes",
-                Price = 100.00M,
-                ImageUrl = null
-            },
-            new Product
-            {
-                Name = "Bath Robe",
-                Description = "Bath Robe",
-                Price = 50.00M,
-                ImageUrl = null
-            },
-            new Product
-            {
-                Name = "Bubble Gum", 
-                Description = "Bubble Gum", 
-                Price = 1.00M, 
-                ImageUrl = null
-            },
-        };
-
-        return products;
-    }
-
-    private static Product GetProduct()
-    {
-        return new Product
-        {
-            Name = "Bubble Gum",
-            Description = "Bubble Gum",
-            Price = 1.00M,
-            ImageUrl = null
-        };
-    }
     #endregion
 
 }

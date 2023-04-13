@@ -1,8 +1,12 @@
-﻿namespace MyShoppingCart.Application.Tests.Handlers.Customers;
+﻿using Microsoft.AspNetCore.Identity;
+using MyShoppingCart.Application.Services;
+
+namespace MyShoppingCart.Application.Tests.Handlers.Customers;
 
 public sealed class DeleteCustomerCommandHandlerTests
 {
     private readonly CancellationToken _cancellationToken = new CancellationToken();
+    private readonly Mock<IUserManagerFacade> _mockUserManager = new Mock<IUserManagerFacade>();
 
     #region Happy Path
 
@@ -12,20 +16,24 @@ public sealed class DeleteCustomerCommandHandlerTests
         //Arrange
         var customer = DataProvider.GetCustomer();
         var request = new DeleteCustomerCommand(customer.Id);
+        var identityResult = IdentityResult.Success;
 
-        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithSingleResponse(customer, _cancellationToken);
+        _mockUserManager.Setup(x => x.FindByIdAsync(request.CustomerId, _cancellationToken))
+            .ReturnsAsync(customer);
+        _mockUserManager.Setup(x => x.DeleteAsync(customer))
+                    .ReturnsAsync(identityResult);
 
-        var handler = new DeleteCustomerCommandHandler(mockCustomerRepository.Object);
+        var handler = new DeleteCustomerCommandHandler(_mockUserManager.Object);
 
         //Act
         var results = await handler.Handle(request, _cancellationToken);
 
         //Assert
         results.Success.Should().NotBeNull().And.Be(Success.Instance);
-        mockCustomerRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
-        mockCustomerRepository
-            .Verify(x => x.DeleteAsync(customer, _cancellationToken), Times.Once);
+        _mockUserManager
+            .Verify(x => x.FindByIdAsync(request.CustomerId, _cancellationToken), Times.Once);
+        _mockUserManager
+            .Verify(x => x.DeleteAsync(customer), Times.Once);
     }
 
     #endregion
@@ -37,19 +45,21 @@ public sealed class DeleteCustomerCommandHandlerTests
     {
         //Arrange
         var request = new DeleteCustomerCommand(Guid.NewGuid());
-        var mockCustomerRepository = MockProvider.GetMockCustomerRepositoryWithNullResponse(_cancellationToken);
 
-        var handler = new DeleteCustomerCommandHandler(mockCustomerRepository.Object);
+        _mockUserManager.Setup(x => x.FindByIdAsync(request.CustomerId, _cancellationToken))
+            .ReturnsAsync(() => null);
+
+        var handler = new DeleteCustomerCommandHandler(_mockUserManager.Object);
 
         //Act
         var results = await handler.Handle(request, _cancellationToken);
 
         //Assert
         results.NotFound.Should().NotBeNull();
-        mockCustomerRepository
-            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetCustomerByIdSpec>(), _cancellationToken), Times.Once);
-        mockCustomerRepository
-            .Verify(x => x.DeleteAsync(It.IsAny<Customer>(), _cancellationToken), Times.Never);
+        _mockUserManager
+            .Verify(x => x.FindByIdAsync(request.CustomerId, _cancellationToken), Times.Once);
+        _mockUserManager
+            .Verify(x => x.DeleteAsync(It.IsAny<Customer>()), Times.Never);
     }
 
     #endregion

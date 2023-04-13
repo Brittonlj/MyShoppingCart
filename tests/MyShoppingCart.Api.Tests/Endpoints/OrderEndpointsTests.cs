@@ -1,5 +1,4 @@
 ﻿using MyShoppingCart.Application.Orders;
-using MyShoppingCart.Domain.Models;
 
 namespace MyShoppingCart.Api.Tests.Endpoints;
 
@@ -16,9 +15,8 @@ public class OrderEndpointsTests
     public async Task GetAllOrders_ShouldReturnOrders_WhenValidParametersAreChosen()
     {
         //Arrange
-        var customerId = Guid.NewGuid();
-        var request = new GetOrdersQuery(customerId);
-        var response = Response<IReadOnlyList<Order>>.FromSuccess(GetOrderList(customerId)); ;
+        var request = QueryProvider.GetGetOrdersQuery();
+        var response = Response<IReadOnlyList<Order>>.FromSuccess(DataProvider.GetOrders()); ;
         SetupMediator(response);
 
         //Act
@@ -36,9 +34,8 @@ public class OrderEndpointsTests
     public async Task GetAllOrders_ShouldReturnNoOrders_WhenBadParametersAreChosen()
     {
         //Arrange
-        var customerId = Guid.NewGuid();
-        var request = new GetOrdersQuery(customerId);
-        var response = Response<IReadOnlyList<Order>>.FromSuccess(GetEmptyOrdersList()); ;
+        var request = QueryProvider.GetGetOrdersQuery();
+        var response = Response<IReadOnlyList<Order>>.FromSuccess(DataProvider.GetEmptyOrdersList()); ;
         SetupMediator(response);
 
         //Act
@@ -56,8 +53,7 @@ public class OrderEndpointsTests
     public async Task GetAllOrders_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var customerId = Guid.NewGuid();
-        var request = new GetOrdersQuery(customerId);
+        var request = QueryProvider.GetGetOrdersQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<IReadOnlyList<Order>>.FromErrorList(_errors);
         SetupMediator(response);
@@ -76,8 +72,7 @@ public class OrderEndpointsTests
     public async Task GetAllOrders_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var customerId = Guid.NewGuid();
-        var request = new GetOrdersQuery(customerId);
+        var request = QueryProvider.GetGetOrdersQuery();
         const string ERROR_KEY = "SortColumn";
         const string ERROR_MESSAGE = "InvalidSortColumn is an invalid value for SortColumn";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -101,8 +96,8 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnOrder_WhenValidParametersAreChosen()
     {
         //Arrange
-        var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
-        var response = Response<Order>.FromSuccess(GetOrder()); ;
+        var request = QueryProvider.GetGetOrderQuery();
+        var response = Response<Order>.FromSuccess(DataProvider.GetOrder()); ;
         SetupMediator<GetOrderQuery>(response);
 
         //Act
@@ -120,7 +115,7 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnNotFound_WhenBadParametersAreChosen()
     {
         //Arrange
-        var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
+        var request = QueryProvider.GetGetOrderQuery();
         var response = Response<Order>.FromNotFound();
         SetupMediator<GetOrderQuery>(response);
 
@@ -139,7 +134,7 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var request = new GetOrderQuery(Guid.NewGuid(), Guid.NewGuid());
+        var request = QueryProvider.GetGetOrderQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Order>.FromErrorList(_errors);
         SetupMediator<GetOrderQuery>(response);
@@ -158,9 +153,9 @@ public class OrderEndpointsTests
     public async Task GetOrderById_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var request = new GetOrderQuery(Guid.Empty, Guid.NewGuid());
+        var request = QueryProvider.GetGetOrderQuery() with { OrderId = Guid.Empty };
         const string ERROR_KEY = "OrderId";
-        const string ERROR_MESSAGE = "OrderId may not be empty.";
+        const string ERROR_MESSAGE = "'Order Id' may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
         var response = Response<Order>.FromValidationFailure(_validationErrors);
         SetupMediator<GetOrderQuery>(response);
@@ -183,8 +178,8 @@ public class OrderEndpointsTests
     public async Task CreateOrder_ShouldReturnOrder_WhenValidParametersAreChosen()
     {
         //Arrange
-        var order = GetOrder();
-        var query = GetCreateOrderQuery();
+        var order = DataProvider.GetOrder();
+        var query = QueryProvider.GetCreateOrderQuery();
         var response = Response<Order>.FromSuccess(order); ;
         SetupMediator<CreateOrderQuery>(response);
 
@@ -203,8 +198,8 @@ public class OrderEndpointsTests
     public async Task CreateOrder_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var order = GetOrder();
-        var query = GetCreateOrderQuery();
+        var order = DataProvider.GetOrder();
+        var query = QueryProvider.GetCreateOrderQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Order>.FromErrorList(_errors);
         SetupMediator<CreateOrderQuery>(response);
@@ -223,11 +218,9 @@ public class OrderEndpointsTests
     public async Task CreateOrder_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var order = GetOrder();
-        order.CustomerId = Guid.Empty;
-        var query = GetCreateOrderQuery();
+        var query = QueryProvider.GetCreateOrderQuery() with { CustomerId = Guid.Empty };
         const string ERROR_KEY = "CustomerId";
-        const string ERROR_MESSAGE = "CustomerId cannot be empty.";
+        const string ERROR_MESSAGE = "'Customer Id' cannot be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
         var response = Response<Order>.FromValidationFailure(_validationErrors);
         SetupMediator<CreateOrderQuery>(response);
@@ -249,8 +242,8 @@ public class OrderEndpointsTests
     public async Task UpdateOrder_ShouldReturnOrder_WhenValidParametersAreChosen()
     {
         //Arrange
-        var query = GetUpdateOrderQuery();
-        var response = Response<Order>.FromSuccess(GetOrder()); ;
+        var query = QueryProvider.GetUpdateOrderQuery();
+        var response = Response<Order>.FromSuccess(DataProvider.GetOrder()); ;
         SetupMediator<UpdateOrderQuery>(response);
 
         //Act
@@ -268,7 +261,7 @@ public class OrderEndpointsTests
     public async Task UpdateOrder_ShouldReturnNotFound_WhenBadOrderIdIsChosen()
     {
         //Arrange
-        var query = GetUpdateOrderQuery();
+        var query = QueryProvider.GetUpdateOrderQuery();
         var response = Response<Order>.FromNotFound();
         SetupMediator<UpdateOrderQuery>(response);
 
@@ -287,7 +280,7 @@ public class OrderEndpointsTests
     public async Task UpdateOrder_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var query = GetUpdateOrderQuery();
+        var query = QueryProvider.GetUpdateOrderQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<Order>.FromErrorList(_errors);
         SetupMediator<UpdateOrderQuery>(response);
@@ -306,8 +299,7 @@ public class OrderEndpointsTests
     public async Task UpdateOrder_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var query = GetUpdateOrderQuery();
-        query = query with { OrderId = Guid.Empty };
+        var query = QueryProvider.GetUpdateOrderQuery() with { OrderId = Guid.Empty };
         const string ERROR_KEY = "OrderId";
         const string ERROR_MESSAGE = "OrderId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
@@ -430,80 +422,5 @@ public class OrderEndpointsTests
             .ReturnsAsync(response);
     }
 
-    private static CreateOrderQuery GetCreateOrderQuery()
-    {
-        return new CreateOrderQuery(
-            Guid.NewGuid(),
-            new List<LineItemModel>
-            {
-                new LineItemModel(Guid.NewGuid(), 10),
-                new LineItemModel(Guid.NewGuid(), 5)
-            });
-    }
-
-    private static UpdateOrderQuery GetUpdateOrderQuery()
-    {
-        var orderId = Guid.NewGuid();
-        return new UpdateOrderQuery(
-            Guid.NewGuid(),
-            orderId,
-            new List<LineItem>
-            {
-                new LineItem(orderId, Guid.NewGuid(), 10)
-            }
-);
-    }
-
-    private static IReadOnlyList<Order> GetEmptyOrdersList()
-    {
-        return new List<Order>();
-    }
-
-    private static IReadOnlyList<Order> GetOrderList(Guid customerId)
-    {
-
-        var orders = new List<Order>
-        {
-            new Order
-            {
-                CustomerId = customerId,
-                OrderDateTimeUtc = DateTime.UtcNow,
-            },
-            new Order
-            {
-                CustomerId = customerId,
-                OrderDateTimeUtc = DateTime.UtcNow,
-            },
-            new Order
-            {
-                CustomerId = customerId,
-                OrderDateTimeUtc = DateTime.UtcNow,
-            }
-        };
-
-        orders[0].AddUpdateLineItem(new LineItem(orders[0].Id, Guid.NewGuid(), 10));
-        orders[0].AddUpdateLineItem(new LineItem(orders[0].Id, Guid.NewGuid(), 5));
-
-        orders[1].AddUpdateLineItem(new LineItem(orders[1].Id, Guid.NewGuid(), 10));
-        orders[1].AddUpdateLineItem(new LineItem(orders[1].Id, Guid.NewGuid(), 5));
-
-        orders[2].AddUpdateLineItem(new LineItem(orders[2].Id, Guid.NewGuid(), 10));
-        orders[2].AddUpdateLineItem(new LineItem(orders[2].Id, Guid.NewGuid(), 5));
-
-        return orders;
-    }
-
-    private static Order GetOrder()
-    {
-        var order = new Order
-        {
-            CustomerId = Guid.NewGuid(),
-            OrderDateTimeUtc = DateTime.UtcNow,
-        };
-        order.AddUpdateLineItem(new LineItem(order.Id, Guid.NewGuid(), 10));
-        order.AddUpdateLineItem(new LineItem(order.Id, Guid.NewGuid(), 5));
-
-        return order;
-    }
     #endregion
 }

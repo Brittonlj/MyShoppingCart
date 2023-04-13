@@ -30,6 +30,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\MyShoppingCart.Application\MyShoppingCart.Application.csproj" />
     <ProjectReference Include="..\..\src\MyShoppingCart.Domain\MyShoppingCart.Domain.csproj" />
+    <ProjectReference Include="..\MyShoppingCart.Shared.Tests\MyShoppingCart.Shared.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Handlers\Authentication\" />
+    <Folder Include="Validators\Authentication\" />
   </ItemGroup>
 
 </Project>

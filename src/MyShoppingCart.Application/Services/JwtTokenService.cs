@@ -15,12 +15,10 @@ public sealed class JwtTokenService : IJwtTokenService
         _jwtConfig = config.Value;
     }
 
-    public string GenerateToken(List<SecurityClaim> securityClaims)
+    public string GenerateToken(List<Claim> claims)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        var claims = securityClaims.Select(x => new Claim(x.Type, x.Value)).ToList();
 
         var token = new JwtSecurityToken(
             _jwtConfig.Issuer,

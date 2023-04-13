@@ -10,7 +10,7 @@ public static class SetupExtensions
         services.AddValidatorsFromAssemblyContaining<IMyShoppingCartDomainMarker>();
 
         services.AddSingleton<IUtcDateTimeProvider, UtcDateTimeProvider>();
-
+    
         return services;
     }
 }
