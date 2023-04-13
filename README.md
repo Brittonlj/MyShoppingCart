@@ -28,7 +28,7 @@ If you want to run the project locally you will need a SQL Server instance (I us
 1. Pull down the git repo and open the solution in VS 2023.
 
 ### Setup the database
-2. Open a powershell window and cd to the MyShoppingCart.Infrastructure project folder.
+2. Open a powershell window and CD to the src/MyShoppingCart.Infrastructure project folder.
 3. Run this command with your own connection string:
 		
         dotnet ef database update --connection "connection string"
@@ -41,11 +41,11 @@ If you want to run the project locally you will need a SQL Server instance (I us
         
         ./code
         
-6. Pull down the dependencies by going to the terminal and typing:
+6. Pull down the dependencies by going to the VS Code terminal and typing:
         
         npm install
 
-7. Run the front-end by entering the following command in the terminal:
+7. Run the front-end by entering the following command in the VS Code terminal:
         
         npm start
 
