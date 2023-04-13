@@ -7,7 +7,7 @@ public sealed class GetProductsQueryHandler :
 
     public GetProductsQueryHandler(IRepository<Product> productRepository)
     {
-        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
+        _productRepository = Guard.Against.Null(productRepository);
     }
 
     public async Task<Response<IReadOnlyList<Product>>> Handle(

@@ -11,7 +11,7 @@ public sealed class ExceptionLoggingPipelineBehavior<TRequest, TEntity> :
 
     public ExceptionLoggingPipelineBehavior(ILogger<TRequest> logger)
     {
-        _logger = Guard.Against.Null(logger, nameof(logger));
+        _logger = Guard.Against.Null(logger);
     }
 
     public async Task<Response<TEntity>> Handle(

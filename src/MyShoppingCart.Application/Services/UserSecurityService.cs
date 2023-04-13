@@ -9,7 +9,7 @@ public sealed class UserSecurityService : IUserSecurityService
 
     public UserSecurityService(IHttpContextAccessor httpContextAccessor)
     {
-        _httpContextAccessor = Guard.Against.Null(httpContextAccessor, nameof(httpContextAccessor));
+        _httpContextAccessor = Guard.Against.Null(httpContextAccessor);
     }
 
     public bool IsInRole(string roleName)

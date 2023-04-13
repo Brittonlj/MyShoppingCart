@@ -15,10 +15,10 @@ public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, 
         IMapper mapper, 
         IUtcDateTimeProvider dateTimeProvider)
     {
-        _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
-        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
-        _mapper = Guard.Against.Null(mapper, nameof(mapper));
-        _dateTimeProvider = Guard.Against.Null(dateTimeProvider, nameof(dateTimeProvider));
+        _orderRepository = Guard.Against.Null(orderRepository);
+        _customerRepository = Guard.Against.Null(customerRepository);
+        _mapper = Guard.Against.Null(mapper);
+        _dateTimeProvider = Guard.Against.Null(dateTimeProvider);
     }
 
     public async Task<Response<Order>> Handle(CreateOrderQuery request, CancellationToken cancellationToken)

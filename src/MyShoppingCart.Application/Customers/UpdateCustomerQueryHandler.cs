@@ -9,8 +9,8 @@ public sealed class UpdateCustomerQueryHandler : IRequestHandler<UpdateCustomerQ
     private readonly IMapper _mapper;
     public UpdateCustomerQueryHandler(IUserManagerFacade userManager, IMapper mapper)
     {
-        _userManager = Guard.Against.Null(userManager, nameof(userManager));
-        _mapper = Guard.Against.Null(mapper, nameof(mapper));
+        _userManager = Guard.Against.Null(userManager);
+        _mapper = Guard.Against.Null(mapper);
     }
 
     public async Task<Response<CustomerModel>> Handle(UpdateCustomerQuery request, CancellationToken cancellationToken)

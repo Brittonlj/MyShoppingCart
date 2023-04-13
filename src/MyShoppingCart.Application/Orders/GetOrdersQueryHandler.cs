@@ -7,7 +7,7 @@ public sealed class GetOrdersQueryHandler :
 
     public GetOrdersQueryHandler(IRepository<Order> orderRepository)
     {
-        _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
+        _orderRepository = Guard.Against.Null(orderRepository);
     }
 
     public async Task<Response<IReadOnlyList<Order>>> Handle(

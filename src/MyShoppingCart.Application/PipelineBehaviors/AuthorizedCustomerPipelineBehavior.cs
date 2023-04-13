@@ -11,7 +11,7 @@ public sealed class AuthorizedCustomerPipelineBehavior<TRequest, TEntity> :
 
     public AuthorizedCustomerPipelineBehavior(IUserSecurityService userSecurityService)
     {
-        _userSecurityService = Guard.Against.Null(userSecurityService, nameof(userSecurityService));
+        _userSecurityService = Guard.Against.Null(userSecurityService);
     }
 
     public async Task<Response<TEntity>> Handle(

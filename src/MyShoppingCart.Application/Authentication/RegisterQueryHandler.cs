@@ -14,8 +14,8 @@ public sealed class RegisterQueryHandler : IRequestHandler<CreateCustomerQuery, 
         IMapper mapper,
         IUserManagerFacade userManager)
     {
-        _mapper = Guard.Against.Null(mapper, nameof(mapper));
-        _userManager = Guard.Against.Null(userManager, nameof(userManager)); ;
+        _mapper = Guard.Against.Null(mapper);
+        _userManager = Guard.Against.Null(userManager); ;
     }
 
     public async Task<Response<CustomerModel>> Handle(CreateCustomerQuery request, CancellationToken cancellationToken)

@@ -6,7 +6,7 @@ public sealed class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderComma
 
     public DeleteOrderCommandHandler(IRepository<Order> orderRepository)
     {
-        _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository)); ;
+        _orderRepository = Guard.Against.Null(orderRepository);
     }
 
     public async Task<Response<Success>> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)

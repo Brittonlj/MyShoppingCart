@@ -7,8 +7,8 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
 
     public UpdateOrderQueryHandler(IRepository<Order> orderRepository, IMapper mapper)
     {
-        _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
-        _mapper = Guard.Against.Null(mapper, nameof(mapper));
+        _orderRepository = Guard.Against.Null(orderRepository);
+        _mapper = Guard.Against.Null(mapper);
     }
 
     public async Task<Response<Order>> Handle(UpdateOrderQuery request, CancellationToken cancellationToken)

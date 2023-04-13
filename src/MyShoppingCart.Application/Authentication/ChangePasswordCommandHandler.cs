@@ -9,8 +9,8 @@ public sealed class ChangePasswordCommandHandler :
     private readonly IRepository<Customer> _customerRepository;
     public ChangePasswordCommandHandler(IUserManagerFacade userManager, IRepository<Customer> customerRepository)
     {
-        _userManager = Guard.Against.Null(userManager, nameof(userManager));
-        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _userManager = Guard.Against.Null(userManager);
+        _customerRepository = Guard.Against.Null(customerRepository);
     }
 
     public async Task<Response<Success>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)

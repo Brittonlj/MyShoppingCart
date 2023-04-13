@@ -7,8 +7,8 @@ public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQue
 
     public CreateProductQueryHandler(IRepository<Product> productRepository, IMapper mapper)
     {
-        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
-        _mapper = Guard.Against.Null(mapper, nameof(mapper));
+        _productRepository = Guard.Against.Null(productRepository);
+        _mapper = Guard.Against.Null(mapper);
     }
 
     public async Task<Response<Product>> Handle(CreateProductQuery request, CancellationToken cancellationToken)

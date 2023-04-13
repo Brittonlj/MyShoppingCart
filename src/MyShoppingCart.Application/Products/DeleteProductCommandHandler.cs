@@ -6,7 +6,7 @@ public sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProductC
 
     public DeleteProductCommandHandler(IRepository<Product> productRepository)
     {
-        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
+        _productRepository = Guard.Against.Null(productRepository);
     }
 
     public async Task<Response<Success>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)

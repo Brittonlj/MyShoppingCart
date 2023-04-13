@@ -8,7 +8,7 @@ public sealed class CreateOrderQueryValidator : AbstractValidator<CreateOrderQue
 
     public CreateOrderQueryValidator(IRepository<Product> productRepository)
     {
-        _productRepository = Guard.Against.Null(productRepository, nameof(productRepository));
+        _productRepository = Guard.Against.Null(productRepository);
 
         RuleFor(x => x.CustomerId).NotEmpty();
         RuleFor(x => x.LineItems).NotEmpty();

@@ -10,7 +10,7 @@ public sealed class ValidationPipelineBehavior<TRequest, TEntity> :
 
     public ValidationPipelineBehavior(IEnumerable<IValidator<TRequest>> validators)
     {
-        _validators = Guard.Against.Null(validators, nameof(validators));
+        _validators = Guard.Against.Null(validators);
     }
 
     public async Task<Response<TEntity>> Handle(

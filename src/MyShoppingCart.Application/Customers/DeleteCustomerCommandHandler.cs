@@ -8,7 +8,7 @@ public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustome
 
     public DeleteCustomerCommandHandler(IUserManagerFacade userManager)
     {
-        _userManager = Guard.Against.Null(userManager, nameof(userManager));
+        _userManager = Guard.Against.Null(userManager);
     }
 
     public async Task<Response<Success>> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)

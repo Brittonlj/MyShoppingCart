@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using System.Threading;
 
 namespace MyShoppingCart.Application.Services;
 
@@ -15,9 +14,9 @@ public sealed class UserManagerFacade : IUserManagerFacade
         IPasswordHasher<Customer> passwordHasher, 
         IRepository<Customer> customerRepository)
     {
-        _userManager = Guard.Against.Null(userManager, nameof(userManager));
-        _passwordHasher = Guard.Against.Null(passwordHasher, nameof(passwordHasher));
-        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _userManager = Guard.Against.Null(userManager);
+        _passwordHasher = Guard.Against.Null(passwordHasher);
+        _customerRepository = Guard.Against.Null(customerRepository);
     }
 
     public async Task<IdentityResult> CreateAsync(Customer customer, string password, CancellationToken cancellationToken = default)

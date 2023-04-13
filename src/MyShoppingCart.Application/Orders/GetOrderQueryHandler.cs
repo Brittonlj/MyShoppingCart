@@ -6,7 +6,7 @@
 
         public GetOrderQueryHandler(IRepository<Order> orderRepository)
         {
-            _orderRepository = Guard.Against.Null(orderRepository, nameof(orderRepository));
+            _orderRepository = Guard.Against.Null(orderRepository);
         }
 
         public async Task<Response<Order>> Handle(GetOrderQuery request, CancellationToken cancellationToken)

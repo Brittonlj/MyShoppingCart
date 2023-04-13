@@ -6,8 +6,8 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
     private readonly IMapper _mapper;
     public GetCustomerQueryHandler(IRepository<Customer> customerRepository, IMapper mapper)
     {
-        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository)); ;
-        _mapper = Guard.Against.Null(mapper, nameof(mapper)); ;
+        _customerRepository = Guard.Against.Null(customerRepository);
+        _mapper = Guard.Against.Null(mapper);
     }
 
     public async Task<Response<CustomerModel>> Handle(
