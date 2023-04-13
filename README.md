@@ -20,3 +20,27 @@ Some things you will find examples of in this code base:
 My next steps are to add a simple front-end.
 
 Thanks for taking a look and have a great day!
+
+
+## Project Setup
+If you want to run the project locally you will need a SQL Server instance (I use docker for this).
+
+1. Pull down the git repo and open the solution in VS 2023.
+
+### Setup the database
+2. Open a powershell window and cd to the MyShoppingCart.Infrastructure project folder.
+3. Run this command with your own connection string:
+		dotnet ef database update --connection "connection string"
+
+### Start the API project
+4. Set the MyShoppingCart.Api as your Startup Project and run the debugger in https mode
+
+### Start the front end
+5. Open the React project by CD to the src/myshoppingcart.web directory and running the command (if you have VS Code installed):
+		./code
+6. Pull down the dependencies by going to the terminal and typing:
+		npm install
+7. Run the front-end by entering the following command in the terminal:
+		npm start
+8. You should see the home page with some products listed.  You can search or login and play around.  The credentials are login: fred.flintstone password: Password123! and login: george.jetson password: Password123!.  George is setup as an admin and Fred is a customer.
+9. Enjoy!
