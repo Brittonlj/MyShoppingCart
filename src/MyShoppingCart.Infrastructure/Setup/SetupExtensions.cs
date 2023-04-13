@@ -14,13 +14,16 @@ public static class SetupExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        // Load the connection string from the appsettings.json file
         var connectionString = configuration.GetConnectionString(CONNECTION_STRING_NAME);
 
+        // Add the MyShoppingCartContext dbContext and put it in DI
         services.AddDbContext<MyShoppingCartContext>(options =>
         {
             options.UseSqlServer(connectionString);
         });
 
+        // Add dependency injection for dependencies in the Infrastructure project
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         return services;

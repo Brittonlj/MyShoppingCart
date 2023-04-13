@@ -16,6 +16,7 @@ public static class SetupExtensions
 
     public static WebApplication RegisterMyShoppingCartEndpoints(this WebApplication app)
     {
+        // Register all endpoints
         CustomerEndpoints.RegisterEndpoints(app);
         OrderEndpoints.RegisterEndpoints(app);
         ProductEndpoints.RegisterEndpoints(app);
@@ -27,20 +28,25 @@ public static class SetupExtensions
         this IServiceCollection services,
         ConfigurationManager config)
     {
-        AddSwaggerGen(services);
+        // Setup the defaults for Swagger
+        services.SetupSwaggerGen();
 
+        // Setup the IOptions<JwtSettings> object and put it in DI
         services
             .AddOptions<JwtSettings>()
             .BindConfiguration(JwtSettings.SECTION_NAME)
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        // Add Identity Framework with the Customer type and the MyShoppingCartContext dbContext
         services.AddIdentity<Customer, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<MyShoppingCartContext>();
 
+        // Read the JwtSettings from the appsettings.json file
         JwtSettings jwtConfig = new JwtSettings();
         config.GetSection(JwtSettings.SECTION_NAME).Bind(jwtConfig);
 
+        // Add JWT Token Authentication and set options
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -61,8 +67,10 @@ public static class SetupExtensions
             };
         });
 
+        // Add the HttpContextAccessor to DI
         services.AddHttpContextAccessor();
 
+        // Setup the default password options
         services.Configure<IdentityOptions>(opts => {
             opts.Password.RequiredLength = 8;
             opts.Password.RequireLowercase = true;
@@ -72,6 +80,7 @@ public static class SetupExtensions
             opts.User.RequireUniqueEmail = true;
         });
 
+        // Setup the default authorization policies (Admin and Customer)
         services.AddAuthorization(options =>
         {
             options.AddPolicy(Policies.AdminAccess, policy => policy
@@ -87,7 +96,7 @@ public static class SetupExtensions
             });
         });
 
-
+        // Add CORS so our web front-end can communicate with the API
         services.AddCors(options =>
         {
             options.AddPolicy(CORS_POLICY,
@@ -104,13 +113,15 @@ public static class SetupExtensions
 
     public static WebApplication SetupUseCors(this WebApplication app)
     {
+        // Tell CORS to use our policies
         app.UseCors(CORS_POLICY);
 
         return app;
     }
 
-    private static void AddSwaggerGen(IServiceCollection services)
+    private static IServiceCollection SetupSwaggerGen(this IServiceCollection services)
     {
+        // Setup Swagger with options for JWT Token authentication
         services.AddSwaggerGen(option =>
         {
             option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -136,5 +147,7 @@ public static class SetupExtensions
                 }
             });
         });
+
+        return services;
     }
 }
