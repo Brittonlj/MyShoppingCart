@@ -9,6 +9,6 @@ public sealed record GetCustomersQuery(
     int PageSize = Constants.DEFAULT_PAGE_SIZE,
     string SortColumn = GetCustomersSpec.DEFAULT_SORT_COLUMN,
     bool SortAscending = true
-    ) : IQueryManyPaged<Customer>
+    ) : IQueryManyPaged<CustomerModel>
 {
 }

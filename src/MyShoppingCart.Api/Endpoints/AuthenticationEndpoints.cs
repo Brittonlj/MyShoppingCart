@@ -7,27 +7,22 @@ public class AuthenticationEndpoints
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
         var group = app.MapGroup("/authentication")
-            .AllowAnonymous();
+            .RequireAuthorization(Policies.CustomerAccess);
 
-        group.MapGet("/token/{customerId}", GetToken); //This is just a dummy authentication method to test with
+        group.MapPost("/login", Login)
+            .AllowAnonymous();
 
         return app;
     }
 
-    public static async Task<IResult> GetToken(
-    [FromServices] IMediator mediator,
-    [AsParameters] JwtTokenQuery request,
-    CancellationToken cancellationToken
+    public static async Task<IResult> Login(
+        [FromServices] IMediator mediator,
+        [FromBody] LoginQuery request,
+        CancellationToken cancellationToken
 )
     {
         var response = await mediator.Send(request, cancellationToken);
 
-        return response.Match(
-            success => Content(success),
-            unauthorized => Unauthorized(),
-            notFound => NotFound(),
-            error => Problem(error.ToJson()),
-            validationFailed => ValidationProblem(validationFailed.Results));
+        return response.MatchResult();
     }
-
 }

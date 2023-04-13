@@ -9,7 +9,7 @@ public class AuthorizedCustomerPipelineBehaviorTests
 {
 	private readonly CancellationToken _cancellationToken = new CancellationToken();
     private readonly Mock<IUserSecurityService> _mockUserSecurityService;
-    private readonly AuthorizedCustomerPipelineBehavior<GetCustomerQuery, Customer> _unitUnderTest;
+    private readonly AuthorizedCustomerPipelineBehavior<GetCustomerQuery, CustomerModel> _unitUnderTest;
 
 	public AuthorizedCustomerPipelineBehaviorTests()
 	{
@@ -17,7 +17,7 @@ public class AuthorizedCustomerPipelineBehaviorTests
 		_mockUserSecurityService.Setup(x => x.IsInRole(Roles.Admin)).Returns(false);
 		_mockUserSecurityService.Setup(x => x.GetCustomerId()).Returns(DataProvider.DefaultCustomerId);
 
-		_unitUnderTest = new AuthorizedCustomerPipelineBehavior<GetCustomerQuery, Customer>(_mockUserSecurityService.Object);
+		_unitUnderTest = new AuthorizedCustomerPipelineBehavior<GetCustomerQuery, CustomerModel>(_mockUserSecurityService.Object);
 	}
 
 	#region Happy Path
@@ -27,13 +27,13 @@ public class AuthorizedCustomerPipelineBehaviorTests
 	{
         //Arrange
         var request = new GetCustomerQuery(DataProvider.DefaultCustomerId);
-		var next = new RequestHandlerDelegate<Response<Customer>>(Next);
+		var next = new RequestHandlerDelegate<Response<CustomerModel>>(Next);
 
 		//Act
 		var result = await _unitUnderTest.Handle(request, next, _cancellationToken);
 
 		//Assert
-		result.Success.Should().NotBeNull().And.Be(DataProvider.GetCustomer());
+		result.Success.Should().NotBeNull().And.BeEquivalentTo(DataProvider.GetCustomerModel());
         _mockUserSecurityService.Verify(x => x.IsInRole(Roles.Admin), Times.Once);
         _mockUserSecurityService.Verify(x => x.GetCustomerId(), Times.Once);
     }
@@ -47,14 +47,14 @@ public class AuthorizedCustomerPipelineBehaviorTests
     {
         //Arrange
         var request = new GetCustomerQuery(DataProvider.DefaultCustomerId);
-        var next = new RequestHandlerDelegate<Response<Customer>>(Next);
+        var next = new RequestHandlerDelegate<Response<CustomerModel>>(Next);
         _mockUserSecurityService.Setup(x => x.IsInRole(Roles.Admin)).Returns(true);
 
         //Act
         var result = await _unitUnderTest.Handle(request, next, _cancellationToken);
 
         //Assert
-        result.Success.Should().NotBeNull().And.Be(DataProvider.GetCustomer());
+        result.Success.Should().NotBeNull().And.BeEquivalentTo(DataProvider.GetCustomerModel());
         _mockUserSecurityService.Verify(x => x.IsInRole(Roles.Admin), Times.Once);
         _mockUserSecurityService.Verify(x => x.GetCustomerId(), Times.Never);
     }
@@ -68,7 +68,7 @@ public class AuthorizedCustomerPipelineBehaviorTests
     {
         //Arrange
         var request = new GetCustomerQuery(DataProvider.DefaultCustomerId);
-        var next = new RequestHandlerDelegate<Response<Customer>>(Next);
+        var next = new RequestHandlerDelegate<Response<CustomerModel>>(Next);
         _mockUserSecurityService.Setup(x => x.GetCustomerId()).Returns(() => null);
 
         //Act
@@ -107,9 +107,9 @@ public class AuthorizedCustomerPipelineBehaviorTests
     #region Private Helpers
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-    private async Task<Response<Customer>> Next()
+    private async Task<Response<CustomerModel>> Next()
     {
-        return Response<Customer>.FromSuccess(DataProvider.GetCustomer());
+        return Response<CustomerModel>.FromSuccess(DataProvider.GetCustomerModel());
     }
 
     private async Task<Response<IReadOnlyList<Product>>> NextProduct()

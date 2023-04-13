@@ -6,7 +6,7 @@ namespace MyShoppingCart.Application.Tests.PipelineBehaviors;
 public class ValidationPipelineBehaviorTests
 {
     private readonly CancellationToken _cancellationToken = new CancellationToken();
-    private readonly ValidationPipelineBehavior<GetCustomerQuery, Customer> _unitUnderTest;
+    private readonly ValidationPipelineBehavior<GetCustomerQuery, CustomerModel> _unitUnderTest;
 
     public ValidationPipelineBehaviorTests()
     {
@@ -15,7 +15,7 @@ public class ValidationPipelineBehaviorTests
             new GetCustomerQueryValidator()
         };
 
-        _unitUnderTest = new ValidationPipelineBehavior<GetCustomerQuery, Customer>(validators);
+        _unitUnderTest = new ValidationPipelineBehavior<GetCustomerQuery, CustomerModel>(validators);
     }
 
     #region Happy Path
@@ -25,13 +25,13 @@ public class ValidationPipelineBehaviorTests
     {
         //Arrange
         var request = new GetCustomerQuery(DataProvider.DefaultCustomerId);
-        var next = new RequestHandlerDelegate<Response<Customer>>(Next);
+        var next = new RequestHandlerDelegate<Response<CustomerModel>>(Next);
 
         //Act
         var result = await _unitUnderTest.Handle(request, next, _cancellationToken);
 
         //Assert
-        result.Success.Should().NotBeNull().And.Be(DataProvider.GetCustomer());
+        result.Success.Should().NotBeNull().And.BeEquivalentTo(DataProvider.GetCustomerModel());
     }
 
     #endregion
@@ -43,7 +43,7 @@ public class ValidationPipelineBehaviorTests
     {
         //Arrange
         var request = new GetCustomerQuery(Guid.Empty);
-        var next = new RequestHandlerDelegate<Response<Customer>>(Next);
+        var next = new RequestHandlerDelegate<Response<CustomerModel>>(Next);
 
         //Act
         var results = await _unitUnderTest.Handle(request, next, _cancellationToken);
@@ -60,10 +60,10 @@ public class ValidationPipelineBehaviorTests
     #region Private Helpers
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-    private async Task<Response<Customer>> Next()
+    private async Task<Response<CustomerModel>> Next()
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
-        return Response<Customer>.FromSuccess(DataProvider.GetCustomer());
+        return Response<CustomerModel>.FromSuccess(DataProvider.GetCustomerModel());
     }
 
     #endregion

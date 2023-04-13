@@ -14,9 +14,10 @@ public static class SetupExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString(CONNECTION_STRING_NAME);
+
         services.AddDbContext<MyShoppingCartContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString(CONNECTION_STRING_NAME);
             options.UseSqlServer(connectionString);
         });
 

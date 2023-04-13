@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyShoppingCart.Api.Endpoints;
+using MyShoppingCart.Domain.Entities;
+using MyShoppingCart.Infrastructure;
 using System.Security.Claims;
 using System.Text;
 
@@ -32,15 +35,41 @@ public static class SetupExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        AddAuthentication(services, config);
+        services.AddIdentity<Customer, IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<MyShoppingCartContext>();
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+        {
+            JwtSettings jwtConfig = new JwtSettings();
+            config.GetSection(JwtSettings.SECTION_NAME).Bind(jwtConfig);
+
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtConfig.Issuer,
+                ValidAudience = jwtConfig.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key))
+            };
+        });
 
         services.AddHttpContextAccessor();
+
+        services.Configure<IdentityOptions>(opts => {
+            opts.Password.RequiredLength = 8;
+            opts.Password.RequireLowercase = true;
+            opts.Password.RequireUppercase = true;
+            opts.Password.RequireDigit = true;
+            opts.Password.RequireNonAlphanumeric = true;
+            opts.User.RequireUniqueEmail = true;
+        });
 
         services.AddAuthorization(options =>
         {
             options.AddPolicy(Policies.AdminAccess, policy => policy
             .RequireRole(Roles.Admin)
-            .RequireAuthenticatedUser()
             .RequireClaim(ClaimTypes.NameIdentifier));
 
             options.AddPolicy(Policies.CustomerAccess, policy =>
@@ -48,7 +77,6 @@ public static class SetupExtensions
                 policy.RequireAssertion(context =>
                     context.User.IsInRole(Roles.Customer) ||
                     context.User.IsInRole(Roles.Admin))
-                .RequireAuthenticatedUser()
                 .RequireClaim(ClaimTypes.NameIdentifier);
             });
         });
@@ -101,26 +129,6 @@ public static class SetupExtensions
                     new string[] {}
                 }
             });
-        });
-    }
-
-    private static void AddAuthentication(IServiceCollection services, ConfigurationManager config)
-    {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-        {
-            JwtSettings jwtConfig = new JwtSettings();
-            config.GetSection(JwtSettings.SECTION_NAME).Bind(jwtConfig);
-
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtConfig.Issuer,
-                ValidAudience = jwtConfig.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key))
-            };
         });
     }
 }

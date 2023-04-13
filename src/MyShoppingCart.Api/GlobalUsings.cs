@@ -1,6 +1,5 @@
 ﻿global using MediatR;
 global using Microsoft.AspNetCore.Mvc;
-global using Microsoft.Extensions.Options;
 global using static Microsoft.AspNetCore.Http.Results;
 global using MyShoppingCart.Api.Utilities;
 global using MyShoppingCart.Domain.Setup;

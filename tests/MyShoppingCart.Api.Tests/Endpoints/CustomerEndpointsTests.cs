@@ -17,11 +17,11 @@ public class CustomerEndpointsTests
     {
         //Arrange
         var request = new GetCustomersQuery();
-        var response = Response<IReadOnlyList<Customer>>.FromSuccess(GetCustomerList());
+        var response = Response<IReadOnlyList<CustomerModel>>.FromSuccess(DataProvider.GetCustomerModels());
         SetupMediator(response);
 
         //Act
-        var httpResult = (Ok<IReadOnlyList<Customer>>)await CustomerEndpoints.GetAllCustomers(
+        var httpResult = (Ok<IReadOnlyList<CustomerModel>>)await CustomerEndpoints.GetAllCustomers(
             _mockMediator.Object,
             request,            
             _cancellationToken);
@@ -36,11 +36,11 @@ public class CustomerEndpointsTests
     {
         //Arrange
         var request = new GetCustomersQuery("UnavailableName", "UnavailableEmail");
-        var response = Response<IReadOnlyList<Customer>>.FromSuccess(GetEmptyCustomersList());
+        var response = Response<IReadOnlyList<CustomerModel>>.FromSuccess(DataProvider.GetEmptyCustomerModelsList());
         SetupMediator(response);
 
         //Act
-        var httpResult = (Ok<IReadOnlyList<Customer>>)await CustomerEndpoints.GetAllCustomers(
+        var httpResult = (Ok<IReadOnlyList<CustomerModel>>)await CustomerEndpoints.GetAllCustomers(
             _mockMediator.Object,
             request,
             _cancellationToken);
@@ -56,7 +56,7 @@ public class CustomerEndpointsTests
         //Arrange
         var request = new GetCustomersQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
-        var response = Response<IReadOnlyList<Customer>>.FromErrorList(_errors);
+        var response = Response<IReadOnlyList<CustomerModel>>.FromErrorList(_errors);
         SetupMediator(response);
 
         //Act
@@ -77,7 +77,7 @@ public class CustomerEndpointsTests
         const string ERROR_KEY = "SortColumn";
         const string ERROR_MESSAGE = "InvalidSortColumn is an invalid value for SortColumn";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
-        var response = Response<IReadOnlyList<Customer>>.FromValidationFailure(_validationErrors);
+        var response = Response<IReadOnlyList<CustomerModel>>.FromValidationFailure(_validationErrors);
         SetupMediator(response);
 
         //Act
@@ -98,11 +98,11 @@ public class CustomerEndpointsTests
     {
         //Arrange
         var request = new GetCustomerQuery(Guid.NewGuid());
-        var response = Response<Customer>.FromSuccess(GetCustomer());
+        var response = Response<CustomerModel>.FromSuccess(DataProvider.GetCustomerModel());
         SetupMediator<GetCustomerQuery>(response);
 
         //Act
-        var httpResult = (Ok<Customer>)await CustomerEndpoints.GetCustomerById(
+        var httpResult = (Ok<CustomerModel>)await CustomerEndpoints.GetCustomerById(
             _mockMediator.Object,
             request,
             _cancellationToken);
@@ -117,7 +117,7 @@ public class CustomerEndpointsTests
     {
         //Arrange
         var request = new GetCustomerQuery(Guid.NewGuid());
-        var response = Response<Customer>.FromNotFound();
+        var response = Response<CustomerModel>.FromNotFound();
         SetupMediator<GetCustomerQuery>(response);
 
         //Act
@@ -137,7 +137,7 @@ public class CustomerEndpointsTests
         //Arrange
         var request = new GetCustomerQuery(Guid.NewGuid());
         _errors.Add(new Error("Exception", "An error has occured"));
-        var response = Response<Customer>.FromErrorList(_errors);
+        var response = Response<CustomerModel>.FromErrorList(_errors);
         SetupMediator<GetCustomerQuery>(response);
 
         //Act
@@ -158,7 +158,7 @@ public class CustomerEndpointsTests
         const string ERROR_KEY = "CustomerId";
         const string ERROR_MESSAGE = "CustomerId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
-        var response = Response<Customer>.FromValidationFailure(_validationErrors);
+        var response = Response<CustomerModel>.FromValidationFailure(_validationErrors);
         SetupMediator<GetCustomerQuery>(response);
 
         //Act
@@ -179,30 +179,30 @@ public class CustomerEndpointsTests
     public async Task CreateCustomer_ShouldReturnCustomer_WhenValidParametersAreChosen()
     {
         //Arrange
-        var customer = GetCustomer();
-        var query = GetCreateCustomerQuery();
-        var response = Response<Customer>.FromSuccess(customer);
+        var customerModel = DataProvider.GetCustomerModel();
+        var query = QueryProvider.GetCreateCustomerQuery();
+        var response = Response<CustomerModel>.FromSuccess(customerModel);
         SetupMediator<CreateCustomerQuery>(response);
 
         //Act
-        var httpResult = (Ok<Customer>)await CustomerEndpoints.CreateCustomer(
+        var httpResult = (Ok<CustomerModel>)await CustomerEndpoints.CreateCustomer(
             _mockMediator.Object,
             query,
             _cancellationToken);
 
         //Assert
         httpResult.Should().NotBeNull();
-        httpResult.Value.Should().NotBeNull().And.Be((Customer)response);
+        httpResult.Value.Should().NotBeNull().And.Be((CustomerModel)response);
     }
 
     [Fact]
     public async Task CreateCustomer_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var customer = GetCustomer();
-        var query = GetCreateCustomerQuery();
+        var customer = DataProvider.GetCustomerModel();
+        var query = QueryProvider.GetCreateCustomerQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
-        var response = Response<Customer>.FromErrorList(_errors);
+        var response = Response<CustomerModel>.FromErrorList(_errors);
         SetupMediator<CreateCustomerQuery>(response);
 
         //Act
@@ -219,13 +219,13 @@ public class CustomerEndpointsTests
     public async Task CreateCustomer_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var customer = GetCustomer();
+        var customer = DataProvider.GetCustomerModel();
         customer.FirstName = string.Empty;
-        var query = GetCreateCustomerQuery();
+        var query = QueryProvider.GetCreateCustomerQuery();
         const string ERROR_KEY = "FirstName";
         const string ERROR_MESSAGE = "FirstName cannot be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
-        var response = Response<Customer>.FromValidationFailure(_validationErrors);
+        var response = Response<CustomerModel>.FromValidationFailure(_validationErrors);
         SetupMediator<CreateCustomerQuery>(response);
 
         //Act
@@ -245,12 +245,12 @@ public class CustomerEndpointsTests
     public async Task UpdateCustomer_ShouldReturnCustomer_WhenValidParametersAreChosen()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery();
-        var response = Response<Customer>.FromSuccess(GetCustomer());
+        var query = QueryProvider.GetUpdateCustomerQuery();
+        var response = Response<CustomerModel>.FromSuccess(DataProvider.GetCustomerModel());
         SetupMediator<UpdateCustomerQuery>(response);
 
         //Act
-        var httpResult = (Ok<Customer>)await CustomerEndpoints.UpdateCustomer(
+        var httpResult = (Ok<CustomerModel>)await CustomerEndpoints.UpdateCustomer(
             _mockMediator.Object,
             query,
             _cancellationToken);
@@ -264,8 +264,8 @@ public class CustomerEndpointsTests
     public async Task UpdateCustomer_ShouldReturnNotFound_WhenBadCustomerIdIsChosen()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery();
-        var response = Response<Customer>.FromNotFound();
+        var query = QueryProvider.GetUpdateCustomerQuery();
+        var response = Response<CustomerModel>.FromNotFound();
         SetupMediator<UpdateCustomerQuery>(response);
 
         //Act
@@ -283,9 +283,9 @@ public class CustomerEndpointsTests
     public async Task UpdateCustomer_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery();
+        var query = QueryProvider.GetUpdateCustomerQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
-        var response = Response<Customer>.FromErrorList(_errors);
+        var response = Response<CustomerModel>.FromErrorList(_errors);
         SetupMediator<UpdateCustomerQuery>(response);
 
         //Act
@@ -302,12 +302,11 @@ public class CustomerEndpointsTests
     public async Task UpdateCustomer_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var query = GetUpdateCustomerQuery();
-        query = query with { CustomerId = Guid.Empty };
+        var query = QueryProvider.GetUpdateCustomerQuery() with { CustomerId = Guid.Empty };
         const string ERROR_KEY = "CustomerId";
         const string ERROR_MESSAGE = "CustomerId may not be empty.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });
-        var response = Response<Customer>.FromValidationFailure(_validationErrors);
+        var response = Response<CustomerModel>.FromValidationFailure(_validationErrors);
         SetupMediator<UpdateCustomerQuery>(response);
 
         //Act
@@ -404,7 +403,7 @@ public class CustomerEndpointsTests
     #endregion
 
     #region Private Helpers
-    private void SetupMediator(Response<IReadOnlyList<Customer>> response)
+    private void SetupMediator(Response<IReadOnlyList<CustomerModel>> response)
     {
         _mockMediator
             .Setup(x => x.Send(It.IsAny<GetCustomersQuery>(), _cancellationToken))
@@ -418,147 +417,13 @@ public class CustomerEndpointsTests
             .ReturnsAsync(response);
     }
 
-    private void SetupMediator<T>(Response<Customer> response)
-        where T : class, IQuery<Customer>
+    private void SetupMediator<T>(Response<CustomerModel> response)
+        where T : class, IQuery<CustomerModel>
     {
         _mockMediator
             .Setup(x => x.Send(It.IsAny<T>(), _cancellationToken))
             .ReturnsAsync(response);
     }
 
-    private static CreateCustomerQuery GetCreateCustomerQuery()
-    {
-        var address = new AddressModel(
-            "123 Test Street",
-            "Test Town",
-            "MO",
-            "12345");
-        return new CreateCustomerQuery(
-            "Fred",
-            "Flintstone",
-            "fred.flintstone@test.com",
-            address,
-            address);
-    }
-
-    private static UpdateCustomerQuery GetUpdateCustomerQuery()
-    {
-        var address = new Address
-        {
-            Street = "123 Test Street",
-            City = "Test Town",
-            State = "MO",
-            PostalCode = "12345"
-        };
-        return new UpdateCustomerQuery(
-            Guid.NewGuid(),
-            "Fred",
-            "Flintstone",
-            "fred.flintstone@test.com",
-            address,
-            address);
-    }
-
-    private static IReadOnlyList<Customer> GetEmptyCustomersList()
-    {
-        return new List<Customer>();
-    }
-
-    private static IReadOnlyList<Customer> GetCustomerList()
-    {
-        var customers = new List<Customer>
-        {
-            new Customer
-            {
-                FirstName = "Bob",
-                LastName = "Builder",
-                Email = "bob.builder@test.com",
-                BillingAddress = new Address
-                {
-                    Street = "123 Test St",
-                    City = "Test Town",
-                    State = "MO",
-                    PostalCode = "12345"
-                },
-                ShippingAddress = new Address
-                {
-                    Street = "123 Test St",
-                    City = "Test Town",
-                    State = "MO",
-                    PostalCode = "12345"
-                }
-            },
-            new Customer
-            {
-                FirstName = "Fred",
-                LastName = "Flintstone",
-                Email = "fred.flintstone@test.com",
-                BillingAddress = new Address
-                {
-                    Street = "123 Test St",
-                    City = "Test Town",
-                    State = "MO",
-                    PostalCode = "12345"
-                },
-                ShippingAddress = new Address
-                {
-                    Street = "123 Test St",
-                    City = "Test Town",
-                    State = "MO",
-                    PostalCode = "12345"
-                }
-            },
-            new Customer
-            {
-                FirstName = "George",
-                LastName = "Jetson",
-                Email = "bob.builder@test.com",
-                BillingAddress = new Address
-                {
-                    Street = "123 Test St",
-                    City = "Test Town",
-                    State = "MO",
-                    PostalCode = "12345"
-                },
-                ShippingAddress = new Address
-                {
-                    Street = "123 Test St",
-                    City = "Test Town",
-                    State = "MO",
-                    PostalCode = "12345"
-                }
-            },
-
-        };
-
-        return customers;
-    }
-
-    private static Customer GetCustomer()
-    {
-        var customer = new Customer
-        {
-            FirstName = "George",
-            LastName = "Jetson",
-            Email = "bob.builder@test.com",
-            BillingAddress = new Address
-            {
-                Street = "123 Test St",
-                City = "Test Town",
-                State = "MO",
-                PostalCode = "12345"
-            },
-            ShippingAddress = new Address
-            {
-                Street = "123 Test St",
-                City = "Test Town",
-                State = "MO",
-                PostalCode = "12345"
-            }
-        };
-
-        return customer;
-
-    }
     #endregion
 }

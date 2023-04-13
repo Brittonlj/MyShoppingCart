@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\src\MyShoppingCart.Api\MyShoppingCart.Api.csproj" />
     <ProjectReference Include="..\..\src\MyShoppingCart.Application\MyShoppingCart.Application.csproj" />
     <ProjectReference Include="..\..\src\MyShoppingCart.Domain\MyShoppingCart.Domain.csproj" />
+    <ProjectReference Include="..\MyShoppingCart.Shared.Tests\MyShoppingCart.Shared.Tests.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Application.Tests.Helpers;
+﻿namespace MyShoppingCart.Shared.Tests.Helpers;
 
 public static class LongStrings
 {

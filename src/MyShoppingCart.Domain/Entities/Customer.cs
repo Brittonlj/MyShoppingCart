@@ -1,13 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
 
 namespace MyShoppingCart.Domain.Entities;
 
-public sealed class Customer : IEntity<Guid>
+public sealed class Customer : IdentityUser<Guid>, IEntity<Guid>
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
-    public required string Email { get; set; }
     [JsonIgnore]
     public Guid? ShippingAddressId { get; set; }
     public Address? ShippingAddress { get; set; }

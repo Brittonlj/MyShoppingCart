@@ -1,6 +1,10 @@
-﻿using MyShoppingCart.Domain.Utilities;
+﻿using Moq;
+using MyShoppingCart.Domain.Entities;
+using MyShoppingCart.Domain.Repositories;
+using MyShoppingCart.Domain.Specifications;
+using MyShoppingCart.Domain.Utilities;
 
-namespace MyShoppingCart.Application.Tests.Helpers;
+namespace MyShoppingCart.Shared.Tests.Helpers;
 
 public static class MockProvider
 {

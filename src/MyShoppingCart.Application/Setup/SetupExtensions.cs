@@ -17,6 +17,7 @@ public static class SetupExtensions
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IUserSecurityService, UserSecurityService>();
+        services.AddScoped<IUserManagerFacade, UserManagerFacade>();
 
         services.AddTransient<IMapper, Mapper>();
 

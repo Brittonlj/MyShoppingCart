@@ -9,3 +9,4 @@ global using Ardalis.GuardClauses;
 global using MyShoppingCart.Application.Configuration;
 global using MyShoppingCart.Domain.Repositories;
 global using MyShoppingCart.Domain.Specifications;
+global using MyShoppingCart.Domain.Models;

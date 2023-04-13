@@ -1,7 +1,9 @@
 ﻿using MyShoppingCart.Application.Configuration;
+using MyShoppingCart.Domain.Entities;
+using MyShoppingCart.Domain.Models;
 using System.Security.Claims;
 
-namespace MyShoppingCart.Application.Tests.Helpers;
+namespace MyShoppingCart.Shared.Tests.Helpers;
 
 public static class DataProvider
 {
@@ -23,11 +25,49 @@ public static class DataProvider
             FirstName = "Fred",
             LastName = "Flintstone",
             Email = "fred.flintstone@test.com",
+            UserName = "fred.flintstone",
             ShippingAddress = address,
             ShippingAddressId = address.Id,
             BillingAddress = address,
             BillingAddressId = address.Id,
         };
+    }
+
+    public static CustomerModel GetCustomerModel()
+    {
+        var address = new Address(
+            DefaultAddressId,
+            "123 Test Street",
+            "Test Town",
+            "MO",
+            "12345");
+        return new CustomerModel
+        {
+            Id = DefaultCustomerId,
+            FirstName = "Fred",
+            LastName = "Flintstone",
+            Email = "fred.flintstone@test.com",
+            UserName = "fred.flintstone",
+            ShippingAddress = address,
+            ShippingAddressId = address.Id,
+            BillingAddress = address,
+            BillingAddressId = address.Id,
+        };
+    }
+
+    public static IReadOnlyList<Customer> GetEmptyCustomersList()
+    {
+        return new List<Customer>();
+    }
+
+    public static IReadOnlyList<CustomerModel> GetEmptyCustomerModelsList()
+    {
+        return new List<CustomerModel>();
+    }
+
+    public static IReadOnlyList<Order> GetEmptyOrdersList()
+    {
+        return new List<Order>();
     }
 
     public static List<Customer> GetCustomers()
@@ -40,6 +80,7 @@ public static class DataProvider
                 FirstName = "Fred",
                 LastName = "Flintstone",
                 Email = "fred.flintstone@test.com",
+                UserName = "fred.flintstone",
                 BillingAddressId = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
                 BillingAddress = new Address
                 {
@@ -65,6 +106,7 @@ public static class DataProvider
                 FirstName = "George",
                 LastName = "Jetson",
                 Email = "george.jetson@test.com",
+                UserName = "george.jetson",
                 BillingAddressId = new Guid("B592FA04-541A-4BF2-967C-C07468AF2014"),
                 BillingAddress = new Address
                 {
@@ -87,26 +129,73 @@ public static class DataProvider
         };
     }
 
-    public static List<SecurityClaim> GetClaims()
+    public static List<CustomerModel> GetCustomerModels()
     {
-        return new List<SecurityClaim>
+        return new List<CustomerModel>
         {
-            new SecurityClaim(
-                new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
-                ClaimTypes.NameIdentifier,
-                "4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
-            new SecurityClaim(
-                new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
-                ClaimTypes.Role,
-                Roles.Customer),
-            new SecurityClaim(
-                new Guid("79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
-                ClaimTypes.NameIdentifier,
-                "79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
-            new SecurityClaim(
-                new Guid("79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
-                ClaimTypes.Role,
-                Roles.Admin)
+            new CustomerModel
+            {
+                Id = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+                FirstName = "Fred",
+                LastName = "Flintstone",
+                Email = "fred.flintstone@test.com",
+                UserName = "fred.flintstone",
+                BillingAddressId = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+                BillingAddress = new Address
+                {
+                    Id = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5"),
+                    Street = "123 Test St",
+                    City = "Bedrock",
+                    State = "MO",
+                    PostalCode = "12345"
+                },
+                ShippingAddressId = new Guid("6B760260-799C-4AF1-A173-0BF83A2A74D5"),
+                ShippingAddress = new Address
+                {
+                    Id = new Guid("6B760260-799C-4AF1-A173-0BF83A2A74D5"),
+                    Street = "123 Test St",
+                    City = "Bedrock",
+                    State = "MO",
+                    PostalCode = "12345"
+                },
+            },
+            new CustomerModel
+            {
+                Id = new Guid("79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
+                FirstName = "George",
+                LastName = "Jetson",
+                Email = "george.jetson@test.com",
+                UserName = "george.jetson",
+                BillingAddressId = new Guid("B592FA04-541A-4BF2-967C-C07468AF2014"),
+                BillingAddress = new Address
+                {
+                    Id = new Guid("B592FA04-541A-4BF2-967C-C07468AF2014"),
+                    Street = "123 Test St",
+                    City = "Space City",
+                    State = "MO",
+                    PostalCode = "12345"
+                },
+                ShippingAddressId = new Guid("CCB9F54B-F5A0-4D42-927D-C65294E0F629"),
+                ShippingAddress = new Address
+                {
+                    Id = new Guid("CCB9F54B-F5A0-4D42-927D-C65294E0F629"),
+                    Street = "123 Test St",
+                    City = "Space City",
+                    State = "MO",
+                    PostalCode = "12345"
+                }
+            }
+        };
+    }
+
+    public static List<Claim> GetClaims()
+    {
+        return new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, "4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"),
+            new Claim(ClaimTypes.Role, Roles.Customer),
+            new Claim(ClaimTypes.NameIdentifier, "79F42C77-83E5-403B-9EC1-6A3FF285C5AC"),
+            new Claim(ClaimTypes.Role, Roles.Admin)
         };
     }
 
@@ -189,6 +278,11 @@ public static class DataProvider
         return products.Take(productCount).ToList();
     }
 
+    public static List<Product> GetEmptyProductsList()
+    {
+        return new List<Product>();
+    }
+
     public static List<LineItemModel> GetLineItemModels()
     {
         return new List<LineItemModel>
@@ -231,7 +325,7 @@ public static class DataProvider
         };
         orderToAdd.AddUpdateLineItemRange(GetLineItems(3));
         orders.Add(orderToAdd);
-        
+
         orderToAdd = new Order
         {
             Id = DefaultOrderId,

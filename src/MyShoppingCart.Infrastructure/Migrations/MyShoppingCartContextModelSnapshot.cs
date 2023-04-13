@@ -17,10 +17,183 @@ namespace MyShoppingCart.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("Role", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("28ca8ce6-cf1d-42b5-da12-08db3ba8f22d"),
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("357b00a9-eb69-4632-da13-08db3ba8f22d"),
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleClaim", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClaim", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+                            ClaimValue = "4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5",
+                            UserId = new Guid("4a5eb696-7c8f-47d4-974b-c1da72cec2c5")
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+                            ClaimValue = "79F42C77-83E5-403B-9EC1-6A3FF285C5AC",
+                            UserId = new Guid("79f42c77-83e5-403b-9ec1-6a3ff285c5ac")
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLogin", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRole", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("79f42c77-83e5-403b-9ec1-6a3ff285c5ac"),
+                            RoleId = new Guid("28ca8ce6-cf1d-42b5-da12-08db3ba8f22d")
+                        },
+                        new
+                        {
+                            UserId = new Guid("4a5eb696-7c8f-47d4-974b-c1da72cec2c5"),
+                            RoleId = new Guid("357b00a9-eb69-4632-da13-08db3ba8f22d")
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("UserToken", (string)null);
+                });
 
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Address", b =>
                 {
@@ -95,13 +268,23 @@ namespace MyShoppingCart.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("BillingAddressId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -113,8 +296,41 @@ namespace MyShoppingCart.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("ShippingAddressId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -123,6 +339,14 @@ namespace MyShoppingCart.Infrastructure.Migrations
                     b.HasIndex("BillingAddressId")
                         .IsUnique()
                         .HasFilter("[BillingAddressId] IS NOT NULL");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("ShippingAddressId")
                         .IsUnique()
@@ -134,20 +358,42 @@ namespace MyShoppingCart.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("4a5eb696-7c8f-47d4-974b-c1da72cec2c5"),
+                            AccessFailedCount = 0,
                             BillingAddressId = new Guid("786de95e-2d4c-4524-ac64-6ddf11ad9ec5"),
+                            ConcurrencyStamp = "998eaff7-78dd-4efc-a16e-5a23a4053398",
                             Email = "fred.flintstone@test.com",
+                            EmailConfirmed = true,
                             FirstName = "Fred",
                             LastName = "Flintstone",
-                            ShippingAddressId = new Guid("6b760260-799c-4af1-a173-0bf83a2a74d5")
+                            LockoutEnabled = false,
+                            NormalizedEmail = "FRED.FLINTSTONE@TEST.COM",
+                            NormalizedUserName = "FRED.FLINTSTONE",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKy9NjMnPf12p4csSvLOiAmdC5zHZnhaF1DkgGH7+e9im6aIuYftYn/cqQP5qgDgLA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "DVI25ATQSEVFM2MVEPL45HBEWPLT6DNG",
+                            ShippingAddressId = new Guid("6b760260-799c-4af1-a173-0bf83a2a74d5"),
+                            TwoFactorEnabled = false,
+                            UserName = "fred.flintstone"
                         },
                         new
                         {
                             Id = new Guid("79f42c77-83e5-403b-9ec1-6a3ff285c5ac"),
+                            AccessFailedCount = 0,
                             BillingAddressId = new Guid("b592fa04-541a-4bf2-967c-c07468af2014"),
+                            ConcurrencyStamp = "02fe5045-5c7b-4641-90a0-e9c5d375fb7b",
                             Email = "george.jetson@test.com",
+                            EmailConfirmed = true,
                             FirstName = "George",
                             LastName = "Jetson",
-                            ShippingAddressId = new Guid("ccb9f54b-f5a0-4d42-927d-c65294e0f629")
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GEORGE.JETSON@TEST.COM",
+                            NormalizedUserName = "GEORGE.JETSON",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDvfuUmbZTWsI9Xgb//t60GssHdXbjTzIh7MIxZ6FGCRjcWIQs14ZCMXjkuYKetxKA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "T5MUNAWWSMQHJTKUYXXI35K2OQ6O4Q7D",
+                            ShippingAddressId = new Guid("ccb9f54b-f5a0-4d42-927d-c65294e0f629"),
+                            TwoFactorEnabled = false,
+                            UserName = "george.jetson"
                         });
                 });
 
@@ -232,129 +478,125 @@ namespace MyShoppingCart.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("7bc8ae1b-031a-4f3a-815c-2111288ff58c"),
-                            Description = "These are some dope Nike Tennis Shoes!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "Nike Tennis Shoes",
                             Price = 100.00m
                         },
                         new
                         {
                             Id = new Guid("9955f4d7-3e40-4111-a76d-23406f93334b"),
-                            Description = "This is some tasty gum, but the flavor doesn't last!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "Fruit Stripe Gum",
                             Price = 1.99m
                         },
                         new
                         {
                             Id = new Guid("ad7d0cf7-ce00-477d-ae2a-5691f65eba0e"),
-                            Description = "Cheerios are a healthy part of your breakfast!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "Cheerios",
                             Price = 6.00m
                         },
                         new
                         {
                             Id = new Guid("e226d6b2-324f-4508-b5e5-0db77b345c69"),
-                            Description = "Crisp and clean with no caffeine!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "7Up",
                             Price = 1.50m
                         },
                         new
                         {
                             Id = new Guid("e3b2bcce-a8f4-4f7e-9c9e-6ac93e03554a"),
-                            Description = "The 90s are calling and they want you back!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "A Plaid Flannel Shirt",
                             Price = 20.00m
                         },
                         new
                         {
                             Id = new Guid("1caa7fb0-8c2e-4304-a1ec-747a89623131"),
-                            Description = "The 80s are calling and they want you back!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "Garbage Pale Kids Stickers",
                             Price = 4.00m
                         },
                         new
                         {
                             Id = new Guid("a9c15177-e1a4-4dc8-bcb0-5d78128fdeae"),
-                            Description = "Raaawwwrrrr!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "Pink Stuffed Dinosaur",
                             Price = 15.99m
                         },
                         new
                         {
                             Id = new Guid("24ef70c3-0fc1-48d7-994f-380d4c533419"),
-                            Description = "Dark and mysterious!  Good for 2 kids who want to impersonate an adult.",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "Black Trenchcoat",
                             Price = 100.00m
                         },
                         new
                         {
                             Id = new Guid("2df1a80e-651a-417a-9028-b81d30a9a26e"),
-                            Description = "The game that destroys friendships and families!",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
                             Name = "Monopoly",
                             Price = 100.00m
                         },
                         new
                         {
                             Id = new Guid("0553ca62-284d-4379-afc5-c2d4903f7a4c"),
-                            Description = "Heavy duty!  Fits most dogs and some people.",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Sapien eget mi proin sed libero enim. Nam at lectus urna duis. Volutpat maecenas volutpat blandit aliquam.",
+                            ImageUrl = "/img/dog_collar.jpg",
                             Name = "A Dog Collar",
                             Price = 100.00m
                         });
                 });
 
-            modelBuilder.Entity("MyShoppingCart.Domain.Entities.SecurityClaim", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("Id");
+                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
-
-                    b.ToTable("Claim", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("ca17ad94-290e-48ec-89fd-b61f0683535f"),
-                            CustomerId = new Guid("4a5eb696-7c8f-47d4-974b-c1da72cec2c5"),
-                            Type = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-                            Value = "4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5"
-                        },
-                        new
-                        {
-                            Id = new Guid("62c79539-b9cb-490a-816b-5c2c2c3df77a"),
-                            CustomerId = new Guid("4a5eb696-7c8f-47d4-974b-c1da72cec2c5"),
-                            Type = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-                            Value = "Customer"
-                        },
-                        new
-                        {
-                            Id = new Guid("3809c003-f0b0-4edf-9e1e-c7e2f6746681"),
-                            CustomerId = new Guid("79f42c77-83e5-403b-9ec1-6a3ff285c5ac"),
-                            Type = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-                            Value = "79F42C77-83E5-403B-9EC1-6A3FF285C5AC"
-                        },
-                        new
-                        {
-                            Id = new Guid("5d4e57ca-fffb-431f-947e-0e023ff044c3"),
-                            CustomerId = new Guid("79f42c77-83e5-403b-9ec1-6a3ff285c5ac"),
-                            Type = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-                            Value = "Admin"
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.HasOne("MyShoppingCart.Domain.Entities.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyShoppingCart.Domain.Entities.Customer", b =>

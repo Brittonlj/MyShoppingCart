@@ -1,25 +1,26 @@
-﻿namespace MyShoppingCart.Application.Customers;
+﻿using MyShoppingCart.Application.Services;
+
+namespace MyShoppingCart.Application.Customers;
 
 public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustomerCommand, Response<Success>>
 {
-    private readonly IRepository<Customer> _customerRepository;
+    private readonly IUserManagerFacade _userManager;
 
-    public DeleteCustomerCommandHandler(IRepository<Customer> customerRepository)
+    public DeleteCustomerCommandHandler(IUserManagerFacade userManager)
     {
-        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
+        _userManager = Guard.Against.Null(userManager, nameof(userManager));
     }
 
     public async Task<Response<Success>> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
-        var spec = new GetCustomerByIdSpec(request.CustomerId);
-        var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
+        var customer = await _userManager.FindByIdAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)
         {
             return NotFound.Instance;
         }
 
-        await _customerRepository.DeleteAsync(customer, cancellationToken);
+        await _userManager.DeleteAsync(customer, cancellationToken);
 
         return Success.Instance;
     }
