@@ -35,20 +35,21 @@ If you want to run the project locally you will need a SQL Server instance (I us
         dotnet ef database update --connection "connection string"
 
 ### Start the API project
-4. Set the MyShoppingCart.Api as your Startup Project and run the debugger in https mode
+4. Add your connection string to the appsettings.json file, or use [Secrets Manager](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows).
+5. Set the MyShoppingCart.Api as your Startup Project and run the debugger in https mode
 
 ### Start the front end
-5. Open the React project by CD to the src/myshoppingcart.web directory and running the command (if you have VS Code installed):
+6. Open the React project by CD to the src/myshoppingcart.web directory and running the command (if you have VS Code installed):
         
         ./code
         
-6. Pull down the dependencies by going to the VS Code terminal and typing:
+7. Pull down the dependencies by going to the VS Code terminal and typing:
         
         npm install
 
-7. Run the front-end by entering the following command in the VS Code terminal:
+8. Run the front-end by entering the following command in the VS Code terminal:
         
         npm start
 
-8. You should see the home page with some products listed.  You can search or login and play around.  The built-in credentials are "fred.flintstone" password: Password123! and "george.jetson" password: Password123!.  George is setup as an admin and Fred is a customer.  Or you can register your own account.
-9. Enjoy!
+9. You should see the home page with some products listed.  You can search or login and play around.  The built-in credentials are "fred.flintstone" password: Password123! and "george.jetson" password: Password123!.  George is setup as an admin and Fred is a customer.  Or you can register your own account.
+10. Enjoy!
