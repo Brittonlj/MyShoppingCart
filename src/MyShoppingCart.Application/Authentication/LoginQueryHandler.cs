@@ -21,14 +21,9 @@ public sealed class LoginQueryHandler :
 
     public async Task<Response<AuthenticationResponseModel>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var customer = await _userManager.FindByUserNameAsync(request.UserName, cancellationToken);
+        var customer = await _userManager.FindByNameAsync(request.UserName, cancellationToken);
 
-        if (customer is null)
-        {
-            return Unauthorized.Instance;
-        }
-
-        if (!await _userManager.CheckPasswordAsync(customer, request.Password))
+        if (customer is null || !await _userManager.CheckPasswordAsync(customer, request.Password))
         {
             return Unauthorized.Instance;
         }
@@ -36,11 +31,12 @@ public sealed class LoginQueryHandler :
         var customerModel = _mapper.Map<CustomerModel>(customer);
         var claims = await _userManager.GetClaimsAsync(customer);
         var roles = await _userManager.GetRolesAsync(customer);
+
         foreach ( var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
-        var token = _jwtTokenService.GenerateToken(claims);
+        var token = _jwtTokenService.GenerateToken(claims.ToList());
 
         return new AuthenticationResponseModel
         {

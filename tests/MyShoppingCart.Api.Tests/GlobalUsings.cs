@@ -1,7 +1,6 @@
 global using Xunit;
 global using Moq;
 global using MediatR;
-global using MyShoppingCart.Application.Authentication;
 global using MyShoppingCart.Domain.Entities;
 global using MyShoppingCart.Domain.ValueObjects;
 global using MyShoppingCart.Api.Endpoints;

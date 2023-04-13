@@ -4,23 +4,23 @@ public sealed class CustomerEndpoints
 {
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
-        var group = app.MapGroup("/customer");
-        //            .RequireAuthorization();
+        var group = app.MapGroup("/customer")
+            .RequireAuthorization();
 
-        group.MapGet("/", GetAllCustomers);
-        //            .RequireAuthorization(Policies.AdminAccess);
+        group.MapGet("/", GetAllCustomers)
+            .RequireAuthorization(Policies.AdminAccess);
 
-        group.MapGet("/{customerId}", GetCustomerById);
-        //            .RequireAuthorization(Policies.CustomerAccess);
+        group.MapGet("/{customerId}", GetCustomerById)
+            .RequireAuthorization(Policies.CustomerAccess);
 
-        group.MapPost("/", CreateCustomer);
-        //            .AllowAnonymous();
+        group.MapPost("/", CreateCustomer)
+            .AllowAnonymous();
 
-        group.MapPut("/", UpdateCustomer);
-        //            .RequireAuthorization(Policies.CustomerAccess);
+        group.MapPut("/", UpdateCustomer)
+            .RequireAuthorization(Policies.CustomerAccess);
 
-        group.MapDelete("/{customerId}", DeleteCustomer);
-//            .RequireAuthorization(Policies.AdminAccess);
+        group.MapDelete("/{customerId}", DeleteCustomer)
+            .RequireAuthorization(Policies.AdminAccess);
 
         return app;
     }

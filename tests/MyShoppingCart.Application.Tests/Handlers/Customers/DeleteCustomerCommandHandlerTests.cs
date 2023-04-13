@@ -20,7 +20,7 @@ public sealed class DeleteCustomerCommandHandlerTests
 
         _mockUserManager.Setup(x => x.FindByIdAsync(request.CustomerId, _cancellationToken))
             .ReturnsAsync(customer);
-        _mockUserManager.Setup(x => x.DeleteAsync(customer, _cancellationToken))
+        _mockUserManager.Setup(x => x.DeleteAsync(customer))
                     .ReturnsAsync(identityResult);
 
         var handler = new DeleteCustomerCommandHandler(_mockUserManager.Object);
@@ -33,7 +33,7 @@ public sealed class DeleteCustomerCommandHandlerTests
         _mockUserManager
             .Verify(x => x.FindByIdAsync(request.CustomerId, _cancellationToken), Times.Once);
         _mockUserManager
-            .Verify(x => x.DeleteAsync(customer, _cancellationToken), Times.Once);
+            .Verify(x => x.DeleteAsync(customer), Times.Once);
     }
 
     #endregion
@@ -59,7 +59,7 @@ public sealed class DeleteCustomerCommandHandlerTests
         _mockUserManager
             .Verify(x => x.FindByIdAsync(request.CustomerId, _cancellationToken), Times.Once);
         _mockUserManager
-            .Verify(x => x.DeleteAsync(It.IsAny<Customer>(), _cancellationToken), Times.Never);
+            .Verify(x => x.DeleteAsync(It.IsAny<Customer>()), Times.Never);
     }
 
     #endregion

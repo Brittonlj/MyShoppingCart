@@ -20,7 +20,7 @@ public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustome
             return NotFound.Instance;
         }
 
-        await _userManager.DeleteAsync(customer, cancellationToken);
+        await _userManager.DeleteAsync(customer);
 
         return Success.Instance;
     }

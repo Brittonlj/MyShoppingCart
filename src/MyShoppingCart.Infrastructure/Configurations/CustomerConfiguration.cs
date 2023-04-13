@@ -53,7 +53,7 @@ public sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
                 NormalizedEmail = "FRED.FLINTSTONE@TEST.COM",
                 NormalizedUserName = "FRED.FLINTSTONE",
                 PasswordHash = "AQAAAAIAAYagAAAAEKy9NjMnPf12p4csSvLOiAmdC5zHZnhaF1DkgGH7+e9im6aIuYftYn/cqQP5qgDgLA==",
-                SecurityStamp = "DVI25ATQSEVFM2MVEPL45HBEWPLT6DNG",
+                SecurityStamp = "T5MUNAWWSMQHJTKUYXXI35K2OQ6O4Q7D",
                 UserName = "fred.flintstone"
             },
             new Customer
@@ -69,7 +69,7 @@ public sealed class CustomerConfiguration : IEntityTypeConfiguration<Customer>
                 NormalizedEmail = "GEORGE.JETSON@TEST.COM",
                 NormalizedUserName = "GEORGE.JETSON",
                 PasswordHash = "AQAAAAIAAYagAAAAEDvfuUmbZTWsI9Xgb//t60GssHdXbjTzIh7MIxZ6FGCRjcWIQs14ZCMXjkuYKetxKA==",
-                SecurityStamp = "T5MUNAWWSMQHJTKUYXXI35K2OQ6O4Q7D",
+                SecurityStamp = "DVI25ATQSEVFM2MVEPL45HBEWPLT6DNG",
                 UserName = "george.jetson"
             }
 

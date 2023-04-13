@@ -38,11 +38,17 @@ public static class SetupExtensions
         services.AddIdentity<Customer, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<MyShoppingCartContext>();
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-        {
-            JwtSettings jwtConfig = new JwtSettings();
-            config.GetSection(JwtSettings.SECTION_NAME).Bind(jwtConfig);
+        JwtSettings jwtConfig = new JwtSettings();
+        config.GetSection(JwtSettings.SECTION_NAME).Bind(jwtConfig);
 
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
