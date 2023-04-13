@@ -30,7 +30,8 @@ If you want to run the project locally you will need a SQL Server instance (I us
 ### Setup the database
 2. Open a powershell window and cd to the MyShoppingCart.Infrastructure project folder.
 3. Run this command with your own connection string:
-		dotnet ef database update --connection "connection string"
+		
+        dotnet ef database update --connection "connection string"
 
 ### Start the API project
 4. Set the MyShoppingCart.Api as your Startup Project and run the debugger in https mode
