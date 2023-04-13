@@ -14,9 +14,9 @@ public sealed class LoginQueryHandler :
         IJwtTokenService jwtTokenService,
         IMapper mapper)
     {
-        _userManager = userManager;
-        _jwtTokenService = jwtTokenService;
-        _mapper = mapper;
+        _userManager = Guard.Against.Null(userManager, nameof(userManager));
+        _jwtTokenService = Guard.Against.Null(jwtTokenService, nameof(jwtTokenService));
+        _mapper = Guard.Against.Null(mapper, nameof(mapper));
     }
 
     public async Task<Response<AuthenticationResponseModel>> Handle(LoginQuery request, CancellationToken cancellationToken)

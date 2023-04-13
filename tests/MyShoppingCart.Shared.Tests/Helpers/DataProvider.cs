@@ -10,6 +10,7 @@ public static class DataProvider
     public static readonly Guid DefaultCustomerId = new Guid("4A5EB696-7C8F-47D4-974B-C1DA72CEC2C5");
     public static readonly Guid DefaultAddressId = new Guid("786DE95E-2D4C-4524-AC64-6DDF11AD9EC5");
     public static readonly Guid DefaultOrderId = new Guid("29D74756-8F33-4AE9-B534-F596252EB97B");
+    public const string DEFAULT_TOKEN = "SOME_TOKEN";
 
     public static Customer GetCustomer()
     {
@@ -52,6 +53,15 @@ public static class DataProvider
             ShippingAddressId = address.Id,
             BillingAddress = address,
             BillingAddressId = address.Id,
+        };
+    }
+
+    public static AuthenticationResponseModel GetAuthenticationResponseModel()
+    {
+        return new AuthenticationResponseModel
+        {
+            Customer = GetCustomerModel(),
+            Token = DEFAULT_TOKEN
         };
     }
 

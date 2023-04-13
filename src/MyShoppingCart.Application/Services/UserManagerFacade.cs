@@ -15,9 +15,9 @@ public sealed class UserManagerFacade : IUserManagerFacade
         IPasswordHasher<Customer> passwordHasher, 
         IRepository<Customer> customerRepository)
     {
-        _userManager = userManager;
-        _passwordHasher = passwordHasher;
-        _customerRepository = customerRepository;
+        _userManager = Guard.Against.Null(userManager, nameof(userManager));
+        _passwordHasher = Guard.Against.Null(passwordHasher, nameof(passwordHasher));
+        _customerRepository = Guard.Against.Null(customerRepository, nameof(customerRepository));
     }
 
     public async Task<IdentityResult> CreateAsync(Customer customer, string password, CancellationToken cancellationToken = default)
