@@ -14,6 +14,8 @@ public sealed class GetOrdersQueryHandler :
         GetOrdersQuery request,
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var spec = new GetOrdersSpec(
             request.CustomerId,
             request.PageNumber,

@@ -14,6 +14,8 @@ public sealed class UserSecurityService : IUserSecurityService
 
     public bool IsInRole(string roleName)
     {
+        ArgumentException.ThrowIfNullOrEmpty(roleName);
+
         var user = _httpContextAccessor.HttpContext.User;
         return user.IsInRole(roleName);
     }
@@ -23,18 +25,12 @@ public sealed class UserSecurityService : IUserSecurityService
         var user = _httpContextAccessor.HttpContext.User;
         var customerIdClaim = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
 
-        if (customerIdClaim is null)
+        if (customerIdClaim is null || !Guid.TryParse(customerIdClaim.Value, out var customerIdGuid))
         {
             return null;
         }
 
-        if (Guid.TryParse(customerIdClaim.Value, out var customerIdGuid))
-        {
-            return customerIdGuid;
-        }
-
-        return null;
-
+        return customerIdGuid;
     }
 
 }

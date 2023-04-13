@@ -13,6 +13,8 @@ public sealed class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustome
 
     public async Task<Response<Success>> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var customer = await _userManager.FindByIdAsync(request.CustomerId, cancellationToken);
 
         if (customer is null)

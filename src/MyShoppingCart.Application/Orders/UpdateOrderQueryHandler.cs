@@ -13,6 +13,8 @@ public sealed class UpdateOrderQueryHandler : IRequestHandler<UpdateOrderQuery, 
 
     public async Task<Response<Order>> Handle(UpdateOrderQuery request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var spec = new GetOrderByIdSpec(request.OrderId, request.CustomerId);
         var order = await _orderRepository.FirstOrDefaultAsync(spec, cancellationToken);
 

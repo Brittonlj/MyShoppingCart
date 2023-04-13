@@ -17,6 +17,8 @@ public sealed class JwtTokenService : IJwtTokenService
 
     public string GenerateToken(List<Claim> claims)
     {
+        ArgumentNullException.ThrowIfNull(claims);
+
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

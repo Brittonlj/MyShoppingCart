@@ -19,6 +19,9 @@ public sealed class AuthorizedCustomerPipelineBehavior<TRequest, TEntity> :
         RequestHandlerDelegate<Response<TEntity>> next, 
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(next);
+
         if (request is not IAuthorizedCustomerRequest authorizedCustomerRequest)
         {
             return await next();

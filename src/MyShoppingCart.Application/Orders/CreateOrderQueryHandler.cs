@@ -23,6 +23,8 @@ public sealed class CreateOrderQueryHandler : IRequestHandler<CreateOrderQuery, 
 
     public async Task<Response<Order>> Handle(CreateOrderQuery request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var spec = new GetCustomerByIdSpec(request.CustomerId).WithNoTracking();
         var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
 

@@ -21,6 +21,8 @@ public sealed class LoginQueryHandler :
 
     public async Task<Response<AuthenticationResponseModel>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var customer = await _userManager.FindByNameAsync(request.UserName, cancellationToken);
 
         if (customer is null || !await _userManager.CheckPasswordAsync(customer, request.Password))

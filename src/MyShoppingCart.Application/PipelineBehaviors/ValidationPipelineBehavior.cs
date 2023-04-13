@@ -18,6 +18,9 @@ public sealed class ValidationPipelineBehavior<TRequest, TEntity> :
         RequestHandlerDelegate<Response<TEntity>> next, 
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(next);
+
         if (!_validators.Any())
         {
             return await next();

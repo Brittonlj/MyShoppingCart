@@ -19,6 +19,9 @@ public sealed class ExceptionLoggingPipelineBehavior<TRequest, TEntity> :
         RequestHandlerDelegate<Response<TEntity>> next, 
         CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(next);
+
         try
         {
             return await next();

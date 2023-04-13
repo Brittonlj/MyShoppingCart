@@ -20,6 +20,8 @@ public sealed class RegisterQueryHandler : IRequestHandler<CreateCustomerQuery, 
 
     public async Task<Response<CustomerModel>> Handle(CreateCustomerQuery request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var customer = _mapper.Map<Customer>(request);
 
         var result = await _userManager.CreateAsync(customer, request.Password);

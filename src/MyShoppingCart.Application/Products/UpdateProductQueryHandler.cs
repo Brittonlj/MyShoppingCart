@@ -1,4 +1,6 @@
-﻿namespace MyShoppingCart.Application.Products;
+﻿using MyShoppingCart.Domain.Entities;
+
+namespace MyShoppingCart.Application.Products;
 
 public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQuery, Response<Product>>
 {
@@ -13,6 +15,8 @@ public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQue
 
     public async Task<Response<Product>> Handle(UpdateProductQuery request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var spec = new GetProductByIdSpec(request.ProductId);
         var product = await _productRepository.FirstOrDefaultAsync(spec, cancellationToken);
 

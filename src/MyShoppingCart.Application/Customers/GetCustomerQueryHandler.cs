@@ -14,6 +14,8 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
         GetCustomerQuery request,
         CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var spec = new GetCustomerByIdSpec(request.CustomerId).WithNoTracking();
 
         var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);

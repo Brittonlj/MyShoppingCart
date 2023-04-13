@@ -15,6 +15,8 @@ public sealed class ChangePasswordCommandHandler :
 
     public async Task<Response<Success>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var spec = new GetCustomerByIdSpec(request.CustomerId);
         var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
 

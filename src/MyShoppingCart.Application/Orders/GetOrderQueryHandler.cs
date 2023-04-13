@@ -11,6 +11,8 @@
 
         public async Task<Response<Order>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(request);
+
             var spec = new GetOrderByIdSpec(request.OrderId, request.CustomerId)
                 .WithNoTracking();
 

@@ -13,6 +13,8 @@ public sealed class CreateProductQueryHandler : IRequestHandler<CreateProductQue
 
     public async Task<Response<Product>> Handle(CreateProductQuery request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         var product = _mapper.Map<Product>(request);
 
         await _productRepository.AddAsync(product);
