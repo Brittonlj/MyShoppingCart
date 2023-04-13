@@ -16,6 +16,7 @@ Some things you will find examples of in this code base:
 - I used the [Fluent Validation](https://docs.fluentvalidation.net/en/latest/) project for all of the validation needs.
 - I used the [OneOf](https://github.com/mcintyre321/OneOf) package to implement Value Objects as F#-like [Discriminated Unions](https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/discriminated-unions). This cuts down on using null values and exception throwing as flow control.
 - I used [xUnit](https://xunit.net/), [Moq](https://github.com/moq/) and [FluentAssertions](https://fluentassertions.com/) for unit testing
+- I used React and Bootstrap for the fron-end.
 
 My next steps are to add a simple front-end.
 
