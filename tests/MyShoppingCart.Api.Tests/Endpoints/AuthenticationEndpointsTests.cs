@@ -1,5 +1,4 @@
 ﻿using MyShoppingCart.Application.Authentication;
-using MyShoppingCart.Application.Customers;
 using MyShoppingCart.Domain.Models;
 
 namespace MyShoppingCart.Api.Tests.Endpoints;
@@ -99,7 +98,7 @@ public class AuthenticationEndpointsTests
     public async Task Register_ShouldReturnCustomers_WhenValidParametersAreChosen()
     {
         //Arrange
-        var request = new RegisterQuery("Fred", "Flintstone", "fred.flintstone@test.com", "fred.flintstone", "somePassword");
+        var request = QueryProvider.GetRegisterQuery();
         var response = Response<CustomerModel>.FromSuccess(DataProvider.GetCustomerModel());
         SetupMediator<RegisterQuery>(response);
 
@@ -118,7 +117,7 @@ public class AuthenticationEndpointsTests
     public async Task Register_ShouldReturnNoCustomers_WhenBadParametersAreChosen()
     {
         //Arrange
-        var request = new RegisterQuery("Fred", "Flintstone", "fred.flintstone@test.com", "fred.flintstone", "somePassword");
+        var request = QueryProvider.GetRegisterQuery();
         var response = Response<CustomerModel>.FromNotFound();
         SetupMediator<RegisterQuery>(response);
 
@@ -136,7 +135,7 @@ public class AuthenticationEndpointsTests
     public async Task Register_ShouldReturnErrorList_WhenErrorsHappen()
     {
         //Arrange
-        var request = new RegisterQuery("Fred", "Flintstone", "fred.flintstone@test.com", "fred.flintstone", "somePassword");
+        var request = QueryProvider.GetRegisterQuery();
         _errors.Add(new Error("Exception", "An error has occured"));
         var response = Response<CustomerModel>.FromErrorList(_errors);
         SetupMediator<RegisterQuery>(response);
@@ -155,7 +154,7 @@ public class AuthenticationEndpointsTests
     public async Task Register_ShouldReturnHttpValidationProblemDetails_WhenValidationFails()
     {
         //Arrange
-        var request = new RegisterQuery("Fred", "Flintstone", "fred.flintstone@test.com", "fred.flintstone", "");
+        var request = QueryProvider.GetRegisterQuery() with { Password = "" };
         const string ERROR_KEY = "Password";
         const string ERROR_MESSAGE = "'Password' is requrired.";
         _validationErrors.Add(ERROR_KEY, new string[] { ERROR_MESSAGE });

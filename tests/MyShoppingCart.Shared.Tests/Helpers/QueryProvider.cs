@@ -1,4 +1,5 @@
-﻿using MyShoppingCart.Application.Customers;
+﻿using MyShoppingCart.Application.Authentication;
+using MyShoppingCart.Application.Customers;
 using MyShoppingCart.Application.Orders;
 using MyShoppingCart.Application.Products;
 using MyShoppingCart.Domain.Entities;
@@ -20,10 +21,27 @@ public static class QueryProvider
             "Flintstone",
             "fred.flintstone@test.com",
             "fred.flintsone",
-            "Fred123",
+            "SomePassword",
             address,
             address);
     }
+    public static RegisterQuery GetRegisterQuery()
+    {
+        var address = new AddressModel(
+            "123 Test Street",
+            "Test Town",
+            "MO",
+            "12345");
+        return new RegisterQuery(
+            "Fred",
+            "Flintstone",
+            "fred.flintstone@test.com",
+            "fred.flintsone",
+            "SomePassword",
+            address,
+            address);
+    }
+
 
     public static UpdateCustomerQuery GetUpdateCustomerQuery()
     {

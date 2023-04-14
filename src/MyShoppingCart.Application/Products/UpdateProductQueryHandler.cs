@@ -1,6 +1,4 @@
-﻿using MyShoppingCart.Domain.Entities;
-
-namespace MyShoppingCart.Application.Products;
+﻿namespace MyShoppingCart.Application.Products;
 
 public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQuery, Response<Product>>
 {

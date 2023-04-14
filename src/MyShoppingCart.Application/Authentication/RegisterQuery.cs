@@ -5,7 +5,9 @@ public sealed record RegisterQuery(
     string LastName,
     string Email,
     string UserName,
-    string Password) : 
+    string Password,
+    AddressModel? BillingAddress,
+    AddressModel? ShippingAddress) : 
     IQuery<CustomerModel>
 {
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MyShoppingCart.Domain.Entities;
 using System.Security.Claims;
 
 namespace MyShoppingCart.Application.Services;
@@ -51,13 +50,13 @@ public sealed class UserManagerFacade : IUserManagerFacade
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
 
-        var spec = new GetCustomerByUserNameSpec(name).WithNoTracking();
+        var spec = new GetCustomerByUserNameSpec(name);
         return await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
     }
 
     public async Task<Customer?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var spec = new GetCustomerByIdSpec(id).WithNoTracking();
+        var spec = new GetCustomerByIdSpec(id);
         return await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
     }
 
@@ -65,7 +64,7 @@ public sealed class UserManagerFacade : IUserManagerFacade
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
-        var spec = new GetCustomerByUserNameSpec(userName).WithNoTracking();
+        var spec = new GetCustomerByUserNameSpec(userName);
         return await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
     }
 

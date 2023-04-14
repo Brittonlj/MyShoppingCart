@@ -1,24 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MyShoppingCart.Application.Customers;
 using MyShoppingCart.Application.Services;
 using System.Security.Claims;
 
 namespace MyShoppingCart.Application.Authentication;
 
-public sealed class RegisterQueryHandler : IRequestHandler<CreateCustomerQuery, Response<CustomerModel>>
+public sealed class RegisterQueryHandler : IRequestHandler<RegisterQuery, Response<CustomerModel>>
 {
     private readonly IUserManagerFacade _userManager;
     private readonly IMapper _mapper;
 
-    public RegisterQueryHandler(
-        IMapper mapper,
-        IUserManagerFacade userManager)
+    public RegisterQueryHandler(IUserManagerFacade userManager, IMapper mapper)
     {
         _mapper = Guard.Against.Null(mapper);
         _userManager = Guard.Against.Null(userManager); ;
     }
 
-    public async Task<Response<CustomerModel>> Handle(CreateCustomerQuery request, CancellationToken cancellationToken)
+    public async Task<Response<CustomerModel>> Handle(RegisterQuery request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 

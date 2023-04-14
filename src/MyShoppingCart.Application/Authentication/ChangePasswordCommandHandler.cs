@@ -1,4 +1,5 @@
-﻿using MyShoppingCart.Application.Services;
+﻿using Microsoft.Extensions.Logging;
+using MyShoppingCart.Application.Services;
 
 namespace MyShoppingCart.Application.Authentication;
 
@@ -6,19 +7,18 @@ public sealed class ChangePasswordCommandHandler :
     IRequestHandler<ChangePasswordCommand, Response<Success>>
 {
     private readonly IUserManagerFacade _userManager;
-    private readonly IRepository<Customer> _customerRepository;
-    public ChangePasswordCommandHandler(IUserManagerFacade userManager, IRepository<Customer> customerRepository)
+    private readonly ILogger<ChangePasswordCommandHandler> _logger;
+    public ChangePasswordCommandHandler(IUserManagerFacade userManager, ILogger<ChangePasswordCommandHandler> logger)
     {
         _userManager = Guard.Against.Null(userManager);
-        _customerRepository = Guard.Against.Null(customerRepository);
+        _logger = Guard.Against.Null(logger);
     }
 
     public async Task<Response<Success>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var spec = new GetCustomerByIdSpec(request.CustomerId);
-        var customer = await _customerRepository.FirstOrDefaultAsync(spec, cancellationToken);
+        var customer = await _userManager.FindByIdAsync(request.CustomerId);
 
         if (customer is null || !await _userManager.CheckPasswordAsync(customer, request.CurrentPassword))
         {
@@ -32,6 +32,10 @@ public sealed class ChangePasswordCommandHandler :
 
         if (!result.Succeeded)
         {
+            foreach (var error in result.Errors)
+            {
+                _logger.LogError("Error changing password for customer ID {customerId}: [{code}] {description}", request.CustomerId, error.Code, error.Description);
+            }
             return Unauthorized.Instance;
         }
 
