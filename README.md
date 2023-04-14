@@ -26,7 +26,7 @@ Thanks for taking a look and have a great day!
 ## Project Setup
 If you want to run the project locally you will need a SQL Server instance (I use docker for this).
 
-1. Pull down the git repo and open the solution in VS 2023.
+1. Pull down the git repo and open the solution in VS 2022.
 
 ### Setup the database
 2. Open a powershell window and CD to the src/MyShoppingCart.Infrastructure project folder.
