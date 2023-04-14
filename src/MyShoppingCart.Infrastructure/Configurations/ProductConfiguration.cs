@@ -37,6 +37,11 @@ public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasPrecision(7, 2);
 
         builder
+            .HasMany(x => x.Categories)
+            .WithMany()
+            .UsingEntity<ProductCategory>();
+
+        builder
             .HasData(
             new Product
             {

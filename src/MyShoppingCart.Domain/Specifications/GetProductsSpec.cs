@@ -23,12 +23,18 @@ public sealed class GetProductsSpec : BaseSpecification<Product>
         if (!string.IsNullOrWhiteSpace(searchString))
         {
             Query
-                .Where(x => x.Name.Contains(searchString) || x.Description.Contains(searchString));
+                .Where(x => 
+                x.Name.Contains(searchString) || 
+                x.Description.Contains(searchString) ||
+                x.Categories.Any(x => x.Name.Contains(searchString)));
         }
 
         SetSorting(sortAscending, sortColumn);
 
-        Query.Paginate(pageNumber, pageSize);
+        Query
+            .Paginate(pageNumber, pageSize)
+            .Include(x => x.Categories)
+            .AsSplitQuery();
     }
 
     private void SetSorting(bool sortAscending, string sortColumn)
