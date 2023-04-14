@@ -20,4 +20,9 @@ public sealed record class Error(string Code, string Message)
     {
         return JsonSerializer.Serialize(this);
     }
+
+    public override string ToString()
+    {
+        return $"[{Code}] {Message}";
+    }
 }

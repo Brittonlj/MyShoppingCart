@@ -115,4 +115,19 @@ public sealed class UserManagerFacade : IUserManagerFacade
 
         return await _userManager.ChangePasswordAsync(customer, currentPassword, newPassword);
     }
+
+    public async Task<IdentityResult> RemovePasswordAsync(Customer customer)
+    {
+        ArgumentNullException.ThrowIfNull(customer);
+
+        return await _userManager.RemovePasswordAsync(customer);
+    }
+
+    public async Task<IdentityResult> AddPasswordAsync(Customer customer, string password)
+    {
+        ArgumentNullException.ThrowIfNull(customer);
+        ArgumentException.ThrowIfNullOrEmpty(password);
+
+        return await _userManager.AddPasswordAsync(customer, password);
+    }
 }

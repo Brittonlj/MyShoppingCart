@@ -17,6 +17,9 @@ public class AuthenticationEndpoints
 
         group.MapPost("/changePassword", ChangePassword);
 
+        group.MapPost("/setPassword", SetPassword)
+            .RequireAuthorization(Policies.AdminAccess);
+
         return app;
     }
 
@@ -45,6 +48,17 @@ public class AuthenticationEndpoints
     public static async Task<IResult> ChangePassword(
         [FromServices] IMediator mediator,
         [FromBody] ChangePasswordCommand request,
+        CancellationToken cancellationToken
+)
+    {
+        var response = await mediator.Send(request, cancellationToken);
+
+        return response.MatchResult();
+    }
+
+    public static async Task<IResult> SetPassword(
+        [FromServices] IMediator mediator,
+        [FromBody] SetPasswordCommand request,
         CancellationToken cancellationToken
 )
     {

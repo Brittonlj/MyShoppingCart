@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 
 namespace MyShoppingCart.Domain.ValueObjects;
 
@@ -32,5 +33,15 @@ public sealed class ErrorList : List<Error>
     public string ToJson()
     {
         return JsonSerializer.Serialize(this);
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        foreach(var error in this)
+        {
+            sb.Append(error.ToString());
+        }
+        return sb.ToString();
     }
 }

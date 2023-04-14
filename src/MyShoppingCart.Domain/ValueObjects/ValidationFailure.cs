@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace MyShoppingCart.Domain.ValueObjects;
 
@@ -10,5 +11,19 @@ public sealed class ValidationFailure
     public ValidationFailure(Dictionary<string, string[]> results)
     {
         Results = results;
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        foreach (var key in Results.Keys)
+        {
+            var errors = Results[key];
+            foreach(var error in errors)
+            {
+                sb.AppendLine($"[{key}] {error}");
+            }
+        }
+        return sb.ToString();
     }
 }

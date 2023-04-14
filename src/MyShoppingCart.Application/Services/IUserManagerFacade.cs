@@ -17,4 +17,6 @@ public interface IUserManagerFacade
     Task<IdentityResult> AddToRoleAsync(Customer customer, string roleName);
     Task<IdentityResult> AddClaimAsync(Customer customer, Claim claim);
     Task<IdentityResult> ChangePasswordAsync(Customer customer, string currentPassword, string newPassword);
+    Task<IdentityResult> RemovePasswordAsync(Customer customer);
+    Task<IdentityResult> AddPasswordAsync(Customer customer, string password);
 }

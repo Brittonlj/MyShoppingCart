@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using MyShoppingCart.Application.Authentication;
+﻿using MyShoppingCart.Application.Authentication;
 
 namespace MyShoppingCart.Application.Tests.Validators.Authentication;
 
