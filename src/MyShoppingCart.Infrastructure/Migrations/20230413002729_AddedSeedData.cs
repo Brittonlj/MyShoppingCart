@@ -27,7 +27,7 @@ namespace MyShoppingCart.Infrastructure.Migrations
                 keyColumn: "Id",
                 keyValue: new Guid("79f42c77-83e5-403b-9ec1-6a3ff285c5ac"),
                 columns: new[] { "ConcurrencyStamp", "EmailConfirmed", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "SecurityStamp", "UserName" },
-                values: new object[] { "02fe5045-5c7b-4641-90a0-e9c5d375fb7b", true, "GEORGE.JETSON@TEST.COM", "GEORGE.JETSON", "AQAAAAIAAYagAAAAEDvfuUmbZTWsI9Xgb//t60GssHdXbjTzIh7MIxZ6FGCRjcWIQs14ZCMXjkuYKetxKA==", "T5MUNAWWSMQHJTKUYXXI35K2OQ6O4Q7D", "george.jetson" });
+                values: new object[] { "02fe5045-5c7b-4641-90a0-e9c5d375fb7b", true, "GEORGE.JETSON@TEST.COM", "GEORGE.JETSON", "AQAAAAIAAYagAAAAEOt9l5axpZkFW3JyiZaAgn7QpKHgMetmUYNsLd7fovRZV9fvV+OLXPGdNntgfK4pDw==", "HKNQOHKL7CB4G3TH257MX3QYRBOPMIED", "george.jetson" });
 
             migrationBuilder.InsertData(
                 table: "Role",
