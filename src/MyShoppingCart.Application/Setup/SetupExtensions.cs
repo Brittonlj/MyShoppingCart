@@ -5,7 +5,7 @@ namespace MyShoppingCart.Application.Setup;
 
 public static class SetupExtensions
 {
-    public static IServiceCollection SetupMyShoppingCartApplication(this IServiceCollection services)
+    public static IServiceCollection SetupMyShoppingCartApplication(this IServiceCollection services, bool includeAuthorizedCustomerRequestPipelineBehavior = true)
     {
         // Add fluent validators for the application tier
         services.AddValidatorsFromAssemblyContaining<IMyShoppingCartApplicationMarker>();
@@ -14,7 +14,7 @@ public static class SetupExtensions
         services.AddMediatR(options =>
         {
             options.RegisterServicesFromAssemblyContaining<IMyShoppingCartApplicationMarker>();
-            options.RegisterPipelines();
+            options.RegisterPipelines(includeAuthorizedCustomerRequestPipelineBehavior);
         });
 
         // Add dependency injection for dependencies in the Application project
@@ -30,7 +30,7 @@ public static class SetupExtensions
     }
 
 
-    private static MediatRServiceConfiguration RegisterPipelines(this MediatRServiceConfiguration options)
+    private static MediatRServiceConfiguration RegisterPipelines(this MediatRServiceConfiguration options, bool includeAuthorizedCustomerRequestPipelineBehavior)
     {
         // Get the assemblies for the project
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
@@ -51,7 +51,6 @@ public static class SetupExtensions
         var pipelineInterfaceType = typeof(IPipelineBehavior<,>);
         var exceptionPipelineType = typeof(ExceptionLoggingPipelineBehavior<,>);
         var validationPipelineType = typeof(ValidationPipelineBehavior<,>);
-        var authorizedUserPipelineType = typeof(AuthorizedCustomerPipelineBehavior<,>);
 
         foreach (var request in requests)
         {
@@ -64,12 +63,19 @@ public static class SetupExtensions
             var interfaceToInject = pipelineInterfaceType.MakeGenericType(new Type[] { request, response });
             var concreteExceprion = exceptionPipelineType.MakeGenericType(new Type[] { request, payload });
             var concreteValidation = validationPipelineType.MakeGenericType(new Type[] { request, payload });
-            var concreteAuthorized = authorizedUserPipelineType.MakeGenericType(new Type[] { request, payload });
 
             // Add the dependency injections for those genericized interfaces and concrete classes.
             options.AddBehavior(interfaceToInject, concreteExceprion);
             options.AddBehavior(interfaceToInject, concreteValidation);
-            options.AddBehavior(interfaceToInject, concreteAuthorized);
+
+            if (includeAuthorizedCustomerRequestPipelineBehavior)
+            {
+                var authorizedUserPipelineType = typeof(AuthorizedCustomerPipelineBehavior<,>);
+
+                var concreteAuthorized = authorizedUserPipelineType.MakeGenericType(new Type[] { request, payload });
+
+                options.AddBehavior(interfaceToInject, concreteAuthorized);
+            }
         }
 
         return options;

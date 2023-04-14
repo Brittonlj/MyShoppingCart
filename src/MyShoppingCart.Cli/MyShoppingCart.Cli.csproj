@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>b8ae7a5a-1b2e-4ad1-8b15-72f13485e7ab</UserSecretsId>
+    <AssemblyName>MyShoppingCart</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentCommandLineParser" Version="1.4.3" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyShoppingCart.Application\MyShoppingCart.Application.csproj" />
+    <ProjectReference Include="..\MyShoppingCart.Domain\MyShoppingCart.Domain.csproj" />
+    <ProjectReference Include="..\MyShoppingCart.Infrastructure\MyShoppingCart.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
