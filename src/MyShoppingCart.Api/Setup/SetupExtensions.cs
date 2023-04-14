@@ -21,6 +21,7 @@ public static class SetupExtensions
         OrderEndpoints.RegisterEndpoints(app);
         ProductEndpoints.RegisterEndpoints(app);
         AuthenticationEndpoints.RegisterEndpoints(app);
+        CategoryEndpoints.RegisterEndpoints(app);
         return app;
     }
 

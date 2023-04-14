@@ -7,6 +7,7 @@ public sealed class Product : IEntity<Guid>
     public required string Description { get; set; }
     public required decimal Price { get; set; }
     public string? ImageUrl { get; set; }
+    public List<Category> Categories { get; } = new List<Category>();
 
     #region Equatable
     public bool Equals(Product? other)

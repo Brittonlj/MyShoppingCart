@@ -5,6 +5,8 @@ public sealed class GetProductByIdSpec : BaseSpecification<Product>, ISingleResu
 	public GetProductByIdSpec(Guid productId)
 	{
 		Query
-			.Where(x => x.Id == productId);
+			.Where(x => x.Id == productId)
+			.Include(x => x.Categories)
+			.AsSplitQuery();
 	}
 }

@@ -5,6 +5,9 @@ public sealed class GetProductsByIdListSpec : BaseSpecification<Product>
 	public GetProductsByIdListSpec(List<Guid> productIds)
 	{
 		Query
-			.Where(x => productIds.Contains(x.Id));
-	}
+			.Where(x => productIds.Contains(x.Id))
+			.Include(x => x.Categories)
+            .AsSplitQuery();
+
+    }
 }
