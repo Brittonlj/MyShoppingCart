@@ -33,8 +33,4 @@
     <ProjectReference Include="..\MyShoppingCart.Shared.Tests\MyShoppingCart.Shared.Tests.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\Authentication\" />
-  </ItemGroup>
-
 </Project>

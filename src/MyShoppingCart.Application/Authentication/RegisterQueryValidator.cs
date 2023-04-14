@@ -9,5 +9,7 @@ public sealed class RegisterQueryValidator : AbstractValidator<RegisterQuery>
         RuleFor(x => x.Email).NotEmpty().MaximumLength(50).EmailAddress();
         RuleFor(x => x.UserName).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Password).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.BillingAddress).NotNull().SetValidator(new AddressModelValidator()!);
+        RuleFor(x => x.ShippingAddress).NotNull().SetValidator(new AddressModelValidator()!);
     }
 }
