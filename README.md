@@ -53,5 +53,7 @@ If you want to run the project locally you will need a SQL Server instance (I us
 
    Please note that the front-end is a work in progress and I'm just getting started on it. :)
 
-9. You should see the home page with some products listed.  You can search or login and play around.  The built-in credentials are "fred.flintstone" password: Password123! and "george.jetson" password: Password123!.  George is setup as an admin and Fred is a customer.  Or you can register your own account.
-10. Enjoy!
+9. You should see the home page with some products listed.  You can search and play around.
+10. For testing the API, the built-in credentials are "fred.flintstone" password: Password123! and "george.jetson" password: Password123!.  George is setup as an admin and Fred is a customer.  Or you can register your own account.
+    To authenticate the API in swagger, try out the Login endpoint using the credentials above.  Copy the token in the response and click on the Authorize button at the top of the swagger page.  In the Value field, type "Bearer " and paste in the token and hit Authorize.
+11. Enjoy!
