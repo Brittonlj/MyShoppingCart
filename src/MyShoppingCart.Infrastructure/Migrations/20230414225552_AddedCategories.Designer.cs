@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyShoppingCart.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyShoppingCart.Infrastructure;
 namespace MyShoppingCart.Infrastructure.Migrations
 {
     [DbContext(typeof(MyShoppingCartContext))]
-    partial class MyShoppingCartContextModelSnapshot : ModelSnapshot
+    [Migration("20230414225552_AddedCategories")]
+    partial class AddedCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,9 +277,6 @@ namespace MyShoppingCart.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Category", (string)null);
 
