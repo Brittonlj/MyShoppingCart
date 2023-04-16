@@ -11,7 +11,8 @@ import {
 import { IGetProductsQuery } from "../models/RequestModels";
 import { IProduct } from "../models/ResponseModels";
 import { ProductsService } from "../services/ProductsService";
-import defaultImage from "../img/default-image.png";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 export default function Shop() {
   const searchString = useRef<HTMLInputElement | null>(null);
 
@@ -23,6 +24,7 @@ export default function Shop() {
     sortAscending: true,
   };
 
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [productsQuery, setProductsQuery] =
     useState<IGetProductsQuery>(defaultProductsQuery);
@@ -35,15 +37,19 @@ export default function Shop() {
         return;
       }
 
-      if (!productsResponse.data) {
+      if (!productsResponse.data || productsResponse.data.length === 0) {
+        setHasMore(false);
         return;
       }
 
       const data = productsResponse.data as IProduct[];
 
       setProducts((p) => {
-        const setOfData = new Set(data);
-        if (p.every((product) => setOfData.has(product))) {
+        if (
+          !data.every((product) =>
+            p.some((existingProduct) => existingProduct.id === product.id)
+          )
+        ) {
           return p.concat(data);
         }
         return [...p];
@@ -98,24 +104,36 @@ export default function Shop() {
         </Form>
       </Container>
       <Container className="d-flex">
-        <Row xxs={1} sm={2} md={3} lg={4}>
-          {products.map((x) => (
-            <Col key={x.id}>
-              <Card className="lg-3 mb-3">
-                <Card.Img
-                  variant="top"
-                  src={x.imageUrl ?? "/img/default-image.png"}
-                  className="p-3"
-                />
-                <Card.Body>
-                  <Card.Title>{x.name}</Card.Title>
-                  <Card.Text>{x.description}</Card.Text>
-                  <Button variant="primary">Add to cart</Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+        <InfiniteScroll
+          dataLength={products.length}
+          next={loadNextPage}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>No more products were found.</b>
+            </p>
+          }
+        >
+          <Row xxs={1} sm={2} md={3} lg={4}>
+            {products.map((x) => (
+              <Col key={x.id}>
+                <Card className="lg-3 mb-3">
+                  <Card.Img
+                    variant="top"
+                    src={x.imageUrl ?? "/img/default-image.png"}
+                    className="p-3"
+                  />
+                  <Card.Body>
+                    <Card.Title>{x.name}</Card.Title>
+                    <Card.Text>{x.description}</Card.Text>
+                    <Button variant="primary">Add to cart</Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </InfiniteScroll>
       </Container>
     </>
   );
