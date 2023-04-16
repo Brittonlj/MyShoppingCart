@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  Badge,
   Button,
   Card,
   Col,
@@ -46,8 +47,8 @@ export default function Shop() {
 
       setProducts((p) => {
         if (
-          !data.every((product) =>
-            p.some((existingProduct) => existingProduct.id === product.id)
+          !data.every((newProduct) =>
+            p.some((existingProduct) => existingProduct.id === newProduct.id)
           )
         ) {
           return p.concat(data);
@@ -127,6 +128,13 @@ export default function Shop() {
                   <Card.Body>
                     <Card.Title>{x.name}</Card.Title>
                     <Card.Text>{x.description}</Card.Text>
+                    <Container>
+                      {x.categories.map((y) => (
+                        <Badge key={y.id} bg="secondary" className="m-1">
+                          {y.name}
+                        </Badge>
+                      ))}
+                    </Container>
                     <Button variant="primary">Add to cart</Button>
                   </Card.Body>
                 </Card>
