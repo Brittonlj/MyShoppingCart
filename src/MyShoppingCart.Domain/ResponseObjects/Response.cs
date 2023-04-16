@@ -1,5 +1,5 @@
 ﻿using OneOf;
-namespace MyShoppingCart.Domain.ValueObjects;
+namespace MyShoppingCart.Domain.ResponseObjects;
 
 [GenerateOneOf]
 public partial class Response<TSuccess> : 

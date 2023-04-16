@@ -3,7 +3,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using static Microsoft.AspNetCore.Http.Results;
 global using MyShoppingCart.Api.Utilities;
 global using MyShoppingCart.Domain.Setup;
-global using MyShoppingCart.Domain.ValueObjects;
+global using MyShoppingCart.Domain.ResponseObjects;
 global using MyShoppingCart.Application.Customers;
 global using MyShoppingCart.Application.Orders;
 global using MyShoppingCart.Application.Products;

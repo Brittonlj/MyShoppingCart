@@ -101,7 +101,11 @@ public static class QueryProvider
             "New Product #123",
             "The latest and greatest in 123!",
             1000.00M,
-            "http://somedomain.com/image.jpg");
+            "http://somedomain.com/image.jpg",
+            new HashSet<Category>
+            {
+                new Category(Guid.NewGuid(), "Test Category")
+            });
     }
 
     public static GetProductsQuery GetGetProductsQuery()
@@ -121,7 +125,11 @@ public static class QueryProvider
             "New Nike Tennis Shoes",
             "New Nike Tennis Shoes Description",
             100.00M,
-            null);
+            null,
+            new HashSet<Category>
+            {
+                new Category(Guid.NewGuid(), "Athletic")
+            });
     }
 
     public static GetOrdersQuery GetGetOrdersQuery()

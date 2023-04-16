@@ -3,6 +3,7 @@
 public class UpdateProductQueryHandlerTests
 {
     private readonly CancellationToken _cancellationToken = new CancellationToken();
+    private readonly Mock<IMapper> _mockMapper = new Mock<IMapper>();
 
     #region Happy Path
 
@@ -16,13 +17,13 @@ public class UpdateProductQueryHandlerTests
         var updatedProduct = DataProvider.GetProduct();
         updatedProduct.Name = NEW_NAME;
 
-        var mapper = new Mapper();
+        _mockMapper.Setup(x => x.Map(request, originalProduct)).Returns(updatedProduct);
 
-        var mockProductRepository = MockProvider.GetMockProductRepositoryWithSingleResponse(updatedProduct, _cancellationToken);
+        var mockProductRepository = MockProvider.GetMockProductRepositoryWithSingleResponse(originalProduct, _cancellationToken);
         mockProductRepository
             .Setup(x => x.UpdateAsync(updatedProduct, _cancellationToken));
 
-        var handler = new UpdateProductQueryHandler(mockProductRepository.Object, mapper);
+        var handler = new UpdateProductQueryHandler(mockProductRepository.Object, _mockMapper.Object);
 
         //Act
         var results = await handler.Handle(request, _cancellationToken);
@@ -33,6 +34,8 @@ public class UpdateProductQueryHandlerTests
            .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), _cancellationToken), Times.Once);
         mockProductRepository
              .Verify(x => x.UpdateAsync(updatedProduct, _cancellationToken), Times.Once);
+        _mockMapper
+            .Verify(x => x.Map(request, originalProduct), Times.Once);
     }
 
     #endregion
@@ -49,11 +52,9 @@ public class UpdateProductQueryHandlerTests
         var updatedProduct = DataProvider.GetProduct();
         updatedProduct.Name = NEW_NAME;
 
-        var mapper = new Mapper();
-
         var mockProductRepository = MockProvider.GetMockProductRepositoryWithNullResponse(_cancellationToken);
 
-        var handler = new UpdateProductQueryHandler(mockProductRepository.Object, mapper);
+        var handler = new UpdateProductQueryHandler(mockProductRepository.Object, _mockMapper.Object);
 
         //Act
         var results = await handler.Handle(request, _cancellationToken);
@@ -64,6 +65,8 @@ public class UpdateProductQueryHandlerTests
             .Verify(x => x.FirstOrDefaultAsync(It.IsAny<GetProductByIdSpec>(), _cancellationToken), Times.Once);
         mockProductRepository
             .Verify(x => x.UpdateAsync(updatedProduct, _cancellationToken), Times.Never);
+        _mockMapper
+            .Verify(x => x.Map(request, originalProduct), Times.Never);
     }
 
     #endregion

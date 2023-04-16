@@ -1,4 +1,4 @@
-﻿namespace MyShoppingCart.Domain.ValueObjects;
+﻿namespace MyShoppingCart.Domain.ResponseObjects;
 
 public sealed class NotFound
 {

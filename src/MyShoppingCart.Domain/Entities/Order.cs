@@ -10,10 +10,10 @@ public sealed class Order : IEntity<Guid>
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]  
     public Customer? Customer { get; set; }
     public DateTime OrderDateTimeUtc { get; set; }
-    public IReadOnlyList<LineItem> LineItems => _lineItems;
-    private List<LineItem> _lineItems = new();
+    public IReadOnlyCollection<LineItem> LineItems => _lineItems;
+    private HashSet<LineItem> _lineItems = new();
 
-    public void AddUpdateLineItem(LineItem lineItem)
+    public void AddUpdate(LineItem lineItem)
     {
         lineItem.OrderId = Id;
 
@@ -30,34 +30,34 @@ public sealed class Order : IEntity<Guid>
         _lineItems.Add(lineItem);
     }
 
-    public void AddUpdateLineItem(LineItemModel lineItemModel)
+    public void AddUpdate(LineItemModel lineItemModel)
     {
         var lineItem = new LineItem(Id, lineItemModel.ProductId, lineItemModel.Quantity);
         _lineItems.Add(lineItem);
     }
 
-    public void AddUpdateLineItemRange(IEnumerable<LineItem> lineItems)
+    public void AddUpdateRange(IEnumerable<LineItem> lineItems)
     {
         foreach (var lineItem in lineItems)
         {
-            AddUpdateLineItem(lineItem);
+            AddUpdate(lineItem);
         }
     }
 
-    public void AddUpdateLineItemRange(IEnumerable<LineItemModel> lineItemModels)
+    public void AddUpdateRange(IEnumerable<LineItemModel> lineItemModels)
     {
         foreach (var lineItemModel in lineItemModels)
         {
-            AddUpdateLineItem(lineItemModel);
+            AddUpdate(lineItemModel);
         }
     }
 
-    public void RemoveLineItem(LineItem lineItem)
+    public void Remove(LineItem lineItem)
     {
-        RemoveLineItem(lineItem.Id);
+        Remove(lineItem.Id);
     }
 
-    public void RemoveLineItem(Guid lineItemId)
+    public void Remove(Guid lineItemId)
     {
         var foundLineItem = _lineItems.FirstOrDefault(x => x.Id == lineItemId);
         if (foundLineItem is not null)

@@ -23,7 +23,7 @@ public sealed class UpdateProductQueryHandler : IRequestHandler<UpdateProductQue
             return NotFound.Instance;
         }
 
-        _mapper.From(request).AdaptTo(product);
+        product = _mapper.Map(request, product);
 
         await _productRepository.UpdateAsync(product, cancellationToken);
 

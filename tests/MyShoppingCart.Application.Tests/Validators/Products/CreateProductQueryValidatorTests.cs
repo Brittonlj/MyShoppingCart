@@ -11,7 +11,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenStateIsValid()
     {
         //Arrange
-        var query = GetCreateProductQuery();
+        var query = QueryProvider.GetCreateProductQuery();
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -25,7 +25,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenImageUrlIsNull()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { ImageUrl = null };
+        var query = QueryProvider.GetCreateProductQuery() with { ImageUrl = null };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -39,7 +39,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenImageUrlIsEmpty()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { ImageUrl = string.Empty };
+        var query = QueryProvider.GetCreateProductQuery() with { ImageUrl = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -53,7 +53,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenPriceIsZero()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Price = 0.0M };
+        var query = QueryProvider.GetCreateProductQuery() with { Price = 0.0M };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -67,7 +67,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenDecimalIsOneDigit()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Price = 1.0M };
+        var query = QueryProvider.GetCreateProductQuery() with { Price = 1.0M };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -81,7 +81,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnNoResults_WhenDecimalIsZeroDigits()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Price = 100 };
+        var query = QueryProvider.GetCreateProductQuery() with { Price = 100 };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -99,7 +99,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenNameIsEmpty()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Name = string.Empty };
+        var query = QueryProvider.GetCreateProductQuery() with { Name = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -114,7 +114,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenNameIsTooLong()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Name = LongStrings.LONG_STRING_51 };
+        var query = QueryProvider.GetCreateProductQuery() with { Name = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -132,7 +132,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenDescriptionIsEmpty()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Description = string.Empty };
+        var query = QueryProvider.GetCreateProductQuery() with { Description = string.Empty };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -147,7 +147,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenDescriptionIsTooLong()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Description = LongStrings.LONG_STRING_501 };
+        var query = QueryProvider.GetCreateProductQuery() with { Description = LongStrings.LONG_STRING_501 };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -166,7 +166,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPriceHasTooManyDecimals()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Price = 1.100M };
+        var query = QueryProvider.GetCreateProductQuery() with { Price = 1.100M };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -181,7 +181,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenPriceHasTooManyDigits()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { Price = 10000000.00M };
+        var query = QueryProvider.GetCreateProductQuery() with { Price = 10000000.00M };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -200,7 +200,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenImageUrlIsTooLong()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { ImageUrl = LongStrings.LONG_STRING_51 };
+        var query = QueryProvider.GetCreateProductQuery() with { ImageUrl = LongStrings.LONG_STRING_51 };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -218,7 +218,7 @@ public class CreateProductQueryValidatorTests
     public async Task Validate_ShouldReturnResults_WhenImageUrlIsInvalidUri()
     {
         //Arrange
-        var query = GetCreateProductQuery() with { ImageUrl = "sometext" };
+        var query = QueryProvider.GetCreateProductQuery() with { ImageUrl = "sometext" };
 
         //Act
         var results = await _validator.ValidateAsync(query, _cancellationToken);
@@ -230,18 +230,4 @@ public class CreateProductQueryValidatorTests
     }
 
     #endregion
-
-    #region Private Helpers
-
-    private static CreateProductQuery GetCreateProductQuery()
-    {
-        return new CreateProductQuery(
-            "Tennis Shoes",
-            "These are some Tennis Shoes",
-            10.00M,
-            "https://myimages.com/image.jpg");
-    }
-
-    #endregion
-
 }

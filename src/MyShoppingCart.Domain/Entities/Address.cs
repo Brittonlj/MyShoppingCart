@@ -47,10 +47,10 @@ public sealed class Address : IEntity<Guid>
 
         return
             Id == other.Id &&
-            Street == other.Street &&
-            City == other.City &&
-            State == other.State &&
-            PostalCode == other.PostalCode;
+            string.Equals(Street, other.Street) &&
+            string.Equals(City, other.City) &&
+            string.Equals(State, other.State) &&
+            string.Equals(PostalCode, other.PostalCode);
     }
     public override bool Equals(object? obj)
     {

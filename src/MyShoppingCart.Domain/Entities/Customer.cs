@@ -25,9 +25,9 @@ public sealed class Customer : IdentityUser<Guid>, IEntity<Guid>
 
         return
             Id == other.Id &&
-            FirstName == other.FirstName &&
-            LastName == other.LastName &&
-            Email == other.Email &&
+            string.Equals(FirstName, other.FirstName) &&
+            string.Equals(LastName, other.LastName) &&
+            string.Equals(Email, other.Email) &&
             EqualityComparer<Address>.Default.Equals(ShippingAddress, other.ShippingAddress) &&
             EqualityComparer<Address>.Default.Equals(BillingAddress, other.BillingAddress);
     }

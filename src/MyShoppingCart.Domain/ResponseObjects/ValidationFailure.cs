@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace MyShoppingCart.Domain.ValueObjects;
+namespace MyShoppingCart.Domain.ResponseObjects;
 
 public sealed class ValidationFailure
 {

@@ -4,7 +4,8 @@ public sealed record CreateProductQuery(
     string Name,
     string Description,
     decimal Price,
-    string? ImageUrl) :
+    string? ImageUrl,
+    IReadOnlyCollection<Category> Categories) :
     IQuery<Product>
 {
 }

@@ -1,6 +1,6 @@
 ﻿global using MediatR;
 global using MapsterMapper;
-global using MyShoppingCart.Domain.ValueObjects;
+global using MyShoppingCart.Domain.ResponseObjects;
 global using MyShoppingCart.Domain.Entities;
 global using FluentValidation;
 global using MyShoppingCart.Application.PipelineBehaviors;

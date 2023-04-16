@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace MyShoppingCart.Domain.ValueObjects;
+namespace MyShoppingCart.Domain.ResponseObjects;
 
 public sealed class ErrorList : List<Error>
 {

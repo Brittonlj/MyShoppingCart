@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MyShoppingCart.Application.Orders;
+using MyShoppingCart.Application.Products;
 
 namespace MyShoppingCart.Application.Setup;
 
@@ -9,13 +10,40 @@ public static class MapsterConfig
     {
         TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
 
+        TypeAdapterConfig<CreateProductQuery, Product>
+            .NewConfig()
+            .AfterMapping((src, result) =>
+            {
+                foreach (var category in src.Categories)
+                {
+                    result.AddUpdate(category);
+                }
+            });
+
+
+        TypeAdapterConfig<UpdateProductQuery, Product>
+            .NewConfig()
+            .AfterMapping((src, result) =>
+            {
+                var itemsToDelete = result.Categories
+                    .Where(x => !src.Categories.Any(y => x.Id == y.Id)).ToList();
+
+                foreach (var item in itemsToDelete)
+                {
+                    result.Remove(item);
+                }
+
+                result.AddUpdateRange(src.Categories);
+            });
+
+
         TypeAdapterConfig<CreateOrderQuery, Order>
             .NewConfig()
             .AfterMapping((src, result) =>
             {
                 foreach (var item in src.LineItems)
                 {
-                    result.AddUpdateLineItem(item);
+                    result.AddUpdate(item);
                 }
             });
 
@@ -28,10 +56,10 @@ public static class MapsterConfig
 
                 foreach (var item in lineItemsToDelete)
                 {
-                    result.RemoveLineItem(item.Id);
+                    result.Remove(item.Id);
                 }
 
-                result.AddUpdateLineItemRange(src.LineItems);
+                result.AddUpdateRange(src.LineItems);
             });
     }
 }
