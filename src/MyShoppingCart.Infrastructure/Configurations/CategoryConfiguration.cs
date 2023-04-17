@@ -31,7 +31,8 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
                 new Category(new Guid("C231F98E-F62E-4672-A12C-18C98B7E7669"), "Clothing"),
                 new Category(new Guid("5330FDA9-5934-4D84-936E-7E910EE66CD6"), "Collectable"),
                 new Category(new Guid("663AC0E4-6265-417C-89E8-968B42077169"), "Toy/Game"),
-                new Category(new Guid("A306808A-6156-44B9-8DAB-07F05039FA33"), "Pet")
+                new Category(new Guid("A306808A-6156-44B9-8DAB-07F05039FA33"), "Pet"),
+                new Category(new Guid("A303508A-6156-44B9-8DAB-07F05039FA33"), "Electronics")
                 );
     }
 }
