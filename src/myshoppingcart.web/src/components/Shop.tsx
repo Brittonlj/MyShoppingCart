@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { FormEventHandler, useEffect, useRef, useState } from "react";
 import {
   Badge,
   Button,
@@ -13,18 +13,21 @@ import { IGetProductsQuery } from "../models/RequestModels";
 import { IProduct } from "../models/ResponseModels";
 import { ProductsService } from "../services/ProductsService";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function Shop() {
-  const searchString = useRef<HTMLInputElement | null>(null);
+  //const searchString = useRef<HTMLInputElement | null>(null);
 
   const defaultProductsQuery: IGetProductsQuery = {
     searchString: undefined,
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 8,
     sortColumn: "Name",
     sortAscending: true,
   };
 
+  const [searchString, setSearchString] = useState<string>("");
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [productsQuery, setProductsQuery] =
@@ -64,18 +67,20 @@ export default function Shop() {
     setProductsQuery((o) => {
       const query = {
         ...o,
+        pageNumber: o.pageNumber + 1,
       };
-      query.pageNumber = o.pageNumber + 1;
       return query;
     });
   }
 
-  function handleSearchButtonClick(e: React.MouseEvent<HTMLButtonElement>) {
+  function formSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     const query = {
       ...defaultProductsQuery,
+      searchString: searchString,
     };
-    query.searchString = searchString?.current?.value;
     setProducts([]);
+    setHasMore(true);
     setProductsQuery(query);
   }
 
@@ -83,22 +88,25 @@ export default function Shop() {
     loadProducts();
   }, [productsQuery]);
 
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
   return (
     <>
       <Container className="pt-4">
-        <Form>
+        <Form onSubmit={formSubmit}>
           <Form.Group className="pb-3 d-flex" controlId="search">
             <InputGroup>
               <Form.Control
                 type="text"
-                placeholder="Search products..."
-                ref={searchString}
+                placeholder="Search products or category tags..."
+                onChange={(e) => setSearchString(e.target.value)}
+                value={searchString}
               />
-              <Button
-                variant="primary"
-                onClick={(e) => handleSearchButtonClick(e)}
-              >
-                Search
+              <Button variant="primary" type="submit">
+                <FontAwesomeIcon icon={faSearch} />
               </Button>
             </InputGroup>
           </Form.Group>
@@ -115,6 +123,7 @@ export default function Shop() {
               <b>No more products were found.</b>
             </p>
           }
+          style={{ overflow: "hidden" }}
         >
           <Row xxs={1} sm={2} md={3} lg={4}>
             {products.map((x) => (
@@ -126,7 +135,11 @@ export default function Shop() {
                     className="p-3"
                   />
                   <Card.Body>
-                    <Card.Title>{x.name}</Card.Title>
+                    <Card.Title>
+                      {x.name}
+                      <br />
+                      {formatter.format(x.price)}
+                    </Card.Title>
                     <Card.Text>{x.description}</Card.Text>
                     <Container>
                       {x.categories.map((y) => (
