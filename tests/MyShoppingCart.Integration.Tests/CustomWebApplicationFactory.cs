@@ -2,7 +2,6 @@
 using DotNet.Testcontainers.Containers;
 using Microsoft.AspNetCore.Mvc.Testing;
 using MyShoppingCart.Api;
-using Testcontainers.MsSql;
 
 namespace MyShoppingCart.Integration.Tests
 {
@@ -10,7 +9,7 @@ namespace MyShoppingCart.Integration.Tests
     {
         private readonly IContainer _dbContainer = new ContainerBuilder()
                 .WithImage("myshoppingcartdb:latest")
-                .WithPortBinding(1433, true)
+                .WithPortBinding(1433, 1433)
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
                 .Build();
 

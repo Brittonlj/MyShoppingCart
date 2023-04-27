@@ -1,16 +1,25 @@
 ﻿using MyShoppingCart.Application.Authentication;
 namespace MyShoppingCart.Integration.Tests.Authentication
 {
-    public class RegisterTests
+    public class RegisterTests : IAsyncLifetime
     {
         private readonly HttpClient _client;
-
+        private readonly CustomWebApplicationFactory _factory;
         public RegisterTests()
         {
-            var factory = new CustomWebApplicationFactory();
-            _client = factory.CreateClient();
+            _factory = new CustomWebApplicationFactory();
+            _client = _factory.CreateClient();
         }
 
+        public async Task DisposeAsync()
+        {
+            await _factory.DisposeAsync();
+        }
+
+        public async Task InitializeAsync()
+        {
+            await _factory.InitializeAsync();
+        }
 
         [Fact]
         public async Task Register_ReturnsSuccess_WhenParametersAreCorrect()
@@ -19,7 +28,7 @@ namespace MyShoppingCart.Integration.Tests.Authentication
             const string FIRST_NAME = "FirstName";
             const string LAST_NAME = "LastName";
             const string EMAIL = "email@test.com";
-            const string PASSWORD = "password123!";
+            const string PASSWORD = "Password123!";
             const string USERNAME = "username";
             const string STREET = "123 Test St.";
             const string CITY = "Test City";
@@ -31,7 +40,7 @@ namespace MyShoppingCart.Integration.Tests.Authentication
 
             //Act
             var response = await _client.PostAsJsonAsync("/authentication/register", request);
-
+            var content = response.Content.ReadAsStringAsync();
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var customer = await response.Content.ReadFromJsonAsync<CustomerModel>();
