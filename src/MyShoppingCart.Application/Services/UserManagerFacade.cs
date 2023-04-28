@@ -22,7 +22,19 @@ public sealed class UserManagerFacade : IUserManagerFacade
     public async Task<IdentityResult> CreateAsync(Customer customer, string password, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(customer);
+        ArgumentNullException.ThrowIfNull(customer.UserName);
         ArgumentException.ThrowIfNullOrEmpty(password);
+
+        var spec = new GetCustomerByUserNameSpec(customer.UserName);
+        var user = await _customerRepository.FirstOrDefaultAsync(spec);
+        if (user is not null)
+        {
+            return IdentityResult.Failed(new IdentityError
+            {
+                Code = "DuplicateUserName",
+                Description = $"UserName '{customer.UserName}' is already taken."
+            });
+        }
 
         return await _userManager.CreateAsync(customer, password);
     }

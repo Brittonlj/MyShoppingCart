@@ -13,9 +13,12 @@ namespace MyShoppingCart.Integration.Tests
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
                 .Build();
 
+        public HttpClient HttpClient { get; private set; } = default!;
+
         public async Task InitializeAsync()
         {
             await _dbContainer.StartAsync();
+            HttpClient = CreateClient();
         }
 
         public new async Task DisposeAsync()

@@ -36,8 +36,8 @@ public static class QueryProvider
             "Fred",
             "Flintstone",
             "fred.flintstone@test.com",
-            "fred.flintsone",
-            "SomePassword",
+            "fred.flintstone",
+            "SomePassword123!",
             address,
             address);
     }
