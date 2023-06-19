@@ -64,7 +64,8 @@ public static class SetupExtensions
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtConfig.Issuer,
                 ValidAudience = jwtConfig.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Key)),
+                ClockSkew = TimeSpan.FromSeconds(10)
             };
         });
 
